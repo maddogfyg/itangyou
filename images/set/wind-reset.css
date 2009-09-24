@@ -1,0 +1,48 @@
+@charset "gb18030";
+/* CSS Document */
+
+html {color: #000;background: #FFF;}
+body, div, dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6, pre, code,
+form, fieldset, legend, input, button,
+textarea, p, blockquote, th, td {margin: 0;padding: 0;}
+img {border: 0;}
+cite,em,strong,th{font-style: inherit;font-weight: inherit;}
+h1, h2, h3, h4, h5, h6 {font-size: 100%;font-weight: normal;}
+input,button,textarea,select{font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;}
+input,button,textarea,select{*font-size: 100%;}
+body {line-height: 1.5;}
+ol, ul {list-style: none;}
+table {border-collapse: collapse;border-spacing: 0;}
+th{text-align: left;}
+blockquote{quotes: none;}
+blockquote:before,blockquote:after,{content: '';content: none;}
+:link, :visited {text-decoration: none;}
+td,th,div{word-break:break-all;word-wrap:break-word}
+form{display:inline;}
+*{outline:none}
+/*清除浮动 代码*/
+.cc:after {content: ".";display: block;height:0;clear: both;visibility: hidden;}
+.cc {display: inline-block;}/* Hides from IE-mac \*/
+* html .cc {height: 1%;}
+.cc {display: block;}/* End hide from IE-mac *//*清除浮动 代码*/
+.c{clear:both;height:0px;font:0px/0px Arial;overflow:hidden;}
+/*通用样式*/
+.b{ font-weight:700;}
+.w{white-space:nowrap}
+.tal{text-align:left}
+.tac{text-align:center}
+.tar{text-align:right}
+.fr{float:right}
+.fl{float:left}
+.pr{position:relative}
+.vt,.vt td{vertical-align:top}
+/*字体大小*/
+.f9{font-size:10px;}
+.f10,small,.small{font-size:11px;}
+.f12{font-size:12px}
+.f14{font-size:14px}
+.f16{font-size:16px;}
+.f24{font-size:24px;}
+.fn,.fn a{font-weight:normal}
+.aimg{display:block;text-indent:-2000em;}

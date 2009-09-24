@@ -1,0 +1,366 @@
+<!--<?php
+$htmlpost = ($foruminfo['allowhide'] && $_G[allowhidden]) ? '' : "disabled";
+$htmlsell = ($foruminfo['allowsell'] && $_G[allowsell]) ? '' : "disabled";
+$htmlhide = ($forumset['allowencode'] && $_G['allowencode']) ? '' : "disabled";
+$ifanonymous = ($isGM || $forumset['anonymous'] && $_G['anonymous']) ? '' : "disabled";
+$creditnames = pwCreditNames();
+print <<<EOT
+-->
+<table cellPadding="0" cellSpacing="0" style="display:none">
+	<tbody id="att_mode"><tr><td><input class="input" type="file" name="attachment_" size="10" /></td>
+		<td><input class="input" type="text" name="atc_desc" size="12" /></td>
+		<td><select name="att_special" onchange="newAtt.sel(this);" style="width:70px;"><option value="0"></option><option value="1">加密</option><option value="2">出售</option></select></td>
+		<td><select name="att_ctype" style="width:60px;">
+<!--
+EOT;
+foreach ($creditnames as $key => $value) {print <<<EOT
+-->
+			<option value="$key">$value</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</select></td>
+		<td><input class="input" type="text" name="atc_needrvrc" value="0" size="1" /></td>
+		<td style="height:25px;line-height:25px;"></td></tr>
+	</tbody>
+</table>
+<form name="FORM" method="post" action="post.php?" enctype = "multipart/form-data" onsubmit="return checkpost(document.FORM);" id="anchor">
+<div class="t" style="margin-top:5px"><table cellspacing="0" cellpadding="0" align="center" width="100%">
+	<tr style="height:23px;line-height:23px;color:#666;">
+		<td class="h" colspan="2"><b>
+<!--
+EOT;
+if ($psot_sta){print <<<EOT
+-->
+		快速回复
+<!--
+EOT;
+}else{print <<<EOT
+-->
+		快速发帖
+<!--
+EOT;
+}print <<<EOT
+-->
+		</b></td>
+		<td class="h" style="text-align:right"><a href="javascript:scroll(0,0)">顶端</a></td>
+	</tr>
+	<tr class="tr2"><td colspan="100" style="border-bottom:0"></td></tr>
+	<tr>
+		<td valign="top" width="20%" class="f_one" style="padding:7px">
+		<b>内容</b><br />
+		  HTML 代码不可用
+		<br />
+		<input type="checkbox" name="atc_usesign" value="1" checked />&nbsp;使用签名
+		<br />
+		<input type="checkbox" name="atc_convert" value="1" checked />&nbsp;Wind Code自动转换
+		<br />
+		<input type="checkbox" name="atc_anonymous" value="1" $ifanonymous />&nbsp;匿名帖
+		<br />
+		<input type="checkbox" name="atc_hide" value="1" $htmlpost />&nbsp;隐藏此帖
+		<br />
+		<input type="checkbox" name="atc_hideatt" value="1" $htmlpost />&nbsp;隐藏附件
+		<br />
+		<input type="checkbox" name="atc_requiresell" id="atc_requiresell" value="1" $htmlsell />&nbsp;出售
+		<input class="input" type="text" maxlength="3" size="1" name="atc_money" value="0" />
+		<select name="atc_credittype" id="attmode_2">
+<!--
+EOT;
+if(is_array($db_sellset['type'])){
+foreach ($db_sellset['type'] as $key => $value) {print <<<EOT
+-->
+			<option value="$value">$creditnames[$value]</option>
+<!--
+EOT;
+}}print <<<EOT
+-->
+		</select>
+		<br />
+		<input type="checkbox" name="atc_requireenhide" id="atc_requireenhide" value="1" $htmlhide />&nbsp;加密
+		<input class="input" type="text"  maxlength="6" size="1" name="atc_rvrc" value="0" />
+		<select name="atc_enhidetype" id="attmode_1">
+<!--
+EOT;
+if(is_array($db_enhideset['type'])){
+foreach ($db_enhideset['type'] as $key => $value) {print <<<EOT
+-->
+			<option value="$value">$creditnames[$value]</option>
+<!--
+EOT;
+}}print <<<EOT
+-->
+		</select>
+		<br />
+		</td>
+		<td width="60%" class="f_one" style="padding:7px">
+		<div>
+<!--
+EOT;
+if(!$psot_sta && ($t_per>0 || $admincheck) && $t_exits==1){
+	if ($t_sub_exits == 1) {print <<<EOT
+-->
+		<select name="p_type" style="width:75px;" onchange="getSubType(this.value)";>
+<!--
+EOT;
+	} else {print <<<EOT
+-->
+		<select name="p_type" style="width:75px;">
+<!--
+EOT;
+	}print <<<EOT
+-->
+		<option value="0">不分类</option>
+<!--
+EOT;
+foreach($t_typedb as $key=>$value){
+if($value){print <<<EOT
+-->
+		<option value="$key">$value[name]</option>
+<!--
+EOT;
+}}print <<<EOT
+-->
+		</select>
+<!--
+EOT;
+if ($t_sub_exits == 1) {print <<<EOT
+-->
+		<select name="p_sub_type" id="p_sub_type" style="width:75px"><option value="">不分类</option></select>
+<!--
+EOT;
+}print <<<EOT
+-->
+<script language="JavaScript">
+function getSubType(id){
+
+	var selobj = getObj('p_sub_type');
+	selobj.options.length=0;
+	selobj.options.add(new Option("不分类","0"));
+	var t_subtypedb = JSONParse('$t_subtypedb');
+	for (var temp in t_subtypedb) {
+		if (temp == id) {
+			for (var temp2 in t_subtypedb[temp]) {
+				if (typeof sel_subid != "undefined" && sel_subid == temp2) {
+					selobj.options.add(new Option(t_subtypedb[temp][temp2],temp2));
+				} else {
+					selobj.options.add(new Option(t_subtypedb[temp][temp2],temp2));
+				}
+			}
+		}
+	}
+}
+</script>
+<!--
+EOT;
+}elseif($special == 'read_debate'){
+print <<<EOT
+-->
+	<select name="standpoint" id="standpoint">
+		<option value="0" $debate_0>闲聊一下</option>
+<!--
+EOT;
+if($debatestand != 2){
+print <<<EOT
+-->
+		<option value="1" $debate_1>正方观点</option>
+<!--
+EOT;
+}if($debatestand != 1){
+print <<<EOT
+-->
+		<option value="2" $debate_2>反方观点</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</select>
+<!--
+EOT;
+}print <<<EOT
+-->
+		<input type="text" class="input" id="atc_title" name="atc_title" value="$titletop1" size="55" />	<span class="gray" id="atc_title_warn">限 $db_titlemax 字节</span> <br />
+
+<!--
+EOT;
+if(($db_gdcheck & 4) && $winddb['postnum'] < $db_postgd){print <<<EOT
+-->
+	<div class="fl" style="margin:8px 15px 10px 0;">
+		 认证码: <input class="input" type="text" name="gdcode" size="5" tabindex="6" onfocus="try{opencode('menu_gd',this)}catch(e){}" id="fs_gdcode"/><br />
+		<div class="menu" id="menu_gd" style="visibility:hidden;"><img src="ck.php?" align="absmiddle" style="cursor:pointer;" id="ckcode" alt="看不清楚，换一张" /></div></div>
+<!--
+EOT;
+}list(,,$postq)=explode("\t",$db_qcheck);
+if($winddb[postnum] < $postq && $db_question){
+$qkey = array_rand($db_question);
+print <<<EOT
+-->
+<div class="fl" style="margin:8px 0 0 0;">验证问题：{$db_question[$qkey]} <input class="input" type="text" name="qanswer" /> 正确答案:{$db_answer[$qkey]}<input type="hidden" name="qkey" value="$qkey" /></div>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</div>
+<!--
+EOT;
+if(isset($db_sitemsg['reply']['0']) && $db_sitemsg['reply']['0'] && $psot_sta){
+print<<<EOT
+-->
+<div class="c"></div>
+<div class="cc"><div class="blockquote fl" style="margin:6px 0 0;width:auto;">{$db_sitemsg[reply][array_rand($db_sitemsg[reply])]}</div></div>
+<!--
+EOT;
+}elseif(isset($db_sitemsg['post']['0']) && $db_sitemsg['post']['0']){print<<<EOT
+-->
+<div class="c"></div>
+<div class="cc"><div class="blockquote fl" style="margin:6px 0 0;width:auto;">{$db_sitemsg[post][array_rand($db_sitemsg[post])]}</div></div>
+<!--
+EOT;
+}print<<<EOT
+-->
+		<div style="padding:.3em 0">
+		<input type="hidden" name="atc_autourl" value="1" /></div>
+		<textarea onkeydown="quickpost(event)" name="atc_content" id="atc_content" rows="8" style="width:96%"></textarea>
+		<div style="padding:0px 15px" id="atc_content_warn" class="fr gray">限 $db_postmax 字节</div>
+		<input type="hidden" value="2" name="step" />
+		<input type="hidden" value="$psot_sta" name="action" />
+		<input type="hidden" value="$fid" name="fid" />
+		<input type="hidden" value="$tid" name="tid" />
+		<input type="hidden" name="verify" value="$verifyhash" />
+		<input type="hidden" value="cn0zz" name="_hexie" />
+<script language="javascript">
+<!--
+EOT;
+$tmpVerify = GetVerify($onlineip.$GLOBALS['winddb']['regdate'].$fid.$tid);print <<<EOT
+-->
+document.FORM._hexie.value='$tmpVerify';
+</script>
+<!--
+EOT;
+if($db_allowupload && $_G[allowupload]){
+$_G['uploadtype'] && $db_uploadfiletype = $_G['uploadtype'];
+$db_uploadfiletype = (is_array($db_uploadfiletype) ? $db_uploadfiletype : unserialize($db_uploadfiletype));
+$uploadfiletype = ' ';
+foreach($db_uploadfiletype as $key=>$value)	$uploadfiletype .= $key.' ';
+print <<<EOT
+-->
+		<table style="margin-top:10px;">
+			<tr>
+				<td width="23%">附件</td>
+				<td width="15%">描述</td>
+				<td width="12%">售/密</td>
+				<td width="10%">积分</td>
+				<td width="10%">价格</td>
+				<td width="30%"></td>
+			</tr>
+			<tbody id="attach"></tbody>
+		</table>
+		<div id="viewimg" class="menu" style="display:none;"></div>
+<script type="text/javascript" language="JavaScript" src="js/upload.js"></script>
+<script language="javascript">
+var titlemax = '$db_titlemax';
+var postmax = '$db_postmax';
+var allowmutinum = 15;
+var allow_ext = '$uploadfiletype';
+var attachnum = parseInt('$db_attachnum');
+newAtt.create();
+initCheckTextNum('atc_title','atc_title_warn',titlemax);
+initCheckTextNum('atc_content','atc_content_warn',postmax);
+</script>
+<!--
+EOT;
+}print <<<EOT
+--><div class="c"></div>
+		<div style="margin:5px 0">
+		<div class="cc" style="padding:4px 15px 4px 0;float:right;"><a class="bta" onclick="javascript:checklength(document.FORM,'$db_postmax');" href="javascript:;">字数检查</a>
+		<a class="bta" onclick="loadData('msg');" href="javascript:;">恢复数据</a>
+		<a class="bta" onclick="savedraft();" href="javascript:;">存为草稿</a>
+		<a class="bta" id="newdraft" onclick="opendraft(this.id);" href="javascript:;">草稿箱</a></div>
+		<input class="btn fl b" style="padding:0 1em;*padding:0;width:70px;height:25px;" type="submit" name="Submit" value=" 提 交 " />
+		<div style="padding:4px 10px 0 0;float:left;color:#FF0000">按 Ctrl+Enter 直接提交</div>
+		</div>
+		</td>
+		<td width="20%" class="f_one">
+		<div style="padding:3px; text-align:center; width:200px;">
+		<fieldset id="smiliebox" style="border:1px solid $tdcolor">
+			<legend>表情</legend>
+			<div id="menu_show"></div>
+			<span style="float:right; margin:3px 10px 5px;"><a id="td_face" style="cursor:pointer;" onClick="showDefault();" align="absmiddle">[更多]</a></span><span style="float:left; margin:3px 10px 5px;"><a id="td_generalface" style="cursor:pointer;" onClick="showGeneral();" align="absmiddle">[个性表情]</a></span>
+		</fieldset></div>
+		<div id="menu_generalface" class="menu" style="display:none;"></div>
+		<div id="menu_face" class="menu" style="display:none;"></div>
+		</td>
+	</tr>
+</table></div></form>
+<!--
+EOT;
+$facedb = '';
+if(R_P!=D_P){
+$facedb = readover(D_P.'data/bbscache/face.js');
+}else{print <<<EOT
+-->
+<script language="JavaScript" src="data/bbscache/face.js"></script>
+<!--
+EOT;
+}print <<<EOT
+-->
+<script language="javascript">
+document.FORM.Submit.disabled = false;
+var charset = '$db_charset';
+var stylepath = '$stylepath';
+var cate = '$db_forcetype';
+var cnt = 0;
+
+{$facedb}
+function checkpost(obj){
+	if(cate==1 && obj.p_type!=null && obj.p_type.value==0){
+		showDialog("error","没有选择主题分类",2);
+		obj.p_type.focus();
+		return false;
+	}
+	if(obj.atc_title.value==""){
+		showDialog("error","标题不能为空",2);
+		obj.atc_title.focus();
+		return false;
+	} else if(strlen(obj.atc_title.value)>$db_titlemax){
+		showDialog("error","标题超过最大长度 $db_titlemax 个字节",2);
+		obj.atc_title.focus();
+		return false;
+	}
+	if(strlen(obj.atc_content.value)<$db_postmin){
+		showDialog("error","文章内容少于 $db_postmin 个字节",2);
+		obj.atc_content.focus();
+		return false;
+	} else if(strlen(obj.atc_content.value)>$db_postmax){
+		showDialog("error","文章内容大于 $db_postmax 个字节",2);
+		obj.atc_content.focus();
+		return false;
+	}
+	document.FORM.Submit.disabled = true;
+	cnt++;
+	if(cnt!=1){
+		showDialog("warning","Submission Processing. Please Wait");
+		return false;
+	}
+	if (is_ie && newAtt.aid < 2) {
+		document.FORM.encoding = "application/x-www-form-urlencoded";
+	}
+	return true;
+}
+
+function checklength(theform,postmaxchars){
+	if(postmaxchars != 0){
+		message = '<br />系统限制最大字节数:'+postmaxchars+' 字节';
+	} else{
+		message = '';
+	}
+	showDialog("warning",'您的信息已有字节数: '+strlen(theform.atc_content.value)+' 字节'+message);
+}
+function addsmile(NewCode){
+    document.FORM.atc_content.value += ' [s:'+NewCode+'] ';
+}
+</script>
+<script language="JavaScript" src="js/post.js"></script>
+<!--
+EOT;
+?>

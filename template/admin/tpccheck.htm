@@ -1,0 +1,51 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">版块开启 "主题审核" 功能时，只有经过管理员审核的主题才会在前台显示</div>
+
+<form action="$basename&" method="post">
+<h2><b>帖子验证</b></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="35%">所属分类 : <select name="fid"><option>选择分类</option>$forumcache</select> &nbsp;
+作者 : <input type="text" size="20" class="input" name="username"> &nbsp;
+<input type="submit" value="提 交" class="btn"></td></tr>
+</table>
+</form>
+
+<form action="$basename&" method=post>
+<input type=hidden name=job value=search>
+<input type=hidden name=step value=2>
+<h2><b>帖子验证</b></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac s3"><td width='5%'>ID</td><td>标题</td><td width='15%'>作者</td>
+<td width='15%'>所属分类</td><td width='15%'>发表时间</td><td width='6%'></td></tr>
+<!--
+EOT;
+$num=($page-1)*$db_perpage;
+foreach($checkdb as $check){
+$num++;
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>$num</td>
+<td><a href="$admin_file?adminjob=content&type=tpc&id=$check[tid]">$check[subject]</a></td>
+<td><a href="u.php?action=show&uid=$check[authorid]" target='_blank'>$check[author]</td><td>$check[name]</td>
+<td class='smalltxt'>$check[postdate]</td>
+<td><input type="checkbox" name="selid[]" value="$check[tid]" onclick="pwJsCheck(this)" /></td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</td></tr>
+<tr><td class="tr4 tac" colspan="6"><input type=radio name="type" value=del>删除<input type=radio name="type" checked='checked' value=pass>通过</td></tr>
+</table><br>$pages
+<center>
+<input type="button" name="chkall" class="btn" value="全 选" onclick="CheckAll(this.form)">
+<input type=submit class="btn" value="提 交">
+</center></form><br/>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

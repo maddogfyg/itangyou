@@ -1,0 +1,488 @@
+form,*,body{padding:0;margin:0;}
+img{border:none; padding:0; margin:0; }
+.c{clear:both; font:0px/0px Arial; height:0px;}
+li{list-style:none;}
+.fl{float:left; }
+.fr{float:right; }
+.mainHead a{color:#FFF}
+.menu{position:relative; left:200px; top:100px; width:250px;}
+.menu2{left:370px; top:-15px;}
+.menu_top{background:url(../images/menu_top.png) left top no-repeat; height:28px; }
+.menu_bg{background:url(../images/menu_bg.png) left top repeat-y;}
+.menu_bottom{background:url(../images/menu_bottom.png) left top no-repeat; height:28px;}
+.menu_s{background:url(../images/menu_s.png) left center no-repeat; width:18px; height:18px; position:relative; top:60px;}
+.menu_li{ line-height:28px;padding-left:18px}
+.menu_li li{border-bottom:1px solid #eee; width:170px;}
+
+.menu_li li a{font-size:12px;color:#000; text-decoration:none; display:block; padding:0 0 0 20px; height:29px;}
+.menu_li li a:hover{background:url(../images/menu_hover.gif) left center repeat-x; color:#fff; }
+.menu_s2{background:url(../images/menu/menu-parent.gif) 0 0 no-repeat; width:5px; height:8px; margin:10px 10px 0 0; }
+.menu_li li a:hover .menu_s2{background-position:0 -8px;}
+.start_padding {padding-left:30px;}
+.menu_item
+{
+padding:15px 0 0 0px;
+
+}
+.menu_item li
+{
+border:0;
+}
+.search_text
+{
+width:188px;
+height:31px;
+top:5px;
+vertical-align:middle;
+margin:2px 3px 0 6px;
+background:transparent url(../images/search_bg.gif) no-repeat;
+}
+.searchbtn
+{
+margin:2px 5px 0px 20px;
+}
+
+.mt8
+{
+position:absolute;
+top:8px;
+left:110px;
+margin-right:10px;
+}
+.mt0
+{
+position:absolute;
+top:5px;
+left:80px;
+margin-right:10px;
+}
+
+.mt3
+{
+position:relative;
+top:-5px;
+}
+.mt2
+{
+position:relative;
+height:28px;
+top:-2px;
+}
+
+.textbox
+{
+width:123px;
+margin:5px 3px 0 6px;
+padding-left:5px;
+height:19px;
+border:0;
+}
+.clearSearch
+{
+top:5px;
+background:transparent url(../images/search_close.gif) center no-repeat;
+width:20px;
+height:20px;
+border:0;
+position:absolute;
+top:6px;
+left:130px;
+}
+
+}
+.transparent
+{
+background:transparent;
+}
+
+html,body
+{
+padding:0;
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+background: #e5e9eb;
+}
+#x-shortcuts dt
+{
+margin:0px 0px 0px 0px;
+text-align:center;
+float:left;
+}
+dt a div
+{
+color:#3b5567;
+padding-top:5px;
+font-size:12px;
+}
+dt img
+{
+border:0;
+}
+DIV.windoo
+{
+	position: absolute;
+	overflow: hidden;
+}
+DIV.windoo .windoo-drag
+{
+	cursor: move;
+}
+DIV.windoo DIV.windoo-body
+{
+	position: relative;
+	text-align: left;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	width: auto;
+	padding-right: 0px;
+	overflow: auto;
+	padding-top: 0px;
+}
+DIV.windoo DIV.windoo-frame
+{
+	position: absolute;
+	line-height: 0;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+}
+DIV.windoo DIV.windoo-frame .strut
+{
+	line-height: 0;
+	font-size: 0px;
+	
+}
+DIV.windoo DIV.windoo-frame .title
+{
+	overflow: hidden;
+}
+DIV.windoo DIV.windoo-frame .title .title-text
+{
+	width: 100%;
+	overflow: hidden;
+	font-weight:bold;
+	color:#49779e;
+	height:24px;
+	padding:10px 0 0 8px;
+	
+
+	
+}
+DIV.windoo A.windoo-button
+{
+	z-index: 10;
+	position: absolute;
+	text-align: center;
+	text-indent: -1000em;
+	outline-style: none;
+	outline-color: invert;
+	outline-width: medium;
+	display: block;
+	overflow: hidden;
+	text-decoration: none;
+}
+DIV.windoo .windoo-sizer
+{
+	z-index: 5;
+	position: absolute;
+	background: url(windoo/s.gif);
+	OVERFLOW: hidden;
+	-moz-user-select: none;
+}
+DIV.windoo .windoo-north
+{
+	width: 100%;
+	height: 6px;
+	top: 0px;
+	cursor: n-resize;
+	left: 0px;
+}
+DIV.windoo .windoo-south
+{
+	width: 100%;
+	bottom: 0px;
+	height: 6px;
+	cursor: s-resize;
+	left: 0px;
+}
+DIV.windoo .windoo-west
+{
+	width: 6px;
+	height: 100%;
+	top: 0px;
+	cursor: w-resize;
+	left: 0px;
+}
+DIV.windoo .windoo-east
+{
+	width: 6px;
+	height: 100%;
+	top: 0px;
+	cursor: e-resize;
+	right: 0px;
+}
+DIV.windoo .windoo-nw
+{
+	width: 9px;
+	height: 9px;
+}
+DIV.windoo .windoo-ne
+{
+	width: 9px;
+	height: 9px;
+}
+DIV.windoo .windoo-sw
+{
+	width: 9px;
+	height: 9px;
+}
+DIV.windoo .windoo-se
+{
+	width: 9px;
+	height: 9px;
+}
+DIV.windoo .windoo-nw
+{
+	top: 0px;
+	cursor: nw-resize;
+	left: 0px;
+}
+DIV.windoo .windoo-ne
+{
+	top: 0px;
+	cursor: ne-resize;
+	right: 0px;
+}
+DIV.windoo .windoo-sw
+{
+	bottom: 0px;
+	cursor: sw-resize;
+	left: 0px;
+}
+DIV.windoo .windoo-se
+{
+	bottom: 0px;
+	cursor: se-resize;
+	right: 0px;
+}
+
+.menu-sep{
+	border:0;
+	line-height: 1px;
+	height:1px;
+	width:169px;
+	padding-left:0;
+	background-color: #eee;
+	margin: 2px 3px 0 -16px;
+	display: block;
+	font-size: 1px;
+	overflow: hidden;
+}
+.menu-sep-start
+{
+ border:0;
+	line-height: 1px;
+	width:237px;
+	margin-left:0px;
+	 _margin-left:-2px;
+	height:1px;
+	background-color: #EEE;
+	display: block;
+	font-size: 1px;
+	overflow: hidden;
+}
+.leftContainer
+{
+width:180px;
+padding-bottom:100px;
+_WIDTH: 195px! important;
+overflow:auto;
+}
+.btn-big
+{
+float:left;position:relative;
+border:0;
+cursor:default;
+overflow:hidden; 
+text-overflow:ellipsis;
+white-space:nowrap;
+margin-left:0px;
+margin-right:1px;
+text-align:center;
+height:15px;
+width:110px;
+background:transparent url(../images/b_btn.gif) no-repeat;
+}
+.skipText
+{
+overflow:hidden; text-overflow:ellipsis;white-space:nowrap;
+width:52px;
+height:100%:
+line-height:100%;
+text-align:center;
+
+}
+.btn-big-over{
+ color:#000;
+ background:transparent url(../images/b_btn_on.gif) no-repeat;
+	2background-position: 0 -63px;
+}
+.btn-big-out{
+color:gray;
+ background:transparent url(../images/b_btn.gif) no-repeat;
+	2background-position: 0 -84px;
+}
+.startPanel
+{
+background:url(../images/startPanel.png) repeat-y;
+width:275px;
+border:0;
+padding-left:30px;
+margin-left:2px;
+z-index:1000;
+}
+.startPanel	ul
+{
+margin-left:-29px;
+_margin-left:-27px;
+}
+.footStartPanel
+{
+background:url(../images/startPanelFoot.png) no-repeat 0px 0;
+font-size:0;line-height:0;
+margin-left:2px;
+width:275px;
+height:16px;
+}
+.start_li
+{
+margin-left:0px;
+
+_margin-left:-2px;
+}
+.menuIndex
+{
+z-index:1000001;
+}
+.startMenu-items
+{
+width:193px;height:299px;
+padding:40px 0 0 38px;
+margin-left:-2px;
+line-height:24px;
+}
+.startMenu-items dt a div
+{
+color:#000;
+}
+#footBar
+{
+width:100%;height:28px;
+background:url(../images/taskbuttons-panel-bg-2.jpg) repeat-x;
+}
+#startMenu
+{
+border:0;
+width:81px;
+height:28px;
+font-size:17px;
+background:transparent;
+font-style:italic ;
+color:#FFF;
+}
+#settingsMenu
+{
+border:0;
+border-top:1px solid #0A090E;
+width:51px;
+height:28px;
+background:#484C50;
+color:#FFF;
+}
+#taskbar
+{
+height:27px;
+position:relative;/*任务栏置与顶层*/
+z-index:1000000;
+overflow:auto;
+overflow-Y:auto;
+overflow-X:hidden;
+}
+#taskbar TD
+{
+font-size:13px;
+}
+#taskbar div
+{
+font-size:13px;
+padding-top:3px;
+line-height:25px;
+height:24px;
+}
+.topTd
+{
+padding:3px 0 0 0px;
+position:absolute;
+font-size:12px;
+line-height:25px;
+left:0;
+height:34px;
+width:100%;
+bottom:0px;
+_bottom:-1px;
+overflow:hidden; text-overflow:ellipsis;white-space:nowrap; 
+color:#717171;
+}
+.leftFoot
+{
+
+padding-left:25px}
+.topTd *
+{
+font-size:12px;
+line-height:16px;
+}
+.topTd a
+{
+font-size:12px;
+color:#4898b6
+}
+.topTd td
+{
+color:#999
+}
+.lineTop
+{
+position:absolute;bottom:31px;left:0;
+border-bottom:1px solid #c9cbcc;
+}
+.lineBottom
+{
+position:absolute;
+bottom:29px;_bottom:28px;left:0;
+border-top:1px solid #f7fafd;
+}
+.startMenuC
+{
+width:22px;
+height:22px;
+background:url(../images/start.png) no-repeat;
+}
+
+.barBg
+{
+background:#d2e3ec;
+
+border-right:1px solid  #b2d1e1;
+}
+
+.barBg_p
+{
+border-right:1px solid  #E5E9EB;
+
+
+}
+

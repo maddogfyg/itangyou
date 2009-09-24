@@ -1,0 +1,130 @@
+<!--
+<?php 
+
+
+print <<<EOT
+-->
+
+<ul class="nav5 cc2">
+	<li class="current"><a href="$basename&job=stman">专题内容管理</a></li>
+	<li><a href="$basename&job=cgman">专题分类管理</a></li>
+	<li><a href="$basename&job=bgman">背景图片管理</a></li>
+</ul>
+
+
+<form action="{$basename}&job=$job" method="post">
+<table width="100%">
+	<tr class="tr3 s3">
+		<td>
+			专题名称：<input type="text" name="search_title" value="$search_title" />
+			所属分类：<select name="search_cid">
+				<option value="0">所有分类</option>
+<!--
+EOT;
+foreach ($category_list as $category) {
+	$selected = $category['id'] == $search_cid ? "selected" : "";
+print <<<EOT
+-->
+				<option value="{$category['id']}" $selected>{$category['title']}</option>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			</select>
+			<input class="btn" type="submit" value="搜索专题" />
+		</td>
+	</tr>
+</table>
+</form>
+
+<form action="{$basename}&job=$job" method="post" id="listForm" onsubmit="return checkSubmit();">
+<table width="100%">
+	<tr class="tr3 s3">
+		<td width="30">&nbsp;</td>
+		<td>专题名称</td>
+		<td>链接地址</td>
+		<td>所属分类</td>
+		<td>创建时间</td>
+
+<!-- 		<td>有效时间</td> -->
+		<td>&nbsp;</td>
+	</tr>
+<!--
+EOT;
+	foreach ($stopic_list as $stopic) {
+		$start_time = get_date($stopic['start_date'], "Y/m/d");
+		$end_time = get_date($stopic['end_date'], "Y/m/d");
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td><input name="stopic_ids[]" type="checkbox" value="{$stopic['stopic_id']}" /></td>
+<!--
+EOT;
+		if ($stopic[url]) {
+print <<<EOT
+-->
+		<td>{$stopic['title']}</td>
+		<td><a href="{$stopic['url']}" target="_blank">{$stopic['url']}</a></td>
+<!--
+EOT;
+		} else {
+print <<<EOT
+-->
+		<td>{$stopic['title']}</td>
+		<td>页面还未生成</td>
+<!--
+EOT;
+		}
+print <<<EOT
+-->
+		<td>{$stopic['catetitle']}</td>
+		<td>{$stopic['create_date']}</td>
+		<!-- <td>$start_time - $end_time</td> -->
+		<td><a href="$basename&job=editstopic&stopic_id={$stopic['stopic_id']}">编辑内容</a></td>
+	</tr>
+<!--
+EOT;
+	}
+print <<<EOT
+-->
+
+	<tr class="tr3">
+		<td><a href="javascript:void(0);" onclick="CheckAll(getObj('listForm'))">全选</a></td>
+		<td colspan="5">
+			<input type="hidden" name="jobact" value="delete" />
+			<input type="submit" value=" 删除所选 " class="btn" />
+		</td>
+	</tr>
+</table>
+$pages
+</form>
+
+<script language="javascript">
+function checkSubmit() {
+	if (!checkSelectBox('stopic_ids[]')) {
+		alert('请选择要删除的专题');
+		return false;
+	} else {
+		return confirm('该操作将删除选中专题的所有数据，你确定要继续么？');
+	}
+}
+function checkSelectBox(checkBoxName) {
+	var obj;
+	obj = document.getElementsByName(checkBoxName);
+	if (obj != null) {
+		var i;
+		for(i=0; i<obj.length; i++){
+			if (obj[i].checked) return true;
+		}
+	}
+	return false;
+}
+</script>
+
+<!--
+EOT;
+
+
+?>
+-->

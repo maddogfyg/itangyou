@@ -1,0 +1,178 @@
+<!--<?php
+include_once PrintEot('left');
+print<<<EOT
+-->
+<h2><a href="$admin_file?adminjob=app&admintype=article&action=app&job=appslist">返回基础应用列表</a></h2>
+<!--
+EOT;
+if(!$action){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename" class="two">记录设置</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename&" method="post">
+<input type="hidden" name="step" value="3">
+<h3>记录积分奖惩设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3" align="center">
+		<td width="15%">积分名称</td>
+		<td>发表记录(+)</td>
+		<td>删除记录(-)</td>
+	</tr>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$value</td>
+		<td><input name="creditset[Post][$key]" value="{$creditset[Post][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Delete][$key]" value="{$creditset[Delete][$key]}" size="8" class="input" /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+<tr class="tr3"><td colspan="3" style="padding-left:1em">注:<b>威望积分</b>支持小数点后一位，其他积分只允许整数！</td></tr>
+</table><br />
+<h3>记录积分流通记录</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td colspan="3" style="line-height:18px;padding-left:1em">此功能可以详细记录某种积分的流通情况，帮助站长更加清晰地掌握论坛的积分状况！</td>
+	</tr>
+	<tr class="tr3" align="center">
+		<td width="15%">积分名称</td>
+		<td>发表记录</td>
+		<td>删除记录</td>
+	</tr>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$value</td>
+		<td><input type="checkbox" name="creditlog[Post][$key]" value="1" {$creditlog[Post][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[Delete][$key]" value="1" {$creditlog[Delete][$key]} /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<br><center><input type="submit" value="提 交" class="btn"></center></form>
+<!--
+EOT;
+}elseif($action == 'writes'){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename&action=writes" class="two">记录管理</a></li>
+</ul>
+<div class="c"></div>
+<!--
+EOT;
+if (!$job){print <<<EOT
+-->
+<script language="JavaScript" src="js/date.js"></script>
+<form method="POST" action="$basename&action=writes&job=list&">
+<h2>记录搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="30%">记录内容（可使用通配符“*”）</td>
+		<td><input type="text" name="content" value="" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">作者名称（可使用通配符“*”）</td>
+		<td><input type="text" name="username" value="" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">发表日期</td>
+		<td><input type="text" name="postdate_s" value="" id="postdate_s" onclick="javascript:ShowCalendar(this.id)" class="input"> - <input type="text" name="postdate_e" id="postdate_e" value="" onclick="javascript:ShowCalendar(this.id)" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">顺序</td>
+		<td>发表时间 ：<input type="radio" name="ordertype" value="asc">升序 <input type="radio" name="oredertype" value="desc" checked="checked">降序</td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">每页显示条数</td>
+		<td><input type="text" name="lines" value="30" class="input" size="5"></td>
+	</tr>
+</table><br />
+<center><input class="btn" value="提 交" type="submit"></center>
+</form>
+<!--
+EOT;
+} elseif ($job == 'list') {print<<<EOT
+-->
+<form method="POST" action="$basename&action=writes&">
+<input type="hidden" name="job" value="delete">
+<input type="hidden" name="content" value="$content">
+<input type="hidden" name="username" value="$username">
+<input type="hidden" name="postdate_s" value="$postdate_s">
+<input type="hidden" name="postdate_e" value="$postdate_e">
+<input type="hidden" name="ordertype" value="$ordertype">
+<input type="hidden" name="page" value="$page">
+<input type="hidden" name="lines" value="$lines">
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr><td class="tr4" colspan="16">记录列表</td></tr>
+<tr class="tr3 s3">
+	<td>ID</td>
+	<td colspan="6" class="tac">内容</td>
+	<td colspan=2>作者</td>
+	<td colspan=2>发表时间</td>
+	<td colspan=2>来源</td>
+	<td colspan=2>评论数</td>
+	<td class="tac">删除</td>
+</tr>
+<!--
+EOT;
+$db_blogsource = array('web'=>'网页','signature'=>'个性签名','other'=>'其他');
+foreach ($writedb as $key => $write) {
+if(!$write['content'])continue;
+$key+=($page-1)*$lines+1;
+print <<<EOT
+-->
+<tr class="tr3">
+	<td class="tac">$key</td>
+	<td colspan="6" class="tac" title="$write[content]">$write[s_content]</td>
+	<td colspan=2><a href="u.php?action=show&uid=$write[uid]" target="_blank">$write[username]</a></td>
+	<td colspan=2>$write[postdate]</td>
+	<td colspan=2>{$db_blogsource[$write[source]]}</td>
+	<td colspan=2>
+<!--
+EOT;
+if ($write['c_num'] > 0) {print <<<EOT
+-->
+	<a href="$admin_file?adminjob=mode&admintype=o_comments&job=list&type=write&typeid=$write[id]">$write[c_num]</a>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+	0
+<!--
+EOT;
+}print <<<EOT
+-->
+	</td>
+	<td class="tac"><input type="checkbox" name="selid[]" value="$write[id]"></td>
+</tr>
+<!--
+EOT;
+}print<<<EOT
+-->
+</table><br />$pages
+<center><input class="btn" type='button' name='chkall' value='全 选' onclick='CheckAll(this.form)'>
+<input type="submit" value='提 交' class="btn" onclick="return checkdel();"></center>
+</form>
+<script language="JavaScript">
+function checkdel(){
+	if(confirm("确定要删除所选记录吗？" )){
+		return true;
+	}else{
+		return false;
+	}
+}
+</script>
+<!--
+EOT;
+}}include_once PrintEot('adminbottom');
+?>-->

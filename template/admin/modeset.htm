@@ -1,0 +1,137 @@
+<!--<?php
+include_once PrintEot('left');
+if (!$action) {
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+1、可以根据自己站点的定位来选择合适自己的社区模式<br />2、二级域名设置，如：bbs.phpwind.net，为了能统一登录，请到“核心设置 － 常规设置”中配置一下Cookie 作用域<br />3、修改主导航中的模式名及显示顺序请到“<b>社区主导航</b>”
+</div>
+
+<form action="$basename&" method="post">
+	<input type="hidden" name="action" value="set">
+	<h2>社区模式选择</h2>
+	<table width="100%" cellspacing="0" cellpadding="0">
+
+		<tr class="tr3 s3">
+			<td>模式名称</td>
+			<td>模式别名</td>
+			<td>二级域名</td>
+			<td>选择默认</td>
+			<td>是否开启</td>
+			<!--
+			<td width="5%">配置</td>
+			-->
+			<td width="5%">更新</td>
+
+			<td width="5%">卸载</td>
+		</tr>
+		<tr class="tr3">
+			<td>站点模式</td>
+			<td><input type="text" name="title[bbs]" value="{$db_modes['bbs']['title']}" class="input"></td>
+			<td></td>
+			<td><input type="radio" name="defaultmode" value='' $defalutchecked></td>
+			<td><input type="hidden" name="ifopen[]" value="bbs" /></td>
+			<td colspan="4"> </td>
+		</tr>
+<!--
+EOT;
+foreach($db_modes as $key=>$mode){
+if ($key == 'bbs') continue;
+$checked = $key==$db_mode ? 'checked="checked"' : '';
+$ifopen = $mode[ifopen]==1 ? 'checked="checked"' : '';
+print <<<EOT
+-->
+		<tr class="tr3">
+			<td>{$mode[m_name]}</td>
+			<td><input type="text" name="title[$key]" value="{$mode[title]}" class="input"></td>
+			<td><input type="text" name="domain[$key]" value="{$db_modedomain[$key]}" class="input"></td>
+			<td><input type="radio" name="defaultmode" value="$key" $checked></td>
+			<td><input type="checkbox" name="ifopen[]" value="$key" $ifopen/></td>
+			<!--
+			<td>
+				<a class="fourm-two" href="$admin_file?adminjob=modepage&m=$key">
+					<span class="edit" title="配置页面"/>
+				</a>
+			</td>
+			-->
+			<td>
+				<a class="fourm-two" title="更新缓存" href="$basename&action=fourmtypecache&m=$key">
+					<span class="update"></span>
+				</a>
+			</td>
+
+			<td>
+				<a class="fourm-two" href="$basename&action=uninstall&m=$key" onclick="return confirmdel();">
+					<span class="del" title="卸载"/>
+				</a>
+			</td>
+		</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</table>
+	<br />
+	<center><input type="submit" class="btn" value="提 交" /></center>
+</form>
+<!--
+EOT;
+if ($uninstall) {
+print <<<EOT
+-->
+<br />
+<h2>未安装模式</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 s3">
+		<td width="10%">模式名称</td>
+		<td width="60%">模式说明</td>
+		<td width="10%">模式目录</td>
+		<td width="10%">管理选项:</td>
+	</tr>
+
+<!--
+EOT;
+foreach($uninstall as $mode){
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td>$mode[0]</td>
+		<td>$mode[1]</td>
+		<td>$mode[2]</td>
+		<td><a href="$basename&action=install&mode=$mode[2]">安装</a></td>
+	</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+<!--
+EOT;
+}}print <<<EOT
+-->
+</div>
+<script language="javascript">
+function showListFid(fid){
+	if (getObj('type_'+fid)) {
+		var showfid = getObj('type_'+fid);
+		if (showfid.style.display == 'none') {
+			showfid.style.display = '';
+			getObj('cate_'+fid).className = 'close fl';
+		} else {
+			showfid.style.display = 'none';
+			getObj('cate_'+fid).className = 'open fl';
+		}
+	}
+}
+function confirmdel(){
+	if (!confirm("卸载了之后本模式的数据也会清空，确定要卸载本模式？")){
+		return false;
+	}
+}
+</script>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

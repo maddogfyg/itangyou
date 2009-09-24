@@ -1,0 +1,264 @@
+<!--<?php print <<<EOT
+--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=$db_charset" />
+<title>$subject$forumtitle$db_bbstitle - Powered by PHPWind</title>
+<meta name="generator" content="PHPWind $wind_version" />
+<meta name="keywords" content="$db_metakeyword" />
+<meta name="description" content="$db_metadescrip" />
+<meta http-equiv="x-ua-compatible" content="ie=7" />
+<link rel='archives' title='$db_bbsname' href='$db_bbsurl/simple' />
+<!--
+EOT;
+if($fid){print <<<EOT
+-->
+<link rel="alternate" type="application/rss+xml" title="RSS" href="$db_bbsurl/rss.php?fid=$fid" />
+<!--
+EOT;
+}print <<<EOT
+-->
+<base id="headbase" href="$db_bbsurl/" />
+<link rel="stylesheet" type="text/css" href="$imgpath/wind-reset.css" />
+<link rel="stylesheet" type="text/css" href="$imgpath/apps/total.css" />
+<!--
+EOT;
+if($pwModeCss){print <<<EOT
+-->
+<link rel="stylesheet" type="text/css" href="$pwModeCss" />
+<!--
+EOT;
+}print <<<EOT
+-->
+<script type="text/javascript" language="JavaScript" src="js/pw_ajax.js"></script>
+<SCRIPT type="text/javascript" LANGUAGE="JavaScript" src="js/core/core.js"></SCRIPT>
+<script language="JavaScript">
+var imgpath = '$imgpath';
+var verifyhash = '$verifyhash';
+var modeimg = '$pwModeImg';
+var modeBase = '$baseUrl';
+var winduid = '$winduid';
+var windid	= '$windid';
+var groupid	= '$groupid';
+var basename = '$basename';
+var temp_basename = '$temp_basename';
+</script>
+</head>
+<body onkeydown="try{keyCodes(event);}catch(e){}" id="body">
+<!--
+EOT;
+if($GLOBALS['groupid'] != 'guest' && $GLOBALS['groupid'] != '' && $GLOBALS['db_toolbar']){print <<<EOT
+-->
+<!--[if IE 6]>
+<style>
+html,body{overflow:hidden;height:100%;}
+.fixed {right:0;left:0;bottom:0;position: fixed;z-index:200}
+</style>
+<div id="upPanel" style="overflow:auto;overflow-y:scroll;width:100%;height:100%;position:absolute;">
+<div id="upPanelWrap" class="cc">
+<![endif]-->
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="topbar">
+	<div id="nav-operate">
+		<table width="100%" cellpadding="0" cellspacing="0" border="0">
+			<tr class="vt">
+				<td width="380">
+<!--
+EOT;
+if($groupid=='guest'){
+print <<<EOT
+-->
+		<a href="login.php" title="登录" class="b">登录</a>&nbsp;&nbsp;<a href="$regurl" class="b">注册</a>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+		<img src="$_LoginInfo[faceurl]" id="iconimg" class="img-20" align="absbottom" /> <a href="u.php?action=show" id="td_userinfomore" class="b">$windid</a>
+		<a href="profile.php" title="设置中心" target="_blank">设置</a><!--
+EOT;
+if(CkInArray($windid,$manager) || $SYSTEM['allowadmincp']){print <<<EOT
+--><a href="$db_adminfile" target="_blank">系统设置</a><!--
+EOT;
+}if($winddb[newpm]>0 && $_G[maxmsg]>0){print <<<EOT
+--><a href="message.php?type=newmsg" id="td_msg" title="有新短消息" style="color:red;" target="_blank">新消息<img src="$imgpath/wind/meg.gif" align="absmiddle" /></a><!--
+EOT;
+} else {print <<<EOT
+--><a href="message.php" id="td_msg" title="短消息" target="_blank">短消息</a><!--
+EOT;
+}print <<<EOT
+--><a href="$loginouturl">退出</a><!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+		<td>
+			<div id="goto-nav"><ul>
+<!--
+EOT;
+foreach($GLOBALS['db_headnav'] as $value){
+if ($value['pos'] == '-1' || strpos(",{$value['pos']},",','.($db_mode?$db_mode:'bbs').',') !== false) {print <<<EOT
+-->
+				<li>{$value['html']}</li>
+<!--
+EOT;
+}}foreach ($db_modes as $key => $value) {
+if($key != 'o' && $value['ifopen'] == 1) {
+$this_url = $db_bbsurl.'/index.php?m='.$key;
+$imageid = $key == 'bbs' ? 'toforum' : 'toportal';
+print<<<EOT
+-->
+				<li id="$imageid"><a href="$this_url" target="_blank"><span>$value[title]</span></a></li>
+<!--
+EOT;
+}
+}print <<<EOT
+-->
+			</ul></div>
+		</td>
+		</tr></table>
+	</div>
+</div>
+<div id="header" class="cc">
+	<table width="100%">
+		<tr>
+			<td><a href="$db_bbsurl/index.php?m=o"><img src="$pwModeImg/logo.png" /></a></td>
+			<td align="right">
+<!--
+EOT;
+list($htmlAdvert,$arrayAdvert) = pwAdvert('Site.Header',$fid);
+if($htmlAdvert){print <<<EOT
+-->
+					$htmlAdvert
+<!--
+EOT;
+}print <<<EOT
+-->
+			</td>
+		</tr>
+	</table>
+	<div class="nav-o f16 b">
+		<div class="fr search">
+			<form action="$searchUrl" method="post" onsubmit="return msg(this);">
+				<input type="hidden" name="step" value="2" />
+				<input type="hidden" name="accord" value="username" />
+				<input class="s-input" name="username" id="keyword" type="text" value="找人..." style="color:gray;+background: #FFF;+margin-top:-2px" onfocus="if(getObj('keyword').value != ''){getObj('keyword').value = '';getObj('keyword').style.color='';}"/>
+				<input type="submit" id="sbb" class="s-btn" value="        "/>
+			</form>
+		</div>
+		<ul class="cc tac">
+<!--
+EOT;
+foreach($o_navinfo as $key=>$value){
+if ($key == 'KEYhome' || $key == 'KEYindex' || $key == 'KEYbrowse') {
+if ($key == 'KEYhome' && $winduid) {print <<<EOT
+-->
+			<li id="o_$key"><span>{$value['html']}</span></li>
+<!--
+EOT;
+} elseif ($key == 'KEYindex' && !$winduid) {
+$q = 'home';print <<<EOT
+-->
+			<li id="o_$key"><span>{$value['html']}</span></li>
+<!--
+EOT;
+} elseif ($key == 'KEYbrowse' && $winduid && $o_browseopen) {print <<<EOT
+-->
+			<li id="o_$key"><span>{$value['html']}</span></li>
+<!--
+EOT;
+}}else{print <<<EOT
+-->
+			<li id="o_$key"><span>{$value['html']}</span></li>
+
+<!--
+EOT;
+}}print <<<EOT
+-->
+		</ul>
+	</div>
+<script type="text/javascript">
+setCurrent('o_KEY$q','','current');
+function msg(obj) {
+	if (obj.username.value == false) {
+		showDialog("error",'请输入用户名');
+		return false;
+	}
+	return true;
+}
+</script>
+</div>
+<!--
+EOT;
+list($htmlAdvert,$arrayAdvert) = pwAdvert('Site.NavBanner1',$fid);
+if($htmlAdvert){print <<<EOT
+-->
+<div class="tac" style="padding:.5em 0 0;">$htmlAdvert</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+<!--
+EOT;
+list($htmlAdvert,$arrayAdvert) = pwAdvert('Site.NavBanner2',$fid);
+if($htmlAdvert){print <<<EOT
+-->
+<div class="tac" style="padding:.5em 0 0;">$htmlAdvert</div>
+<!--
+EOT;
+}if ($winduid){print<<<EOT
+-->
+<div id="menu_userinfomore" class="menu-post cc" style="display:none;">
+	<div class="menu-b" style="width:26.5em;">
+		<ul class="menu-half cc">
+		<li>等级: $gp_grouptitle
+<!--
+EOT;
+if ($_G['allowhide']) {print <<<EOT
+-->
+		<li>状态: 
+<span style="cursor:pointer;" onclick="ajax.send('pw_ajax.php?action=changestate','',changeState)" id="online_state"><!--
+EOT;
+if (GetCookie('hideid') == 1) {print <<<EOT
+--><img src="$imgpath/stealth.png" align="absmiddle" />隐身<!--
+EOT;
+} else {print <<<EOT
+--><img src="$imgpath/online.png" align="absmiddle" />在线<!--
+EOT;
+}print <<<EOT
+--></span>
+<script language="JavaScript">
+function changeState() {
+	var msg = ajax.request.responseText;
+	if (msg == 1){
+		getObj('online_state').innerHTML = '<img src="$imgpath/stealth.png" align="absmiddle" />隐身';
+	}else{
+		getObj('online_state').innerHTML = '<img src="$imgpath/online.png" align="absmiddle" />在线';
+	}
+}
+</script>
+			</li>
+<!--
+EOT;
+}print <<<EOT
+-->	
+			<li>帖子: $winddb[postnum]</li>
+			<li>今日: $winddb[todaypost]</li>
+			<li>$db_rvrcname: <span class="s2">$userrvrc $db_rvrcunit</span></li>
+			<li>$db_moneyname: <span class="s3">$winddb[money] $db_moneyunit</span></li>
+			<li>$db_creditname: <span class="s3">$winddb[credit] $db_creditunit</span></li>
+			<li>最后登录: <span class="f10">{$_LoginInfo['lastlodate']}</span></li>
+			<li>登录IP: <span class="f10">$onlineip</span></li>
+		</ul>
+	</div>
+</div>
+<!--
+EOT;
+}print<<<EOT
+-->
+<div id="main" class="cc">
+<!--
+EOT;
+?>-->

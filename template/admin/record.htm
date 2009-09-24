@@ -1,0 +1,107 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">1.　为了保证后台的安全性,系统只允许站点创始人和管理员删除操作日记<br>2.　系统必须保留前100条后台管理日志.</div>
+<form action="$basename&" method=post>
+<input type=hidden name=action value=search>
+<h2>搜索</h2>
+
+<table width=100% cellspacing="0" cellpadding="0">
+<tr class="tr3 s3" align="center">
+<td>关键字</td>
+<td><input type="text" class="input" name="keyword"></td>
+<td><input type="submit" class="btn" value='提 交'></td></tr>
+</table>
+
+</form><br/>
+<h2><b>管理日志</b></h2>
+<table width="100%" cellspacing="0" cellpadding="0" style="word-break:break-all;">
+<!--
+EOT;
+if($admintype=='adminlog'){
+print <<<EOT
+-->
+<tr class="tr3 tac s3">
+	<td width="10%">用户名</td>
+	<td width="10%">错误密码</td>
+	<td width="30%">操作日志</td>
+	<td width="10%">IP</td>
+	<td width="15%">操作时间</td>
+	<td width="30%">其他</td>
+</tr>
+$adlogfor
+<!--
+EOT;
+}elseif($admintype=='forumlog'){
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>管理员</td>
+<td>用户名</td>
+<td width='15%'>站点</td>
+<td colspan=3>操作日志</td>
+<td>IP</td>
+<td>操作时间</td>
+</tr>
+$adlogfor
+<!--
+EOT;
+}elseif($admintype=='creditlog'){
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td width=8%>积分名称</td>
+<td width=10%>作者</td>
+<td width=5%>点数</td>
+<td width=12%>查看文章位置</td>
+<td width=10%>管理员</td>
+<td width=10%>IP</td>
+<td width=15%>操作时间</td>
+<td>评分理由</td></tr>
+<!--
+EOT;
+foreach($creditdb as $credit){
+if($credit){
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>$credit[name]</td>
+<td>$credit[5] </td>
+<td>$credit[6]</td>
+<td><a href="read.php?tid=$credit[1]">查看文章位置</a></td>
+<td>$credit[3]</td>
+<td>$credit[4]</td>
+<td>$credit[time]</td>
+<td>$credit[8]</td></tr>
+<!--
+EOT;
+}}}
+print <<<EOT
+-->
+</table><br>$pages
+<!--
+EOT;
+if($action=='search'){print <<<EOT
+-->
+<br><br><center class="xia2"><a href='$basename'><b>查看全部日志</b></a></center>
+<!--
+EOT;
+}if($admin_gid==3){
+$j_url=EncodeUrl("$basename&del=Y");
+print <<<EOT
+-->
+<br><br><center class="xia2"><a style="cursor:pointer;" onclick="delRecord();"><b class="xia2" style="margin-left:2em;">删除多余管理日志</b></a></center>
+<script language="JavaScript">
+var j_url = '$j_url';
+function delRecord(){
+	if(!confirm("是否要删除多余日志？"))
+		return false;
+	location.href=j_url;
+}
+</script>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

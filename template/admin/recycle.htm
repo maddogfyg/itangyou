@@ -1,0 +1,162 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<ul class="nav3">
+<!--
+EOT;
+if ($type == 'topic'){print <<<EOT
+-->
+<li><a href="$basename&type=topic" class="two">主题回收站</a></li>
+<li><a href="$basename&type=reply">回复回收站</a></li>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+<li><a href="$basename&type=topic">主题回收站</a></li>
+<li><a href="$basename&type=reply" class="two">回复回收站</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<div class="c"></div>
+<h2><b>提示信息</b></h2>
+<ul class="tr5"><li>1.还原:可将被删除的帖子主题或回复还原到原来的版块帖子中。</li><li>2.删除:将帖子主题或回复从回收站中彻底删除,不可恢复</li><li>3.清空:删除所有回收站帖子</li><li>4.删除记录:删除回收站的记录,但并没有彻底删除帖子内容,不可恢复</li></ul>
+<!--
+EOT;
+if ($type == 'topic'){print <<<EOT
+-->
+<form action="$basename&type=topic&" method=post>
+<h3>回收站</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="35%">所属分类 : <select name="fid"><option>选择分类</option>$forumcache</select> &nbsp; 
+作者 : <input type="text" size="20" class="input" name="username"> &nbsp; 
+管理员 : <input type="text" size="20" class="input" name="admin"> &nbsp; 
+<input type=submit value="提 交" class="btn"></td></tr>
+</table>
+</form>
+<br />
+<form action="$basename&type=topic&" method="post" name="form1">
+<h3>回收站</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 s2">
+<td width='5%'>ID</td>
+<td align=center>标题</td>
+<td width='15%'>站点</td>
+<td width='15%'>作者</td>
+<td width='15%'>管理员</td>
+<td width='15%'>时间</td>
+<td width='5%'></td>
+</tr>
+<!--
+EOT;
+$id=($page-1)*$db_perpage;
+foreach($recycledb as $key => $value){
+$id++;
+print <<<EOT
+-->
+<tr class="tr3">
+<td>$id</td>
+<td align="left" style="cursor:pointer" onclick="content('$value[tid]');">$value[subject]</td>
+<td><a href="thread.php?fid=$value[fid]" target="_blank">$value[fname]</a></td>
+<td><a href="u.php?action=show&uid=$value[authorid]" target="_blank">$value[author]</a></td>
+<td>$value[admin]</td>
+<td>$value[deltime]</td>
+<td><input type='checkbox' name='selid[$value[tid]]' value="$value[fid]"></td></tr>
+<tr id="content_$value[tid]" style="display:none;" class="tr3"><td colspan="7" style="padding:5px 10px">$value[content]</td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br>$pages
+<div class="c"></div>
+<center>
+<input type="radio" name="action" value="revert" checked>还原帖子
+<input type="radio" name="action" value="del" >删除帖子
+<input type="radio" name="action" value="delete">清空回收站
+<input type="radio" name="action" value="clear">删除记录<br><br>
+<input type='button' name='chkall' class="btn" value='全 选' onclick='CheckAll(this.form)'>
+<input type="submit" name="hello" class="btn"  value="提 交" onclick="return confirm('您确认要进行此操作吗?');">
+</center></form>
+<br/>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+<form action="$basename&type=reply&" method=post>
+<h3>回收站</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="35%">所属分类 : <select name="fid"><option>选择分类</option>$forumcache</select> &nbsp; 
+作者 : <input type="text" size="20" class="input" name="username"> &nbsp; 
+管理员 : <input type="text" size="20" class="input" name="admin"> &nbsp; 
+<input type=submit value="提 交" class="btn"></td></tr>
+</table>
+</form>
+<br/>
+<form action="$basename&type=reply&" method="post" name="form1">
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr><td colspan="7" class="tr2">
+<!--
+EOT;
+if($db_plist){print <<<EOT
+-->
+<select onchange="window.location=('$basename&type=reply&ptable='+this.value);" style="float:right" name="ptable">$p_table</select>
+<!--
+EOT;
+}print <<<EOT
+-->
+<b>回收站</b></td></tr>
+<tr class="tr3 s2" align="center">
+<td width='5%'>ID</td>
+<td align=center>标题</td>
+<td width='15%'>站点</td>
+<td width='15%'>作者</td>
+<td width='15%'>管理员</td>
+<td width='15%'>时间</td>
+<td width='5%'></td>
+</tr>
+<!--
+EOT;
+$id=($page-1)*$db_perpage;
+foreach($recycledb as $key => $value){
+$id++;
+print <<<EOT
+-->
+<tr class="tr3">
+<td>$id</td>
+<td align="left" style="cursor:pointer" onclick="content('$value[pid]');">$value[subject](<a href="read.php?tid=$value[tid]" target="_blank">查看主题帖</a>)</td>
+<td><a href="thread.php?fid=$value[fid]" target="_blank">$value[fname]</a></td>
+<td><a href="u.php?action=show&uid=$value[authorid]" target="_blank">$value[author]</a></td>
+<td>$value[admin]</td>
+<td>$value[deltime]</td>
+<td><input type='checkbox' name='selid[$value[pid]]' value="$value[fid]"></td></tr>
+<tr id="content_$value[pid]" style="display:none;"><td class="tr2" colspan="7" style="padding:5px 10px">$value[content]</td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br>$pages
+<center>
+<input type="radio" name="action" value="revert">还原回复
+<input type="radio" name="action" value="del" checked>删除回复
+<input type="radio" name="action" value="delete">清空回收站
+<input type="radio" name="action" value="clear">删除记录<br><br>
+<input type='button' name='chkall' value='全 选' class="btn" onclick='CheckAll(this.form)'>
+<input type="submit" name="hello" value="提 交" class="btn" onclick="return confirm('您确认要进行此操作吗?');">
+</center></form>
+<br/>
+<!--
+EOT;
+}print <<<EOT
+-->
+<script language="JavaScript">
+function content(id){
+	var o = getObj('content_'+id);
+	o.style.display = o.style.display == 'none' ? '' : 'none';
+}
+</script>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

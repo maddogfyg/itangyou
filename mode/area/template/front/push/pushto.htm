@@ -1,0 +1,247 @@
+<!--<?php
+print <<<EOT
+-->
+<!--
+EOT;
+if (empty($step)) {print <<<EOT
+-->
+	<table width="100%" cellspacing="0" cellpadding="5">
+		<tr><th class="h" colspan="2" style="cursor:move" onmousedown="read.move(event);"><span class="fr" style="margin-top:2px;cursor:pointer" onclick="closep();"><img src="$imgpath/close.gif" /></span>推送位置选择</th></tr>
+<!--
+EOT;
+$i=0;
+foreach ($areaPage as $key=>$value){
+if($i == '0'){print<<<EOT
+-->
+<tr>
+<!--
+EOT;
+}$i++;print<<<EOT
+-->
+		<td><a onclick="sendmsg('{$thisBaseName}&action=pushto&fid=$fid&selid=$selid&step=1&index={$key}','','')" style="cursor:pointer" >{$value}</a></td>
+<!--
+EOT;
+if($i == 2){$i=0;print<<<EOT
+-->
+</tr>
+<!--
+EOT;
+}}print<<<EOT
+-->
+	</table>
+<!--
+EOT;
+}elseif($step == 1) {
+$back = $back ? '' : '';
+print<<<EOT
+-->
+	<table width="100%" cellspacing="0" cellpadding="5">
+		<tr><th class="h" colspan="2" style="cursor:move" onmousedown="read.move(event);"><span class="fr" style="margin-top:2px;cursor:pointer" onclick="closep();"><img src="$imgpath/close.gif" /></span>推送位置选择</th></tr>
+		<tr class="tr2 trbor"><td class="b">$selTitle</td><td class="tar gray"><a style="cursor:pointer" onclick="sendmsg('{$thisBaseName}&action=pushto&back=1&fid=$fid&selid=$selid','','')">返 回</a></td></tr>
+<!--
+EOT;
+$i=0;
+foreach ($areaPage as $key=>$value){
+if($i == '0'){print<<<EOT
+-->
+<tr>
+<!--
+EOT;
+}$i++;
+$tmpName = !is_numeric($key) ? urlencode($key) : urlencode($value);print<<<EOT
+-->
+		<td><a href="{$thisBaseName}&action=pushto&fid=$fid&selid=$selid&step=2&index=$index&name={$tmpName}" $back >{$value}</a></td>
+<!--
+EOT;
+if($i == 2){$i=0;print<<<EOT
+-->
+</tr>
+<!--
+EOT;
+}}print<<<EOT
+-->
+	</table>
+<!--
+EOT;
+}elseif($step == 2) {print<<<EOT
+-->
+<div id="breadCrumb">
+	<img src="$imgpath/$stylepath/thread/home-old.gif" align="absmiddle" />&nbsp;<a href="$db_bfn" title="$db_bbsname">$db_bbsname</a> &raquo; 模块内容推送
+</div>
+<style type="text/css">
+.t{margin-top:8px;border:4px solid $forumcolortwo;}
+.t table{border:2px solid $tablecolor;}
+.t .h{font-weight:normal}
+.t .tr3{line-height:25px;}
+</style>
+<form action="{$thisBaseName}&action=$action" method="post">
+<input type="hidden" name="verify" value="$verifyhash" />
+<input type="hidden" name="fid" value="$fid" />
+<input type="hidden" name="selid" value="$selid" />
+<input type="hidden" name="step" value="3" />
+<input type="hidden" name="index" value="$index" />
+<input type="hidden" name="invokename" value="$name" />
+<div class="t f_one">
+<table width="100%" cellspacing="0" cellpadding="0" align="center">
+<tr><td colspan="2" class="h"><b>$selTitle</b><span class="fr gray"><a style="cursor:pointer" onclick="sendmsg('{$thisBaseName}&action=pushto&back=1&step=1&fid=$fid&selid=$selid&index=$index','','')">选择模块</a></span></td></tr>
+<!--
+EOT;
+if ($subtitle) {print<<<EOT
+-->
+<tr class="tr3">
+	<td class="tar">推送到子模块</td>
+	<td><select name="titleid" onchange="optionAdd(this.value);">
+<!--
+EOT;
+foreach ($subtitle as $key=>$value) {print<<<EOT
+-->
+		<option value="$key">$value</option>
+<!--
+EOT;
+}print<<<EOT
+-->
+	</select></td>
+</tr>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+<input type="hidden" name="titleid" value="{$mInvok['id']}" />
+<!--
+EOT;
+}print<<<EOT
+-->
+<tr class="tr3">
+	<td class="tar">标题</td>
+	<td><input type="text" name="subject" value="{$read['subject']}" size="50" class="input" /></td>
+</tr>
+<tr class="tr3">
+	<td class="tar">链接</td>
+	<td><input type="text" name="url" value="{$read['url']}" size="50" class="input" /></td>
+</tr>
+<tr class="tr3">
+	<td class="tar">图片选择</td>
+	<td>
+<!--
+EOT;
+if($attimages){
+$i = 0;
+foreach($attimages as $k => $v){
+if ($i == 0){
+$checked = 'checked';
+$cimgurl = $v;
+$i++;
+}else{
+$checked = '';
+}
+print<<<EOT
+-->
+	<span class="fl" style="white-space:nowrap;margin-right:5px;"><img src="$v" style="width:60px;height:60px;margin-bottom:3px;" align="absmiddle">
+	<center><input type="radio" name="attachurl" value="$v" onclick="push_image(this)" $checked></center></span>
+<!--
+EOT;
+}print<<<EOT
+-->
+	<div class="c"></div>
+<!--
+EOT;
+}print<<<EOT
+-->
+	<input type="text" name="cimgurl" id="cimgurl" value="$cimgurl" size="50" class="input" />
+	</td>
+</tr>
+<tr class="tr3">
+	<td class="tar">摘要</td>
+	<td><textarea name="content" style="width:260px;height:92px" />$content</textarea></td>
+</tr>
+<!--
+EOT;
+if (!empty($subtitle) || $mInvok['num']>1) {print<<<EOT
+-->
+<tr class="tr3">
+	<td class="tar">列表位置</td>
+	<td><select name="offset" id="pushoffset">
+<!--
+EOT;
+for ($i=1;$i<=$mInvok['num'];$i++) {print<<<EOT
+-->
+		<option value="$i">$i</option>
+<!--
+EOT;
+}print<<<EOT
+-->
+	</select></td>
+</tr>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+<input type="hidden" name="offset" value="1" />
+<!--
+EOT;
+}print<<<EOT
+-->
+<tr class="tr3">
+	<td class="tar">失效日期</td>
+	<td><input type="text" size="10" name="endtime" id="endtime" onclick="ShowCalendar(this.id);"> (留空则为长期显示)</td>
+</tr>
+<tr class="tr3"><td class="tar">消息通知:</td>
+	<td><input type="radio" name="ifmsg" value="1" checked />是
+		<input type="radio" name="ifmsg" value="0" />否
+	</td>
+</tr>
+<tr class="tr3">
+	<td class="tar">操作原因:</td>
+	<td><select name="" onchange="this.form.atc_content.value=this.value" style="width:260px">
+			<option value="">自定义</option>
+			<option value="">-------</option>
+			$reason_sel
+		</select><br>
+		<textarea name="atc_content" onkeydown="ajax.quickpost(event,this.form)" style="width:180px;height:92px"></textarea>
+	</td>
+</tr>
+</table>
+<script src="js/date.js" language="JavaScript"></script>
+<ul><li style="text-align:center;padding:4px 0;">
+<!--
+EOT;
+if($db_enterreason){print <<<EOT
+-->
+<input type="button" class="btn" name="ajaxsubmit" onclick="if(this.form.atc_content.value){this.form.submit();}else{alert('请输入操作理由！')}" value="提 交" />
+<!--
+EOT;
+}else{print <<<EOT
+-->
+<input type="submit" class="btn" value="提 交" />
+<!--
+EOT;
+}print <<<EOT
+-->
+</li></ul>
+</form>
+<script type="text/javascript">
+function push_image(o){
+	getObj('cimgurl').value = o.value;
+}
+<!--
+EOT;
+if ($subtitle || intval($invokepiece[0]['num'])>1) {print<<<EOT
+-->
+function optionAdd(k) {
+	var invokeparam = $invokeparam;
+	var obj = getObj('pushoffset');
+	obj.options.length = 0;
+	for (var i=1;i<=invokeparam[k];i++) {
+		obj.options[i-1] = new Option(i,i);
+	}
+}
+optionAdd($firstKey);
+<!--
+EOT;
+}print <<<EOT
+-->
+</script>
+</div>
+<!--
+EOT;
+}?>-->

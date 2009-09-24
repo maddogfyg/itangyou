@@ -1,0 +1,39 @@
+<!--
+<?php 
+
+print <<<EOT
+-->
+<form action="{$default_handler_url}" method="post">
+<input type="hidden" name="action" value="{$show}">
+<input type="hidden" name="id" value="{$id}">
+<table width="300">
+	<tr>
+		<td colspan="2">
+		<div class="b">添加评价选项</div>
+		</td>
+	</tr>
+	<tr>
+		<td>名称：</td>
+		<td><input type="text" name="rateconfig[title]" value="$rateConfig[title]"> 限6个字节</td>
+	</tr>
+	<tr>
+		<td>类别：</td>
+		<td>{$typeSelect}</td>
+	</tr>
+	<tr>
+		<td>图标名：</td>
+		<td><input type="text" name="rateconfig[icon]" value="$rateConfig[icon]"></td>
+	</tr>
+	<tr>
+		<td>开启：</td>
+		<td><input type="radio" value="1" name="rateconfig[isopen]" {$isopen[1]}>是 <input type="radio" value="0" name="rateconfig[isopen]" {$isopen[0]}>否</td>
+	</tr>
+	<tr class="tac">
+		<td colspan="2"><input type="submit" value="提交" class="btn"> <input type="button" value="取消" class="btn" onclick="closep();"></td>
+	</tr>
+</table>
+</form>
+<!--
+EOT;
+?>
+-->

@@ -1,0 +1,103 @@
+<!--<?php
+include_once PrintEot('left');
+if(empty($action)){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="#" class="two">友情链接管理</a></li>
+<li><a href="$basename&action=add">添加友情链接</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+ 友情链接添加说明:<br> 1、特殊链接(显示顺序<0，每行显示一个)<br> 2、普通连接(显示顺序>=0)
+</div>
+<form method="post" action="$basename&">
+<h2><select style="float:right;margin-top:.3em;" onchange="window.location=('$basename&state='+this.value);"><option>状态</option><option value="1" $state_1>已审</option><option value="0" $state_0>未审</option></select></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 s3"  align="center">
+		<td width="5%">ID</td>
+		<td width="20%">站点名称</td>
+		<td width="6%">顺序</td>
+		<td width="30%">站点URL</td>
+		<td width="*">站点说明</td>
+		<td width="5%">状态</td>
+		<td width="5%" class="tal">编辑</td>
+		<td width="4%"></td>
+	</tr>
+<!--
+EOT;
+foreach($threaddb as $key=> $thread){
+$key++;
+$state=$thread[ifcheck] ? '已审' : '<font color="red">未审</font>';
+print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$key</td>
+		<td><a href="$basename&action=edit&sid=$thread[sid]">$thread[name]</a></td>
+		<td>$thread[threadorder]</td>
+		<td>$thread[url]</td>
+		<td>$thread[descrip]</td>
+		<td>{$state}</td>
+		<td><a class="fourm-two" href="$basename&action=edit&sid=$thread[sid]" title="编辑"><span class="edit"></span></a></td>
+		<td><input type='checkbox' name='deiaid[]' value="$thread[sid]"></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<input name=action type=hidden value="del">
+<br><center><input class="btn" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)"> <input class="btn" type="submit" name="delete" value="删 除"> <input type="submit" class="btn" name="unpass" value="未 审"> <input class="btn" type="submit" name="pass" value="审 核"></center><br/></form>
+<!--
+EOT;
+}elseif($action=='add' || $action=='edit'){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename">友情链接管理</a></li>
+<!--
+EOT;
+if($action=='edit'){ print <<<EOT
+-->
+<li><a href="$basename&action=add">添加友情链接</a></li>
+<li><a href="#" class="two">编辑友情链接</a></li>
+<!--
+EOT;
+}else{ print <<<EOT
+-->
+<li><a href="#" class="two">添加友情链接</a></li>
+<!--
+EOT;
+} print <<<EOT
+-->
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+ 友情链接添加说明:<br> 1、特殊链接(显示顺序<0，每行显示一个)<br> 2、普通连接(显示顺序>=0)
+</div>
+<form action="$basename" method=POST>
+<input type=hidden name="action" value=$action>
+<input type=hidden name="step" value=2>
+<input type=hidden name="sid" value=$sid>
+<h2><b>友情链接</b></h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr class="tr3"><td width=20%>站点名称</td>
+<td><input type="text" class="input" name="name" size=30 value='$name'></td></tr>
+<tr class="tr3"><td width=20%>显示顺序(默认为0)</td>
+<td><input type="text" class="input" name="threadorder" value='$threadorder' size="30"></td></tr>
+<tr class="tr3"><td>站点URL</td>
+<td><input type="text" class="input" name="url" value='$url' size="30"></td></tr>
+<tr class="tr3"><td>站点主人</td>
+<td><input type="text" class="input" name="username" value='$username' size="30"></td></tr>
+<tr class="tr3"><td>站点说明</td>
+<td><input type="text" class="input" name="descrip" value='$descrip' size="30"></td></tr>
+<tr class="tr3"><td>站点LOGO<br>[设置文字链接请留空]</td>
+<td><input type="text" class="input" name="logo" value='$logo' size="30"></td></tr>
+<tr class="tr3"><td>状态</td>
+<td><input type="radio" name="ifcheck" $ifcheck_Y value="1"> 已审 <input type="radio" name="ifcheck" $ifcheck_N value="0"> 未审 </td></tr>
+</table><br>
+<center><input type="submit" class="btn" value="提 交"></center><br/></form>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

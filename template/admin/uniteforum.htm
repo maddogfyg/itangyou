@@ -1,0 +1,36 @@
+<!--<?php
+include_once PrintEot('left');
+if (empty($action)){
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">1.源版块将被删除，源版块的所有帖子将移动目标版块中<br>2.有子版块的版块不能合并到其他版块<br>3.分类不能使用合并功能</div>
+<form action="$basename" method=post>
+<h2><b>合并版块</b></h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr class="tr3">
+	<td>源版块</td>
+	<td>
+		<select name='fid'>
+			$forumcache
+			$hideforum
+		</select>
+	</td>
+</tr>
+<tr class="tr3">
+	<td>目标版块</td>
+	<td>
+		<select name='tofid'>
+			$forumcache
+			$hideforum
+		</select>
+	</td>
+</tr>
+</table>
+<br>
+<center><input type="hidden" name=action value='unite'><input class="btn" type="submit" value='提 交'></center></form>
+<br/>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

@@ -1,0 +1,261 @@
+<!--<?php
+include_once PrintEot('left');
+print<<<EOT
+-->
+<h2><a href="$admin_file?adminjob=app&admintype=article&action=app&job=appslist">返回基础应用列表</a></h2>
+<!--
+EOT;
+if(!$action){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename" class="two">日志设置</a></li>
+</ul>
+<div class="c"></div>
+
+<form action="$basename&" method="post">
+<input type="hidden" name="step" value="3">
+<h2>日志基本设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3"><td width="30%"><span class="xia2">是否开启日志功能:</span></td>
+	<td><input type="radio" name="dopen" value="1" $dopen_Y /> 开启
+	<input type="radio" name="dopen" value="0" $dopen_N /> 关闭</td></tr>
+	<tr class="tr3"><td width="30%"><span class="xia2">是否开启发表日志认证码:</span></td>
+	<td><input type="radio" name="config[diary_gdcheck]" value="1" $diary_gdcheck_Y /> 开启
+	<input type="radio" name="config[diary_gdcheck]" value="0" $diary_gdcheck_N /> 关闭</td></tr>
+	<tr class="tr3"><td width="30%"><span class="xia2">是否开启验证问题:</span></td>
+<td><input type="radio" name="config[diary_qcheck]" value="1" $diary_qcheck_Y /> 开启
+<input type="radio" name="config[diary_qcheck]" value="0" $diary_qcheck_N /> 关闭</td></tr>
+	<tr class="tr3"><td width="30%"><span class="xia2">允许发表日志的用户组:</span><br />全不选为任何用户组可发日志</td>
+	<td>$creategroup</td></tr>
+	<tr class="tr3"><td><span class="xia2">每天最多允许发表多少篇日志:</span><br />设置为0不限制</td>
+	<td><input type="text" name="config[diarylimit]" size="10" value="$o_diarylimit"></td></tr>
+	<tr class="tr3"><td><span class="xia2">日志灌水预防:</span><br />多少秒间隔内不能发日志,设为0则不做限制</td>
+	<td><input type="text" name="config[diarypertime]" size="10" value="$o_diarypertime"></td></tr>
+	<tr class="tr3"><td><span class="xia2">日志列表页日志内容显示字节:</span><br />0表示全篇显示</td>
+	<td><input type="text" name="config[shownum]" size="10" value="$o_shownum"></td></tr>
+	<tr class="tr3">
+		<td><span class="xia2">上传附件允许后缀和最大尺寸:[KB]</span><br />0为不限制</td>
+		<td>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%" align="center">
+				<tr>
+					<td width="20%">后缀名</td>
+					<td>最大尺寸</td>
+				</tr>
+				<tr>
+					<td>jpg</td>
+					<td><input name="uploadsize[jpg]" value="$uploadsize[jpg]" size="10" class="input" /></td>
+				</tr>
+				<tr>
+					<td>jpeg</td>
+					<td><input name="uploadsize[jpeg]" value="$uploadsize[jpeg]" size="10" class="input" /></td>
+				</tr>
+				<tr>
+					<td>png</td>
+					<td><input name="uploadsize[png]" value="$uploadsize[png]" size="10" class="input" /></td>
+				</tr>
+				<tr>
+					<td>gif</td>
+					<td><input name="uploadsize[gif]" value="$uploadsize[gif]" size="10" class="input" /></td>
+				</tr>
+				<tr>
+					<td>bmp</td>
+					<td><input name="uploadsize[bmp]" value="$uploadsize[bmp]" size="10" class="input" /></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">附件保存方式:</span><br />如果使用非默认的保存方式，请确认 mkdir() 函数可正常使用，否则设置后新上传的附件无法保存，更改不影响已上传附件。</td>
+		<td>
+			<select name="config[attachdir]">
+				<option value="0" $attachdir_ck[0]>全部存入同一目录(默认)</option>
+				<option value="1" $attachdir_ck[1]>按类型存入不同目录</option>
+				<option value="2" $attachdir_ck[2]>按月份存入不同目录</option>
+				<option value="3" $attachdir_ck[3]>按天存入不同目录</option>
+			</select>
+		</td>
+	</tr>
+</table><br />
+<h3>日志积分奖惩设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3" align="center">
+		<td width="15%">积分名称</td>
+		<td>发表日志(+)</td>
+		<td>删除日志(-)</td>
+	</tr>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$value</td>
+		<td><input name="creditset[Post][$key]" value="{$creditset[Post][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Delete][$key]" value="{$creditset[Delete][$key]}" size="8" class="input" /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+	<tr class="tr3"><td colspan="3" style="padding-left:1em">注:<b>威望积分</b>支持小数点后一位，其他积分只允许整数！</td></tr>
+</table><br />
+<h3>日志积分流通记录</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td colspan="3" style="line-height:18px;padding-left:1em">此功能可以详细记录某种积分的流通情况，帮助站长更加清晰地掌握论坛的积分状况！</td>
+	</tr>
+	<tr class="tr3" align="center">
+		<td width="15%">积分名称</td>
+		<td>发表日志</td>
+		<td>删除日志</td>
+	</tr>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$value</td>
+		<td><input type="checkbox" name="creditlog[Post][$key]" value="1" {$creditlog[Post][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[Delete][$key]" value="1" {$creditlog[Delete][$key]} /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<br><center><input type="submit" value="提 交" class="btn"></center></form>
+<!--
+EOT;
+}elseif($action=='cp'){
+if($step == 'list'){print<<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename&action=cp" class="two">日志管理</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="$action">
+<input type="hidden" name="step" value="delete">
+<input type="hidden" name="groupid" value="$groupid">
+<input type="hidden" name="author" value="$author">
+<input type="hidden" name="keyword" value="$keyword">
+<input type="hidden" name="postdate1" value="$postdate1">
+<input type="hidden" name="postdate2" value="$postdate2">
+<input type="hidden" name="hits" value="$hits">
+<input type="hidden" name="replies" value="$replies">
+<input type="hidden" name="tcounts" value="$tcounts">
+<input type="hidden" name="counts" value="$counts">
+<input type="hidden" name="orderby" value="$orderby">
+<input type="hidden" name="sc" value="$sc">
+<input type="hidden" name="perpage" value="$perpage">
+<input type="hidden" name="page" value="$page">
+
+<h2>文章列表</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac s3">
+<td width="5%">ID</td>
+<td>标 题</td>
+<td width="15%">作 者</td>
+<td width="12%">隐私权限</td>
+<td width="20%">发表日期</td>
+<td width="7%">浏览数</td>
+<td width="7%">回复数</td>
+<td width="5%">删除</td></tr>
+<!--
+EOT;
+$id = ($page-1)*$perpage;
+foreach($diarydb as $value){
+$privacy = array('全站用户可见','仅好友可见','仅自己可见');
+$id++;
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>$id</td>
+<td><a href="mode.php?m=o&q=diary&did=$value[did]&u=$value[uid]" target="_blank">$value[subject]</a></td>
+<td><a href="u.php?action=show&uid=$value[uid]" target="_blank">$value[username]</td>
+<td>{$privacy[$value[privacy]]}</td>
+<td>$value[postdate]</td>
+<td>$value[r_num]</td>
+<td>
+<!--
+EOT;
+if ($value['c_num'] > 0) {print <<<EOT
+-->
+	<a href="$admin_file?adminjob=mode&admintype=o_comments&job=list&type=diary&typeid=$value[did]">$value[c_num]</a>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+	0
+<!--
+EOT;
+}print <<<EOT
+-->
+</td>
+<td><input type="checkbox" name="selid[]" value="$value[did]"></td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><div class="mt10">$pages</div><br/>
+<center><input type="button" name="chkall" class="btn" value="全 选" onclick="CheckAll(this.form)"> <input class="btn" type="submit" name="button" value="删 除" onclick="return Checkdel();"></center><br/>
+</form>
+<script language="JavaScript">
+function Checkdel(){
+	if (!confirm("您确定要删除选中项吗?")) {
+		return false;
+	}else{
+		return true;
+	}
+}
+</script>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename&action=cp" class="two">日志管理</a></li>
+</ul>
+<div class="c"></div>
+<script language="JavaScript" src="js/date.js"></script>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="$action">
+<input type="hidden" name="step" value="list">
+<h2>日志搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="30%">用户组:</td>
+<td>$creategroup</td>
+</tr>
+<tr class="tr3"><td>作 者:(多个作者用","分隔)</td>
+<td><input name="author" size="30" class="input" value="">&nbsp;可使用通配符 "*"</td></tr>
+
+<tr class="tr3"><td>关键字:(多个关键字用","分隔)</td>
+<td><input name="keyword" size="30" class="input" value="">&nbsp;可使用通配符 "*"</td></tr>
+
+<tr class="tr3"><td>发表日期:(格式 yyyy-mm-dd)</td>
+<td><input type="text" name="postdate_s" value="" id="postdate_s" onclick="javascript:ShowCalendar(this.id)" class="input"> - <input type="text" name="postdate_e" id="postdate_e" value="" onclick="javascript:ShowCalendar(this.id)" class="input"></td></tr>
+
+<tr class="tr3"><td>浏览人数小于:</td>
+<td><input type="text" size="20" class="input" maxlength=14 name="hits">&nbsp;的日志</td></tr>
+<tr class="tr3"><td>回复人数小于:</td>
+<td><input type="text" size="20" class="input" maxlength=14 name="replies">&nbsp;的日志</td></tr>
+
+<tr class="tr3"><td>内容大于:</td>
+<td><input type="text" size="20" class="input" name="tcounts">&nbsp;字节</td></tr>
+<tr class="tr3"><td>内容小于:</td>
+<td><input type="text" size="20" class="input" name="counts">&nbsp;字节</td></tr>
+
+<tr class="tr3"><td>排序:</td>
+<td><select name="orderby" style="width:100px;">
+<option value="postdate">发表日期</option>
+</select>
+<input type="radio" name="sc" value="desc" CHECKED> 降序
+<input type="radio" name="sc" value="asc"> 升序</td></tr>
+<tr class="tr3"><td>每页显示条数</td>
+<td><input name="perpage" size="15" class="input" value="30"></td></tr>
+</table><br />
+<center><input type="submit" value="提 交" class="btn"></center><br/>
+</form>
+<!--
+EOT;
+}}include_once PrintEot('adminbottom');
+?>-->

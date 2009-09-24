@@ -1,0 +1,197 @@
+<!--<?php
+include_once PrintEot('left');
+if(!$action){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="#" class="two">文件搜索检查</a></li>
+<li><a href="$basename&action=file">程序文件检查</a></li>
+<li><a href="$basename&action=cache">缓存目录检查</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+文件安全检查功能说明:<br />　1、文件搜索检查:输入自定义关键字(可疑代码)，搜索程序文件，查找出所有出现关键字的文件<br />　2、程序文件检查:与官方提供的程序进行对比，提醒您站点上的文件是否被篡改<br />　3、缓存目录检查:查找所有缓存文件，确认文件的安全性<br />　4、保障站点安全有效地运行
+</div>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="search">
+<h2>文件搜索检查</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="10%">关键字</td><td><input class="input" type="text" size="60" name="keyword" /></td></tr>
+<tr class="tr3"><td>文件夹</td><td><select name="dir[]" size="10" multiple><option value=".">./</option>$dirlist</select></td></tr>
+</table>
+<br /><center><input type="submit" class="btn" value="提 交" /></center>
+</form>
+
+<!--
+EOT;
+}elseif($action=='search'){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename" class="two">文件搜索检查</a></li>
+<li><a href="$basename&action=file">程序文件检查</a></li>
+<li><a href="$basename&action=cache">缓存目录检查</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">文件安全检查功能说明:<br />　1、文件搜索检查:输入自定义关键字(可疑代码)，搜索程序文件，查找出所有出现关键字的文件<br />　2、程序文件检查:与官方提供的程序进行对比，提醒您站点上的文件是否被篡改<br />　3、缓存目录检查:查找所有缓存文件，确认文件的安全性<br />　4、保障站点安全有效地运行</div>
+<h2>检查结果</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 s3">
+	<td>文件名</td>
+	<td width="20%">文件大小</td>
+	<td width="30%">最后修改时间</td>
+	<td width="20%">文件状态</td>
+</tr>
+<!--
+EOT;
+foreach($dirlist as $dir=>$value){print <<<EOT
+-->
+<tr class="tr3"><td colspan="4">{$dir}/</td></tr>
+<!--
+EOT;
+foreach($value as $k=>$v){print <<<EOT
+-->
+<tr class="tr3">
+	<td>$v[0]</td>
+	<td width="20%">$v[1]</td>
+	<td width="30%">$v[2]</td>
+	<td width="20%"><font color="blue">包含可疑代码</font></td>
+</tr>
+<!--
+EOT;
+}}print <<<EOT
+-->
+</table><br/>
+
+<!--
+EOT;
+}elseif($action=='file'){print <<<EOT
+-->
+
+<ul class="nav3">
+<li><a href="$basename">文件搜索检查</a></li>
+<li><a href="#" class="two">程序文件检查</a></li>
+<li><a href="$basename&action=cache">缓存目录检查</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">与官方提供的程序进行对比，有如下结果:<br />　1. <font color=green>未知文件</font> 请检查是否被非法放入其他文件<br />　2. <font color=blue>文件丢失</font> 请上传正确的文件，保障站点正常运行<br />　3. <font color=red>文件被修改</font> 请确认文件合法性，是否是由于自身特殊需要所作的修改</div>
+<h2>检查结果</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td colspan="4">未知文件:$cklog[1] &nbsp;&nbsp; 文件被修改:$cklog[3] &nbsp;&nbsp; 文件丢失:$cklog[2]</td></tr>
+<!--
+EOT;
+foreach($dirlist as $dir=>$value){print <<<EOT
+-->
+<tr><td class="tr4" colspan="4">{$dir}/</td></tr>
+<tr class="tr3 s3">
+	<td>文件名</td>
+	<td width="20%">文件大小</td>
+	<td width="30%">最后修改时间</td>
+	<td width="20%">文件状态</td>
+</tr>
+<!--
+EOT;
+foreach($value as $k=>$v){print <<<EOT
+-->
+<tr class="tr3">
+	<td>$v[0]</td>
+	<td width="20%">$v[1]</td>
+	<td width="30%">$v[2]</td>
+	<td width="20%">
+<!--
+EOT;
+if($v[3]=='1'){print <<<EOT
+-->
+	<font color="green">未知文件</font>
+<!--
+EOT;
+}elseif($v[3]=='2'){print <<<EOT
+-->
+	<font color="blue">文件丢失</font>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	<font color="red">文件被修改</font>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</td>
+</tr>
+<!--
+EOT;
+}}print <<<EOT
+-->
+</table>
+
+
+<!--
+EOT;
+}elseif($action=='cache'){print <<<EOT
+-->
+
+<ul class="nav3">
+<li><a href="$basename">文件搜索检查</a></li>
+<li><a href="$basename&action=file">程序文件检查</a></li>
+<li><a href="#" class="two">缓存目录检查</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">检查缓存文件的合法性，有如下结果:<br />　1. <font color=green>可疑木马程序</font> 该文件一般为木马程序，请删除<br />　2. <font color=blue>非法代码文件</font> 该文件含有非法代码，请检查其合法性或删除<br />　3. <font color=red>包含iframe代码</font> 该文件包含iframe代码，请检查文件是否被恶意写入iframe</div>
+<h2>检查结果</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td colspan="4">可疑木马程序:$cklog[1] &nbsp;&nbsp; 非法代码文件:$cklog[2] &nbsp;&nbsp; 包含iframe代码:$cklog[3]</td></tr>
+<!--
+EOT;
+foreach($dirlist as $dir=>$value){print <<<EOT
+-->
+<tr><td class="tr4" colspan="4">{$dir}/</td></tr>
+<tr class="tr3 s3">
+	<td>文件名</td>
+	<td width="20%">文件大小</td>
+	<td width="30%">最后修改时间</td>
+	<td width="20%">文件状态</td>
+</tr>
+<!--
+EOT;
+foreach($value as $k=>$v){print <<<EOT
+-->
+<tr class="tr3">
+	<td>$v[0]</td>
+	<td width="20%">$v[1]</td>
+	<td width="30%">$v[2]</td>
+	<td width="20%">
+<!--
+EOT;
+if($v[3]=='1'){print <<<EOT
+-->
+	<font color="green">可疑木马程序</font>
+<!--
+EOT;
+}elseif($v[3]=='2'){print <<<EOT
+-->
+	<font color="blue">非法代码文件</font>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	<font color="red">包含iframe代码</font>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</td>
+</tr>
+<!--
+EOT;
+}}print <<<EOT
+-->
+</table>
+<br/>
+<!--
+EOT;
+}
+include_once PrintEot('adminbottom');
+?>-->

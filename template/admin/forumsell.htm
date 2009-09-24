@@ -1,0 +1,63 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<form action="$basename" method="post">
+<h2>搜索</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr class="tr3 tac">
+	<td>用户名：<input type="text" class="input" name="username"></td>
+	<td>版块:<select name="fid"><option></option>$forumcache</option></td>
+	<td><input type="submit" class="btn" value="提 交"></td>
+</tr>
+</table></form>
+<form action="$basename" method="post">
+<h2>版块出售记录</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr class="tr3 tac s3">
+<td width="8%">ID</td>
+<td>版块名称</td>
+<td>用户名</td>
+<td>购买日期</td>
+<td>到期日期</td>
+<td>花费</td>
+<td width="6%"></td>
+</tr>
+<!--
+EOT;
+$i=($page-1)*$db_perpage;
+foreach($buydb as $key=>$value){
+$i++;
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>$i</td>
+<td>{$forum[$value[fid]][name]}</td>
+<td>$value[username]</td>
+<td>$value[buydate]</td>
+<td>$value[overtime]
+<!--
+EOT;
+if($value['overdate']<$timestamp){print <<<EOT
+-->
+<font color="red">(已到期)</font>
+<!--
+EOT;
+}print <<<EOT
+-->
+</td>
+<td>$value[cost] {$credit->cType[$value[credit]]}</td>
+<td><input type="checkbox" name="selid[]" value="$value[id]" onclick="pwJsCheck(this)" /></td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>$pages
+<input type="hidden" name="action" value="del" />
+<br /><center><input class="btn" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" />&nbsp;
+<input type="submit" value="删除所选项" class="btn"/></center></form><br/>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

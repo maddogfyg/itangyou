@@ -1,0 +1,120 @@
+<!--<?php
+include_once PrintEot('left');
+if(!empty($sub)){
+print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename">帖子索引设置</a></li>
+<li><a href="$basename&sub=y" class="two">添加帖子索引</a></li>
+</ul>
+<h3>按回复数查询帖子</h3>
+<form method="post" action="{$basename}&sub=y&action=search">
+<div class="tr5">
+根据回复数：&nbsp;
+<!--
+EOT;
+!$replies && $replies = $repliesArray[0];
+foreach ($repliesArray as $value) {
+$checked = $value == $replies ? 'checked' : '';
+print <<< EOT
+-->
+<input type="radio" value="$value" name="replies" $checked/> 大于$value  &nbsp;
+<!--
+EOT;
+}print <<< EOT
+-->
+&nbsp;&nbsp;&nbsp;&nbsp;
+根据帖子ID查找：<input type="text"  value="$tid" name="tid" class="input" size="8"/>
+&nbsp;&nbsp;
+<input type="submit" value="查 询" class="btn" name="submit"/>
+</div>
+</form>
+<div>
+<form action="{$basename}&sub=y&action=update" method="post">
+<h2>帖子列表</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tac tr3 s3">
+	<td width="5%">ID</td>
+	<td width="35%">主题</td>
+	<td width="8%">回复数</td>
+	<td width="8%">发帖日期</td>
+	<td>选择</td>
+</tr>
+<!--
+EOT;
+$num=0;
+foreach ($threads[data] as $key => $value) {
+$_disable = $value['replies'] > 0 ? "" : "disabled";
+$num++;
+print <<< EOT
+-->
+<tr class="tac tr3">
+	<td>$num</td>
+	<td align="left">$value[subject]</td>
+	<td>$value[replies]</td>
+	<td>$value[postdate]</td>
+	<td><input type="checkbox" name="threads[]" value="$value[tid]" $_disable/> </td>
+</tr>
+<!--
+EOT;
+}
+print <<< EOT
+-->
+</table>
+<input type="hidden" name="page" value="$page"/>
+<input type="hidden" name="replies" value="$replies"/>
+<input type="hidden" name="tid" value="$tid"/>
+$threads[pages]
+<br></br>
+<center><input type="submit" value="添加索引" name="submit" class="btn"/> </center>
+</form>
+</div>
+<!--
+EOT;
+}else{
+print <<< EOT
+-->
+<ul class="nav3">
+<li><a href="$basename" class="two">帖子索引设置</a></li>
+<li><a href="$basename&sub=y">添加帖子索引</a></li>
+</ul>
+<form action="{$basename}&action=delete" method="post" name="postIndex" onsubmit="if(!confirm('真的要删除吗？')){return false;}">
+<div>
+	<h2>帖子列表</h2>
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tac tr3 s3">
+		<td width="3%"></td>
+		<td width="3%">ID</td>
+		<td width="35%">主题</td>
+		<td width="8%">回复数</td>
+		<td width="8%">发帖日期</td>
+		<td></td>
+	</tr>
+<!--
+EOT;
+foreach($threads['data'] as $key => $value){
+$num++;
+print <<< EOT
+-->
+	<tr class="tac tr3">
+		<td><input type="checkbox" value="$value[tid]" name="tids[]"/> </td>
+		<td>$num</td>
+		<td align="left">$value[subject]</td>
+		<td>$value[replies]</td>
+		<td>$value[postdate]</td>
+		<td><input type="button" name="resest" value="重新建立索引" onclick="location.href='{$basename}&action=reset&tid=$value[tid]&page=$page'" class="btn" $disable/> </td>
+	</tr>
+<!--
+EOT;
+}print <<< EOT
+-->
+	</table>
+	$threads[pages]
+	<br></br>
+	<center><input type="submit" name="submit" value="删除选中" class="btn"/> </center>
+</div>
+</form>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

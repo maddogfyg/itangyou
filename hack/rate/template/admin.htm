@@ -1,0 +1,155 @@
+<!--
+<?php
+
+print <<<EOT
+-->
+<script language="JavaScript" src="js/global.js"></script>
+<script language="JavaScript" src="js/pw_ajax.js"></script>
+<div class="b" style="padding:20px 0 0;">评价控件管理</div>
+<ul class="nav3 cc2">
+	<li><a href="{$default_handler_url}1" {$currentClass[thread]}>帖子</a></li>
+	<li><a href="{$default_handler_url}2" {$currentClass[blog]}>日志</a></li>
+	<li><a href="{$default_handler_url}3" {$currentClass[picture]}>相片</a></li>
+	<li><a href="{$default_handler_url}100" {$currentClass[power]}>评价权限设置</a></li>
+</ul>
+<!--
+EOT;
+//评价权限设置部分
+if($typeId == 100){
+print <<<EOT
+-->
+<form action="{$default_handler_url}100" method="post">
+<table width="100%">
+	<tr>
+		<td colspan="3"  class="tr4">全局权限设置</td>
+	</tr>
+	<tr class="tr3">
+		<td>是否开启评价相应控件</td>
+		<td colspan="2">
+			<input type="checkbox" value="1" name="power[type][1]" {$currentPower[1]}/> 贴子评价
+			<input type="checkbox" value="1" name="power[type][2]" {$currentPower[2]}/> 日志评价
+			<input type="checkbox" value="1" name="power[type][3]" {$currentPower[3]}/> 相片评价
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="3" class="tr4">用户组权限设置[每天最多可允许评价次数]</td>
+	</tr>
+
+<!--
+EOT;
+foreach($userGroups as $gptype=>$groups){
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td colspan="3" class="b" style="color:#008800">{$userGroupTitles[$gptype]}</td>
+	</tr>
+<!--
+EOT;
+foreach($groups as $group){
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td width="150">{$group[grouptitle]}</td>
+		<td width="200"><img src="{$imageUrl}{$group[groupimg]}.gif" /></td>
+		<td><input type="text" value="{$groupSets[$group[gid]]}" name="power[group][$group[gid]]" /> 次</td>
+	</tr>
+<!--
+EOT;
+}
+}
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td colspan="2"> </td>
+		<td>
+		<input type="hidden" value="power" name="action">
+		<input type="submit" value="提交" name="" class="btn">
+		</td>
+	</tr>
+</table>
+
+<!--
+EOT;
+}else{
+//评价后台配置部分
+print <<<EOT
+-->
+<h2><a href="#" onclick="sendmsg('{$default_ajax_url}&job=ajax&typeid={$typeId}','',this.id);">+添加自定义评价</a></h2>
+<form action="{$default_handler_url}{$typeId}" method="post">
+<table width="100%">
+    <tr>
+        <td class="tr4" colspan="8">如果需要自定义上传图标，请上传至目录[/hack/rate/images/]</td>
+    </tr>
+	<tr class="tr3">
+		<td>启用</td>
+		<td>名称</td>
+		<td>所属类别</td>
+		<td>调用图标名</td>
+		<td>积分设置</td>
+		<td>评价者</td>
+		<td>作者</td>
+		<td>操作</td>
+	</tr>
+<!--
+EOT;
+foreach($rateConfigs as $config){
+if($config[isdefault]){
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td><input name="rateconfig[$config[id]][isopen]" type="checkbox" value="1" {$config[isopen]}/></td>
+		<td>{$config[title]}</td>
+		<td>{$config[typename]}</td>
+		<td><input name="rateconfig[$config[id]][icon]" type="text" class="input" value="$config[icon]" size="10" /><img src="{$imageUrl}{$config[icon]}" align="absmiddle" width="32" /></td>
+		<td>
+		{$config[creditset]}
+		</td>
+		<td>
+		{$config[voternum]}
+		</td>
+		<td>
+		{$config[authornum]}
+		</td>
+		<td>--</td>
+	</tr>
+<!--
+EOT;
+}else{
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td><input name="rateconfig[$config[id]][isopen]" type="checkbox" value="1" {$config[isopen]}/></td>
+		<td><input name="rateconfig[$config[id]][title]" type="text" class="input" value="$config[title]" size="10" /></td>
+		<td>{$config[typename]}</td>
+		<td><input name="rateconfig[$config[id]][icon]" type="text" class="input" value="$config[icon]" size="10" /><img src="{$imageUrl}{$config[icon]}" align="absmiddle" width="32" /></td>
+		<td>
+		{$config[creditset]}
+		</td>
+		<td>
+		{$config[voternum]}
+		</td>
+		<td>
+		{$config[authornum]}
+		</td>
+		<td><a href="#" onclick="sendmsg('{$default_ajax_url}&show=update&job=ajax&id={$config[id]}&typeid={$config[typeid]}','',this.id);">编辑</a>&nbsp;&nbsp;&nbsp;<a href="{$default_handler_url}{$typeId}&action=delete&id={$config[id]}">删除</a></td>
+	</tr>
+<!--
+EOT;
+}
+}
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td colspan="8" class="tac">
+		<input type="hidden" value="modify" name="action">
+		<input type="submit" value="提交" name="" class="btn">
+		</td>
+	</tr>
+</table>
+</form>
+<!--
+EOT;
+}
+?>
+-->

@@ -1,0 +1,99 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<style type="text/css">
+.tr3 .wid{width:40px;text-align:left;}
+.open,.close{width:12px;height:12px;margin:6px 6px 6px 0;cursor:pointer;overflow:hidden;}
+.open{background:url($imgpath/admin/setfourm/fourm.gif) 0 0 no-repeat;}
+.close{background:url($imgpath/admin/setfourm/fourm.gif) 0 -12px no-repeat;}
+.fourm-two{float:left;}
+
+.popoutContent{background:#fff;border:1px solid #4680b6;}
+.bgcorner1,.bgcorner2,.bgcorner3,.bgcorner4,.pobg1,.pobg2,.pobg3,.pobg4{filter:Alpha(opacity=80);_filter:Alpha(opacity=80);opacity:.8;overflow:hidden; z-index:1005; line-height:0 }
+.bgcorner1,.bgcorner2,.bgcorner3,.bgcorner4{width:5px;height:5px;background:url($imgpath/pwicon/bgcorner.gif) no-repeat;}
+.bgcorner1{background-position: 0 0 }
+.bgcorner2{background-position: -5px 0 }
+.bgcorner3{background-position: -5px -5px}
+.bgcorner4{background-position:0 -5px}
+.pobg1,.pobg2,.pobg3,.pobg4{ background:#799fc3;}
+.pobg1{height:5px; }
+.pobg2{width:5px;}
+.pobg3{height:5px;}
+.pobg4{width:5px;}
+.popoutContent td{padding:.5em .6em;border-bottom:1px solid $tdcolor;}
+
+.h{border-bottom:1px solid $headborder;background:$headcolor;text-align:left;color:$headfontone;padding:2px .5em 0; line-height:220%;}
+.h span{font-weight:normal;}
+.h h2{font-weight:bold}
+.h a{font-family:Arial;color:$headfontone}
+.h span a,.h span{color:$headfonttwo;}
+
+.mode-one{padding:10px;width:700px;border:1px solid #eeeeee;background:#fff;margin-top:10px;}
+.mode-one dt{float:left;width:380px; text-align:right;padding-right:10px;}
+.mode-one dd{float:left;;line-heigh:24px;width:305px;}
+.mode-one dd strong{ font-weight:700;}
+.mode-one dd .fr a{margin-left:2em;}
+.mode-one dd li{padding:4px 0;}
+</style>
+
+<!--
+EOT;
+if ($action == 'doset') {
+print <<<EOT
+-->
+
+<!--
+EOT;
+} else {
+print <<<EOT
+-->
+
+<ul class="nav3">
+<li><a href="$basename" class="two">门户首页静态化</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+注意：开启门户模式静态化后，门户模式首页的底部导航条将被隐藏。
+</div>
+<div class="c"></div>
+<h2>配置门户模式静态化&nbsp;</h2>
+
+<form action="$basename" method="post">
+<table width="100%" cellspacing="0" cellpadding="0" style="line-height:25px;">
+	<tbody>
+		<tr class="tr3">
+			<td class="tal" width="30%">是否开启门户模式静态化</td>
+			<td>
+				<input type="radio" name="area_static[ifon]" value="1" $if_on_checked />开启
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="area_static[ifon]" value="0" $if_noton_checked />关闭
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="$basename&action=dorefresh" onclick="if(confirm('你确定要刷新门户首页么？')){return true;}else{return false;}">立即刷新门户首页</a>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td class="tal">静态化页面更新时间</td>
+			<td>
+				<input type="text" name="area_static[step]" value="$area_static_step" size="5" />（分钟）
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<center>
+					<input type="hidden" name="action" value="doset" />
+					<input type="submit" value="提交" class="btn" />
+				</center>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</form>
+
+
+<!--
+EOT;
+}
+include_once PrintEot('adminbottom');
+?>-->

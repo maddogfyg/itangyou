@@ -1,0 +1,10 @@
+/*链接样式*/ a:link, a:visited{color:#3B568E;text-decoration:none;} a:hover,
+            a:active{color:#C8182D !important;}/*默认链接样式*/ /*gMenu下拉小菜单*/ /*MENU样式定义(主要应用:COCO)*/
+            .gMenu,.gMenuWarp a,.gMenuOpt a{font-size:14px;border-width:1px;border-style:solid} .gMenu{position:absolute;z-index:99;overflow:hidden;border-color:#CCC;background-color:#FFF;text-overflow:ellipsis}
+            .gMenu .gM_Warp{height:100%;color:#333;background:#FFF url(../images/gM_Warp_bg.jpg)
+            repeat-y 0 0;border:1px solid #FFF;/*text-align:right*/} .gMenuOpt a{display:block;overflow:hidden;line-height:18px;height:18px;margin:1px
+            0 1px 18px;padding:0px 1px 1px 2px;*padding-bottom:0px;/*width:100%;*/text-overflow:ellipsis;color:#333;border-color:#FCFCFC}
+            *:lang(zh) .gMenuOpt a{width:auto} .gMenuOpt a:hover{margin:1px 0 1px 0px;padding-left:20px;border:1px
+            solid #CCC;background-color:#F2F2F2;color:#000;text-decoration:none} /*分割线*/
+            .gM_line{overflow:hidden;height:1px;font-size:0px;margin:1px 4px -1px 22px;border-top:1px
+            solid #C4D1D8}

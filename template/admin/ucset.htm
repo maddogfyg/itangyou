@@ -1,0 +1,85 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+　　此处用于设置多个系统间的用户信息共享，并实现各系统间用户资料、操作等的同步。<br />
+独立系统—表示系统没有跟其他系统共享用户信息；<br />
+用户中心服务端—表示系统为用户中心主站，设置过程中其本身的数据将不受影响；设置完成后，需要到《应用管理》中添加附站信息；<br />
+用户中心客户端—表示系统为用户中心附站，设置完成后，其用户信息将被主站覆盖（设置需谨慎）
+</div>
+
+<form action="$basename" method="post">
+<h2>用户中心</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tr3">
+		<td width="20%">将本系统作为：</td>
+		<td>
+			<input type="radio" name="uc_server" value="0" onclick="showset(this.value);" $ifcheck_0 /> 独立系统<br />
+			<input type="radio" name="uc_server" value="1" onclick="showset(this.value);" $ifcheck_1 /> 用户中心服务端<br />
+			<input type="radio" name="uc_server" value="2" onclick="showset(this.value);" $ifcheck_2 /> 用户中心客户端（用户中心的一个子应用）
+		</td>
+	</tr>
+	<tbody id="uc_set_appid" style="display:none">
+	<tr class="tr3">
+		<td>本应用id</td>
+		<td><input type="text" name="uc_appid" value="$uc_appid" /></td>
+	</tr>
+	</tbody>
+	<tbody id="uc_set_key" style="display:none">
+	<tr class="tr3">
+		<td>本应用密钥</td>
+		<td><input type="text" name="uc_key" value="$uc_key" id="uc_key" /> <input type="button" value="随机生成密钥" onclick="randomChar(20)" class="btn" /></td>
+	</tr>
+	</tbody>
+	<tbody id="uc_set_server" style="display:none">
+	<tr class="tr3">
+		<td>服务端数据库主机名 或 IP 地址</td>
+		<td><input type="text" name="uc_dbhost" value="$uc_dbhost" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>服务端数据库用户名</td>
+		<td><input type="text" name="uc_dbuser" value="$uc_dbuser" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>服务端数据库密码</td>
+		<td><input type="text" name="uc_dbpw" value="$uc_dbpw" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>服务端数据库名</td>
+		<td><input type="text" name="uc_dbname" value="$uc_dbname" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>服务端数据库表前缀</td>
+		<td><input type="text" name="uc_dbpre" value="$uc_dbpre" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>服务端数据库表字符编码</td>
+		<td><input type="text" name="uc_dbcharset" value="$uc_dbcharset" /></td>
+	</tr>
+	</tbody>
+</table>
+<br />
+<center><input type="hidden" name=action value='unite'><input class="btn" type="submit" value='提 交'></center></form>
+<br />
+<script language="JavaScript">
+function randomChar(len) {
+	var x = "0123456789qwertyuioplkjhgfdsazxcvbnm";
+	var tmp = "";
+	for (var i = 0; i < len; i++) {
+		tmp += x.charAt(Math.ceil(Math.random() * 100000000) % x.length);
+	}
+	getObj('uc_key').value = tmp;
+}
+function showset(id) {
+	getObj('uc_set_key').style.display = (id != '0') ? '' : 'none';
+	getObj('uc_set_server').style.display = (id == '2') ? '' : 'none';
+	getObj('uc_set_appid').style.display = (id == '2') ? '' : 'none';
+}
+showset('$uc_server');
+</script>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

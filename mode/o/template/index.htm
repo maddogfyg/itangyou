@@ -1,0 +1,477 @@
+<!--<?php
+print <<<EOT
+-->
+<SCRIPT type="text/javascript" LANGUAGE="JavaScript" src="js/core/core.js"></SCRIPT>	
+				<div id="menu-bar" class="w230 fl">
+			<div class="menu-bar-box h240 mb10">
+				<h2>会员登录</h2>
+				<div class="m10">
+				<form action="login.php" name="login_FORM" method="post">
+				<input type="hidden" name="step" value="2" />
+				<input type="hidden" name="cktime" value="31536000" />
+				<input type="hidden" name="jumpurl" value="mode.php?m=$m" />
+				<table cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td width="45">
+							<select name="lgt">
+<!--
+EOT;
+$arr_logintypename = array('用户名','UID','Email');
+if(count($arr_logintype)==1){
+$value = current($arr_logintype);
+print <<<EOT
+-->
+								<option value="$value" selected>$arr_logintypename[$value]</option>
+<!--
+EOT;
+}elseif(count($arr_logintype)>1){
+$i=1;
+foreach($arr_logintype as $value){
+$str_checked = $i==1? 'selected':'';
+$i++;
+print <<<EOT
+-->
+								<option value="$value" $str_checked>$arr_logintypename[$value]</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+							</select>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+
+							<input type="radio" name="lgt" value="$value" checked /><span id="login_$value">用户名</span>
+<!--
+EOT;
+}
+
+if(($db_gdcheck & 2)|| $db_ifsafecv||	$qcheck)
+{
+print<<<EOT
+-->
+<div id="nav_logintab" style="margin-top:-90px;margin-left:200px;width:350px;position:absolute;display:none;z-index:1001">
+			<div class="t5 f_two"  style="border:1px solid #ccc;background: #F3F9FB;line-height:25px;">
+				<table cellspacing="0" cellpadding="1" align="center" style="width:95%; margin:auto">
+<!--
+EOT;
+}
+if($db_gdcheck & 2){print <<<EOT
+-->
+					<tr>
+						<td width="60">认证码</td>
+						<td>
+							<input class="input" onfocus="showCK();" type="text" name="gdcode" size="5" /></td>
+							<td><img id="ckcode" width="126" style="cursor:pointer;display:none;" onclick="this.src='ck.php?nowtime='+new Date().getTime();" alt="看不清楚，换一张" align="absmiddle" /></td>
+					</tr>
+<!--
+EOT;
+}if($db_ifsafecv){print <<<EOT
+-->
+					<tr>
+						<td>安全问题</td>
+						<td>
+							<select name="question" onchange="showcustomquest(this.value)">
+								<option value="0">无安全问题</option><option value="1">我爸爸的出生地</option><option value="2">我妈妈的出生地</option><option value="3">我的小学校名</option><option value="4">我的中学校名</option><option value="5">我最喜欢的运动</option><option value="6">我最喜欢的歌曲</option><option value="7">我最喜欢的电影</option><option value="8" >我最喜欢的颜色</option><option value="-1">自定义问题</option>
+							</select>
+						</td>
+						<td><input id="customquest" style="display:none" name="customquest" class="input" size="10" /></td>
+					</tr>
+					<tr>
+						<td>您的答案</td>
+						<td><input name="answer" class="input" /></td>
+						<td></td>
+					</tr>
+<!--
+EOT;
+}
+if($loginq && $db_question) {
+	$qkey = array_rand($db_question);
+print <<<EOT
+-->
+					<tr>
+						<td>验证问答</td>
+						<td>
+							问题：{$db_question[$qkey]}
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input class="input" type="text" name="qanswer" tabindex="7" />
+							<input type="hidden" name="qkey" value="$qkey" />  
+							正确答案:{$db_answer[$qkey]}
+						</td>
+						<td></td>
+					</tr>
+<!--
+EOT;
+}
+if($qcheck){print <<<EOT
+-->
+					<tr>
+						<td>验证问答</td>
+						<td>问题:{$db_question[$qkey]}<br />
+							<input class="input" name="qanswer" style="width:140px;" /><br />&nbsp;正确答案:{$db_answer[$qkey]}
+							<input type="hidden" name="qkey" value="$qkey" />
+						</td>
+						<td></td>
+					</tr>
+<!--
+EOT;
+}
+
+if(($db_gdcheck & 2)|| $db_ifsafecv||	$qcheck)
+{
+print<<<EOT
+-->
+		</table>
+	</div>
+</div>
+<!--
+EOT;
+}
+
+
+
+print <<<EOT
+-->
+						</td>
+						<td><input class="input" name="pwuser" type="text"/></td>
+					</tr>
+					<tr>
+						<td>
+							密 码
+						</td>
+						<td>
+							<input class="input" type="password" onclick="this.onfocus()" onfocus="document.login_FORM.appendChild(getObj('nav_logintab'));getObj('nav_logintab').style.display='';PW_popEvent(getObj('nav_logintab'));" name="pwpwd" />
+						</td>
+					</tr>
+<!--
+EOT;
+print <<<EOT
+-->
+					<tr >
+						<td>&nbsp;</td>
+						<td><input name="keepyear" type="checkbox" value="1" style=" vertical-align:middle;" />
+							保持登录状态</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><span class="button" style="margin-left:0;"><span><button type="submit"> 登 录 </button></span></span>&nbsp;
+						<a href="sendpwd.php" class="uline gray">忘记密码了？</a></td>
+					</tr>
+				</table>
+				</form>
+				</div>
+			</div>
+<SCRIPT type="text/javascript" LANGUAGE="JavaScript" src="js/core/core.js"></SCRIPT>	
+
+			<div class="menu-bar-box cc mb10">
+			<a href="register.php" class="register uline">马上注册，分享社区乐趣！</a>
+			</div>
+<!--#
+if ($o_indexset & 8) {
+#-->
+
+<!--
+EOT;
+if (!empty($feeds)) {
+print <<<EOT
+-->
+			<div class="menu-bar-box cc mb10">
+				<h2 class="b">最新动态</h2>
+				<div class="h355 p10 mb10" id="feedinfo">
+				<div id="feedinfo1" style="overflow:hidden">
+<!--
+EOT;
+foreach ($feeds as $day => $feed) {
+print <<<EOT
+-->
+				<div class="mt10">
+					<p class="b mb10">$day</p>
+<!--
+EOT;
+foreach ($feed as $key => $value) {
+$add_classname = getAppClassName($value['type']);
+print <<<EOT
+-->
+<p class="mb10"><a href="u.php?uid=$value[uid]">$value[username]</a>&nbsp;$value[descrip]
+<!--
+EOT;
+if (checkCommType($value[type]) && $value[typeid]>0) {
+print <<<EOT
+-->
+<div id="com_{$value[type]}_{$value[typeid]}"></div>
+<!--
+EOT;
+}print <<<EOT
+-->
+</p>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</div>
+				<div id="feedinfo2"></div>
+				</div>
+<script language="javascript">
+var speed=65;
+var feedinfo = getObj('feedinfo');
+var feedinfo1 = getObj('feedinfo1');
+var feedinfo2 = getObj('feedinfo2');
+feedinfo2.innerHTML = feedinfo1.innerHTML;
+feedinfo2.innerHTML += feedinfo1.innerHTML;
+
+function marquee() {
+	if(feedinfo2.offsetTop-feedinfo.scrollTop<=0) {
+		feedinfo.scrollTop-=feedinfo1.offsetHeight;
+	} else{
+		feedinfo.scrollTop++;
+	}
+}
+var thisway=setInterval(marquee,speed);
+feedinfo.onmouseover=function() {
+	clearInterval(thisway);
+}
+feedinfo.onmouseout=function() {
+	thisway=setInterval(marquee,speed);
+}
+</script>
+		</div>
+<!--
+EOT;
+} else { print <<<EOT
+-->
+			<div class="menu-bar-box cc mb10">
+				<h2 class="b">最新动态</h2>
+				<div class="h355 p10 mb10" id="feedinfo">
+				<div id="feedinfo1" style="overflow:hidden">
+				<dl class="status-item">
+					<dd class="status-info p10">
+						暂没有动态信息
+					</dd>
+				</dl>
+				</div>
+				</div>
+			</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+<!--#}#-->
+<!--#if ($db_phopen && $o_indexset & 128) {#-->
+			<div class="menu-bar-box cc content-box mb10">
+			<h2 class="b">相册</h2>
+			<div style="padding:10px;">
+<!--#
+if (!empty($albumdb)) {
+foreach ($albumdb as $key => $value) {
+#-->
+			<table cellpadding="0" cellspacing="0" width="100%">
+				<tr class="vt">
+					<td width="80"><a href="{$basename}u=$value[ownerid]&q=photos&a=album&aid=$value[aid]"><img src="$value[lastphoto]" width="80" /></a></td>
+					<td><a href="{$basename}u=$value[ownerid]&q=photos&a=album&aid=$value[aid]" class="f14 b blue">{$value[aname]}</a>
+						<p class="text">
+						<a href="u.php?uid=$value[ownerid]">$value[owner]</a>&nbsp;$value[photonum]&nbsp;张照片<br />
+						更新于<span class="f10">$value[lasttime]</span>
+						</p></td>
+				</tr>
+			</table>
+<!--#}} else {#-->
+		<table cellpadding="0" cellspacing="0" width="100%"><tr><td class="tac">暂时没有相册信息</td></tr></table>
+<!--#}#-->
+	</div>
+			</div>
+<!--#} if ($db_groups_open && $o_indexset & 256) {#-->
+			<div class="menu-bar-box content-box cc mb10">
+			<h2 class="b">群组</h2>
+			<div style="padding:10px;">
+<!--#foreach($reGroups as $value){#-->
+			<table cellpadding="0" cellspacing="0" width="100%" class="mb10">
+				<tr class="vt">
+					<td width="50"><img src="$value[cnimg]" class="img-50" /></td>
+					<td><a href="{$basename}q=group&cyid=$value[id]" class="f14 b blue  pdr">$value[cname]</a><br />
+						{$value[members]}成员
+					</td>
+				</tr>
+			</table>
+<!--#}#-->
+			</div></div>
+<!--#}#-->
+		</div>
+		<div id="content" class="w720 fr">
+			<div class="index-banner mb10">
+				<div class="index-banner-bg"></div>
+				<div id="tabs1">
+					<ul id="menu1">
+						<li class="hover" onmouseover="setTab(1,0)"><a href="{$basename}q=share"><img src="$pwModeImg/index/share.png" /></a></li>
+						<li onmouseover="setTab(1,1)"><a href="{$basename}q=write"><img src="$pwModeImg/index/jilu.png" /></a></li>
+						<li onmouseover="setTab(1,2)"><a href="{$basename}q=browse&tab=t"><img src="$pwModeImg/index/posts.png" /></a></li>
+						<li onmouseover="setTab(1,3)"><a href="{$basename}q=diary&a=write"><img src="$pwModeImg/index/diary.png" /></a></li>
+						<li onmouseover="setTab(1,4)"><a href="{$basename}q=groups"><img src="$pwModeImg/index/group.png" /></a></li>
+						<li onmouseover="setTab(1,5)"><a href="{$basename}q=photos&a=upload"><img src="$pwModeImg/index/photo.png" /></a></li>
+					</ul>
+					<div id="main1" class="index-banner-text">
+						<div style="display:block;">分享记录让朋友了解你在做什么！<b class="share"></b></div>
+						<div style="display:none;">记录个人的每个时刻的感觉！<b class="record"></b></div>
+						<div style="display:none;">发表帖子，阐述自己的独特观点！<b class="posts"></b></div>
+						<div style="display:none;">编写日志，记录生活点点滴滴！<b class="log"></b></div>
+						<div style="display:none;">讨论小组，与有共同爱好者做朋友<b class="groups"></b></div>
+						<div style="display:none;">上传相片<b class="albums"></b></div>
+					</div>
+				</div>
+				<a href="register.php" class="register">快来注册吧！</a>
+			</div>
+<!--#if ($o_indexset & 16) {#-->
+			<div class="content-box mb10">
+				<h2><strong>今日达人</strong><span>社区圈子已经入住会员 {$totalmember} 人啦！</span></h2>
+				<div class="today-user cc">
+<!--#foreach ($hotuser as $value) {#-->
+						<a href="$value[url]"><img src="$value[image]" class="img-50"/><p>$value[title]</p></a>
+<!--#}#-->
+				</div>
+				<div class="today-reg">
+				<span class="red">今日新人</span>
+<!--#
+if($newuser){
+foreach ($newuser as $value) {
+#-->
+				<a href="u.php?uid=$value[uid]">$value[username]</a>
+<!--#}}#-->
+				</div>
+			</div>
+<!--#} if ($o_indexset & 2) {#-->
+			<div class="content-box mb10">
+				<h2><strong>最新照片...</strong></h2>
+				<div class="new-img cc">
+<!--#foreach($smphoto as $value){#-->
+					<a href="{$basename}q=photos&a=view&pid=$value[pid]"><img src="$value[path]"/></a>
+<!--#}#-->
+				</div>
+			</div>
+<!--#}if ($o_indexset & 4) {#-->
+			<div class="content-box mb10">
+				<h2><strong>论坛热门</strong></h2>
+				<div class="cc">
+					<div class="hot-post fl">
+						<table cellpadding="0" cellspacing="0" width="100%">
+<!--#
+foreach ($hotsubject as $value) {
+$value[title] = substrs($value[title],32);
+#-->
+						<tr>
+							<td class="one"><span><span>{$value[addition][replies]}</span></span></td>
+							<td class="two"><a href="$value[url]" class="blue">$value[title]</a></td>
+							<td class="tree"><a href="u.php?uid={$value[addition][authorid]}" class="black">{$value[addition][author]}</a></td>
+						</tr>
+<!--#}#-->
+						</table>
+					</div>
+					<div class="hot-forum fr">
+						<ul>
+<!--#foreach ($hotforum as $value) {#-->
+							<li><span>{$value[addition][article]}</span><a href="$value[url]" title="$value[title]">$value[title_sub]</a></li>
+<!--#}#-->
+						</ul>
+					</div>
+				</div>
+			</div>
+<!--#} if ($db_dopen && $o_indexset & 512) {#-->
+			<div class="content-box mb10">
+				<h2><strong>最新日志</strong></h2>
+				<div class="new-log cc">
+<!--#
+if($newDiarys){
+foreach($newDiarys as $value){
+#-->
+					<dl class="cc">
+						<dt><img src="$value[face]" class="img-50" /></dt>
+						<dd><a href="$value[url]">$value[subject]</a><br />
+						<a href="u.php?uid=$value[uid]" class="black">$value[username]</a>
+						<span class="gray">$value[postdate]</span><br />
+						$value[content]
+						</dd>
+					</dl>
+<!--#}}else{#-->
+					<p class="text p10">暂无日志</p>
+<!--#}#-->
+				</div>
+			</div>
+<!--#} if ($o_indexset & 32) {#-->
+			<div class="content-box mb10">
+				<h2><strong>最新记录</strong></h2>
+				<div class="new-log cc">
+<!--#
+if($newWrite){
+foreach($newWrite as $value){
+#-->
+					<dl class="cc">
+						<dt><img src="$value[icon]" class="img-50" /></dt>
+						<dd>
+						<a href="u.php?uid=$value[uid]" class="black">$value[username]</a>
+						<span class="gray">$value[postdate]</span><br />
+						$value[content]
+						</dd>
+					</dl>
+<!--#}}else{#-->
+					<p class="text p10">没有最新记录</p>
+<!--#}#-->
+				</div>
+			</div>
+<!--#} if ($db_share_open && $o_indexset & 64) {#-->
+			<div class="content-box mb10">
+				<h2><strong>最新分享</strong></h2>
+				<div class="new-log2 cc">
+<!--#
+if($newShares){
+foreach($newShares as $value){
+#-->
+				<dl class="cc">
+					<img src="$value[icon]" class="img-20" align="absmiddle" /> <a href="u.php?uid=$value[uid]">$value[username]</a> {$value[type_name]}
+					<dd>
+<!--#if ($value[groupid] == 6 && $db_shield && $groupid != 3) {#-->
+					<span style="color:black;background-color:#ffff66">用户被禁言,该分享自动屏蔽!</span>
+<!--#} else {#-->
+					$value[descrip]<br />
+<!--#if($value[type]=='video'){#-->
+					<img title="播放" style="cursor: pointer;" src="$pwModeImg/share_v.png" class="vthumb" onclick="javascript:showShare('$value[host]','$value[hash]',this,'$value[id]')"/>
+<!--#}elseif($value[type]=='music'){#-->
+					<img title="播放" style="cursor: pointer;" src="$pwModeImg/musicplay.gif" onclick="javascript:showShare('$value[type]','$value[link]',this,'$value[id]')"/>
+<!--#}elseif($value[type]=='flash'){#-->
+					<img title="播放" style="cursor: pointer;" src="$pwModeImg/musicplay.gif" onclick="javascript:showShare('$value[type]','$value[link]',this,'$value[id]')"/>
+<!--#}elseif(in_array($value[type],array('user','group'))){#-->
+					<a href="$value[link]"><img src="$value[image]" width="100"/></a>
+<!--#}elseif(in_array($value[type],array('photo','album'))){#-->
+					<a href="$value[link]"><img src="$value[image]" width="100"/></a>
+<!--#}#-->
+					$value[title]<br />
+<!--#if($value[type]=='topic'){#-->
+						$value[abstract]<br />
+<!--#
+if($value[imgs]){
+foreach($value[imgs] as $k => $v){
+#-->
+					<span class="fl" style="white-space:nowrap;margin-right:5px;"><img src="$v" style="width:60px;height:60px;margin-bottom:3px;" align="absmiddle"></span>
+<!--#}#-->
+					<div class="c"></div>
+<!--#}}}#-->
+				</dd>
+			</dl>
+<!--#}}else{#-->
+				<p class="text p10">暂无分享信息</p>
+<!--#}#-->
+			</div>
+		</div>
+<!--#}#-->
+</div>
+<!--
+EOT;
+?>-->

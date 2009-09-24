@@ -1,0 +1,441 @@
+<!--<?php
+include_once PrintEot('left');
+if(!$action){
+print <<<EOT
+-->
+<h3>优化方案说明</h3>
+<div class="tr5">负载优化:根据您的站点规模进行优化，您也可以在“查看设置”中自定义设置负载优化选项<br/>功能设置:根据您对功能的需求快速开启/关闭站点功能，您也可以在“查看设置”中自定义设置功能设置选项<br/>说明:选中任何一个负载优化和功能设置，在核心设置中的值都将改成该处所配置的值</div>
+<form action=$basename method=post name="form1">
+<input type="hidden" name="action" value="size">
+<h2>负载优化</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+<td width="52%"><input type="radio" name="type" value="1" $size_1>小型站点:30分钟在线 < 1000</td>
+<td align="center"><a href="$basename&action=size_detail&type=1">查看设置</a></td>
+</tr>
+<tr class="tr3">
+<td><input type="radio" name="type" value="2" $size_2>中型站点:30分钟在线 < 5000</td>
+<td align="center"><a href="$basename&action=size_detail&type=2">查看设置</a></td>
+</tr>
+<tr class="tr3">
+<td><input type="radio" name="type" value="3" $size_3>大型站点:30分钟在线 > 5000</td>
+<td align="center"><a href="$basename&action=size_detail&type=3">查看设置</a></td>
+</tr>
+</table>
+<br />
+<center><input type="submit" value="提 交" class="btn"></center>
+</form><br />
+<form action=$basename method=post name="form1">
+<input type=hidden name="action" value="func">
+<h2>功能设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+<td width="52%"><input type="radio" name="type" value="1" $func_1>简洁:关闭娱乐和部分影响效率的功能，适合追求高效率的站点</td>
+<td align="center"><a href="$basename&action=func_detail&type=1">查看设置</a></td>
+</tr>
+<tr class="tr3">
+<td><input type="radio" name="type" value="2" $func_2>推荐:按照站点日常基本需求配置，效率与功能比较平衡</td>
+<td align="center"><a href="$basename&action=func_detail&type=2">查看设置</a></td>
+</tr>
+<tr class="tr3">
+<td><input type="radio" name="type" value="3" $func_3>丰富:开启大部分功能，站点会员体验较好，负载较前两种配置要高一些</td>
+<td align="center"><a href="$basename&action=func_detail&type=3">查看设置</a></td>
+</tr>
+</table>
+<br />
+<center><input type="submit" name="hello" value="提 交" class="btn"></center>
+</form>
+<!--
+EOT;
+}elseif($action=='size_detail'){print <<<EOT
+-->
+<form action=$basename method=post name="form1">
+<input type="hidden" name="action" value="size_detail">
+<input type="hidden" name="type" value="$type">
+<input type="hidden" name="step" value="2">
+<h2>负载优化</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 s3"><td colspan=2><i>以下设置是系统推荐</i><b>
+<!--
+EOT;
+if($type=='3'){print <<<EOT
+-->
+	
+<!--
+EOT;
+}elseif($type=='2'){print <<<EOT
+-->
+	中型站点
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	小型站点
+<!--
+EOT;
+}print <<<EOT
+-->
+</b><i>使用的优化配置方案，您可以根据您的具体需求自定义设置</i></td></tr>
+<tr class="tr3">
+	<td width="50%">定时打开与关闭站点搜索功能:<br />
+允许用户使用搜索功能的时间段，时间格式为 24小时制，管理员与总版主不受此限制<br>
+比如允许用户在8点到18点这段时间内使用搜索功能，可设置如下:<br>
+搜索开启于(点): 8 点 搜索关闭于(点): 18 点<br>
+支持跨越零点，如允许用户在每晚22:00 到 次日 10:00 可设置如下:<br>
+搜索开启于(点): 22 点 搜索关闭于(点): 10 点</td>
+	<td>
+		<input type=radio value=1 name="schcontrol[opensch]" $opensch_Y>开启
+		<input type=radio value=0 name="schcontrol[opensch]" $opensch_N>关闭
+		<br><br>
+		搜索开启于(点): <input name="schcontrol[schstart]" class="input" value="$db_schstart" size=2>
+		搜索关闭于(点): <input name="schcontrol[schend]" class="input" value="$db_schend" size=2>
+	</td>
+</tr>
+<tr class="tr3">
+	<td>进程优化:<br>建议<b>15分钟</b>在线<b>1000人</b>以上站点打开此选项</td>
+	<td>
+		<input type=radio value=1 name="config[lp]" $lp_Y>开启
+		<input type=radio value=0 name="config[lp]" $lp_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>GZIP 压缩级别:<br>设置 GZIP 在输出时的压缩级别: <b>0=关闭GZIP功能，9=最大压缩比</b>。<br>如果您已经在服务器上使用了mod_gzip 或者 mod_deflate，请设置为0关闭GZIP功能，否则强烈推荐使用级别 1。另外，此功能要求 ZLIB 库支持。<br><br>GZIP 压缩输出简介:使用 GZIP HTML 压缩输出给用户页面，这会减少带宽要求。此功能要求客户端浏览器的支持，以及 HTTP 1.1 兼容。它会产生服务器额外的性能开销。</td>
+	<td><input name="config[obstart]" value="$db_obstart" class="input"></td>
+</tr>
+<tr class="tr3">
+	<td>是否记录会员在线时间并在版块内显示</td>
+	<td>
+		<input type=radio value=1 name="config[ifonlinetime]" $ifonlinetime_Y>开启
+		<input type=radio value=0 name="config[ifonlinetime]" $ifonlinetime_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>刷新预防时间(多少秒间刷新被视为恶意刷新,设为0则不做限制):</td>
+	<td><input size="35" class="input" name="config[refreshtime]" value="$db_refreshtime">(秒)</td>
+</tr>
+<tr class="tr3">
+	<td>在线用户时限（多少分钟内有动作视为在线）:</td>
+	<td><input size="35" class="input" name="config[onlinetime]" value="$db_onlinetime">(分钟)</td>
+</tr>
+<tr class="tr3">
+	<td>搜索查询的最大结果数:</td>
+	<td><input size="35" class="input" name="config[maxresult]" value="$db_maxresult"></td>
+</tr>
+<tr class="tr3">
+	<td>帖子中表情，动作以及 img，wmv，rm 等标签的最多转换次数<br>建议设置为10 - 30 之间，-1 为不限制</td>
+	<td><input type="text" class="input" name="config[cvtimes]"  value="$db_cvtimes"></td>
+</tr>
+<tr class="tr3">
+	<td>一次最多上传附件个数</td>
+	<td><input size="35" class="input" name="config[attachnum]" value="$db_attachnum"></td>
+</tr>
+<tr class="tr3">
+	<td>首页显示今天生日会员:<br>如果选择“开启”，将在站点首页显示今天过生日的会员，<font color=blue>会影响速度</font>。</td>
+	<td>
+		<input type=radio value=1 name="config[indexshowbirth]" $indexshowbirth_Y>开启
+		<input type=radio value=0 name="config[indexshowbirth]" $indexshowbirth_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>首页显示<font color=blue>在线用户</font>(影响速度):</td>
+	<td>
+		<input type=radio value=1 name="config[indexonline]" $indexonline_Y>开启 
+		<input type=radio value=0 name="config[indexonline]" $indexonline_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>首页显示<font color=blue>在线游客</font>(影响速度):</td>
+	<td>
+		<input type=radio value=1 name="config[showguest]" $showguest_Y>开启
+		<input type=radio value=0 name="config[showguest]" $showguest_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>统计<font color=blue>今日到访会员</font>(大型站点建议关闭，影响速度):</td>
+	<td>
+		<input type=radio value=1 name="config[today]" $today_Y>开启
+		<input type=radio value=0 name="config[today]" $today_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>主题列表最大显示页数:<br>主题列表中用户可以查看的最大页数，建议设置为 1000 －2500 之间，0 为不限制</td>
+	<td><input class="input" size="35" name="config[maxpage]" value="$db_maxpage"></td>
+</tr>
+<tr class="tr3">
+	<td>用户列表最大页数:<br>用户列表显示的总页数，建议为1000-2500。0或留空表示不限制。</td>
+	<td><input class="input" size="35" name="config[maxmember]" value="$db_maxmember"></td>
+</tr>
+<tr class="tr3">
+	<td>点击率延迟更新功能(小时)<br>（设置为0则不使用此功能,使用生成html功能将自动使用此功能）</td>
+	<td>
+		<select name="config[hithour]">
+			<option value=0  $hithour_sel[0]>0</option>
+			<option value=1  $hithour_sel[1]>1</option>
+			<option value=4  $hithour_sel[4]>4</option>
+			<option value=6  $hithour_sel[6]>6</option>
+			<option value=8  $hithour_sel[8]>8</option>
+			<option value=12 $hithour_sel[12]>12</option>
+			<option value=20 $hithour_sel[20]>24</option>
+		</select>
+	</td>
+</tr>
+<tr class="tr3">
+	<td>版块内显示在线用户:</td>
+	<td>
+		<input type=radio value=1 name="config[threadonline]" $threadonline_Y>开启
+		<input type=radio value=0 name="config[threadonline]" $threadonline_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td><font color="blue">是否在帖子页面显示用户加入的群组</font></td>
+	<td>
+		<input type=radio value=1 name="config[showcolony]" $showcolony_Y>开启
+		<input type=radio value=0 name="config[showcolony]" $showcolony_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td><font color="blue">选择要在阅读帖子页面（read.php）显示的自定义积分</font></td>
+	<td>
+		<table>
+			<tr>
+<!--
+EOT;
+$num=0;
+foreach($_CREDITDB as $key=>$value){
+$ct_checked=strpos($db_showcustom,",$key,")!==false?'checked':'';
+$num++;print <<<EOT
+-->
+				<td>
+					<input type="checkbox" name="showcustom[$key]" value="$key" $ct_checked>$value[0]
+				</td>
+<!--
+EOT;
+if($num==4){
+$num=0;print <<<EOT
+-->
+			</tr>
+			<tr>
+<!--
+EOT;
+}}print <<<EOT
+-->
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否使用图片水印功能<br><span class="gray">将在论坛上传的图片附件中加上您在下面设置的图片或文字水印<br />开启后请到版块设置里开启</span></td>
+	<td>
+		<input type=radio value=1 name="config[watermark]" $watermark_Y> 开启
+		<input type=radio value=0 name="config[watermark]" $watermark_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否使用头像缩略图功能<br /><span class="gray">论坛上的头像，按照一定比例，缩略成一张清晰的图片</span></td>
+	<td>
+		<input type=radio value=1 name="config[iffthumb]" $iffthumb_Y> 开启
+		<input type=radio value=0 name="config[iffthumb]" $iffthumb_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启WAP功能<br>开启此功能允许用户通过手机访问站点，实现浏览、发帖、收发短消息等功能</td>
+	<td>
+		<input type=radio value=1 name="config[wapifopen]" $wapifopen_Y> 开启
+		<input type=radio value=0 name="config[wapifopen]" $wapifopen_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启 JS调用<br>此功能允许在您的网站首页或其他地方调用站点的内容<br>调用方式分为: 版块调用、公告调用、基本信息调用、会员排行调用、文章调用。</td>
+	<td>
+		<input type=radio value=1 name="config[jsifopen]" $jsifopen_Y> 开启
+		<input type=radio value=0 name="config[jsifopen]" $jsifopen_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>安全问题功能<br />如果会员设置了安全问题，需要填写正确的答案才能登录站点，可提高密码安全性</td>
+	<td>
+		<input type=radio value=1 name="config[ifsafecv]" $ifsafecv_Y>开启
+		<input type=radio value=0 name="config[ifsafecv]" $ifsafecv_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>强制使用安全问题用户组设置<br />可以强制管理权限较高的用户组(管理员,总版主,版主)使用安全问题，可提高密码安全性</td>
+	<td>$safegroup</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启静态目录部署功能</td>
+	<td>
+		<input type="radio" name="config[htmifopen]" value="1" $htmifopen_Y>是
+		<input type="radio" name="config[htmifopen]" value="0" $htmifopen_N>否
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启IP统计</td>
+	<td>
+		<input type=radio value=1 $ipstates_Y name="config[ipstates]">是
+		<input type=radio value=0 $ipstates_N name="config[ipstates]">否
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否允许用户使用宣传代码!</td>
+	<td>
+		<input type=radio value=2 $ads_2 name="config[ads]">需要注册
+		<input type=radio value=1 $ads_1 name="config[ads]">勿需注册
+		<input type=radio value=0 $ads_0 name="config[ads]">关闭
+	</td>
+</tr>
+</table>
+<br />
+<center><input type="submit" name="hello" value=" 保存并应用" class="btn"> <input type="submit" name="recovery" value=" 恢复默认值" class="btn2"></center>
+</form>
+<br/>
+<!--
+EOT;
+}elseif($action=='func_detail'){print <<<EOT
+-->
+<form action="$basename" method="post" name="form1">
+<input type="hidden" name="action" value="func_detail">
+<input type="hidden" name="type" value="$type">
+<input type="hidden" name="step" value="2">
+<h2>功能设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+	<td>头像宽高范围</td>
+		<td width="50%"><input name="upload[imgwidth]" value="$db_imgwidth" size="6" class="input" maxlength="3"> 最大宽度 &nbsp; <input name="upload[imglen]" value="$db_imglen" size="6" class="input" maxlength="3"> 最大高度</td>
+	</tr>
+<tr class="tr3">
+<td>是否开启头像上传功能<br>此处为全局控制，此功能关闭则所有用户都不能使用头像上传功能</td>
+	<td>
+		<input type=radio value=1 name="upload[upload]" $upload_Y>开启
+		<input type=radio value=0 name="upload[upload]" $upload_N>关闭
+		<input name="upload[imgsize]" value="$db_imgsize" size="6" class="input"> M
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启左右分栏</td>
+	<td><input type=radio value=2 name="config[columns]" $columns_2>开启，默认使用分栏模式<br />
+		<input type=radio value=1 name="config[columns]" $columns_1>开启，默认使用平板模式<br />
+		<input type=radio value=0 name="config[columns]" $columns_0>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启新消息声音提示</td>
+	<td>
+		<input type=radio value=1 name="config[msgsound]" $msgsound_Y>开启
+		<input type=radio value=0 name="config[msgsound]" $msgsound_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启屏蔽禁言会员所有帖子</td>
+	<td>
+		<input type="radio" value="1" name="config[shield]" $shield_Y>开启
+		<input type="radio" value="0" name="config[shield]" $shield_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启发帖内容验证(开启该功能，会员将无法连续发表同一内容的主题)</td>
+	<td>
+		<input type="radio" value="1" name="config[tcheck]" $tcheck_Y>开启
+		<input type="radio" value="0" name="config[tcheck]" $tcheck_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启副版主功能(开启该功能，第一版主有权任命和罢免其他版主)</td>
+	<td>
+		<input type="radio" value="1" name="config[adminset]" $adminset_Y>开启
+		<input type="radio" value="0" name="config[adminset]" $adminset_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否使用附件上传功能</td>
+	<td>
+		<input type=radio value=1 name="config[allowupload]" $allowupload_Y>开启 
+		<input type=radio value=0 name="config[allowupload]" $allowupload_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>用户文章被回复是否发送邮件:</td>
+	<td>
+		<input type=radio value=1 name="config[replysendmail]" $replysendmail_Y>开启
+		<input type=radio value=0 name="config[replysendmail]" $replysendmail_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>用户文章被回复是否发送站内通知:</td>
+	<td>
+		<input type=radio value=1 name="config[replysitemail]" $replysitemail_Y>开启
+		<input type=radio value=0 name="config[replysitemail]" $replysitemail_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>编辑器是否开启<font color="blue">自定义代码功能</font>:</td>
+	<td>
+		<input type=radio value=1 name="config[pwcode]" $pwcode_Y>开启
+		<input type=radio value=0 name="config[pwcode]" $pwcode_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>编辑器是否开启<font color="blue">帖子格式功能</font>:</td>
+	<td>
+		<input type=radio value=1 name="config[setform]" $setform_Y>开启
+		<input type=radio value=0 name="config[setform]" $setform_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否使用自动贴图</td>
+	<td>
+		<input type=radio value=1 name="config[autoimg]" $autoimg_Y>开启 
+		<input type=radio value=0 name="config[autoimg]" $autoimg_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>版块导航弹出菜单显示<br />版块导航 (帖子列表、发帖页面)</td>
+	<td>
+		<input type=radio value=1 name="config[menu]" $menu_Y>开启 
+		<input type=radio value=0 name="config[menu]" $menu_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td><font color=blue>总置顶, 分类置顶功能:</font><br>置顶3 为总置顶, 置顶2 为分类置顶, 置顶1 为本版块置顶</td>
+	<td>
+		<input type=radio value=1 name="config[topped]" $topped_Y>开启
+		<input type=radio value=0 name="config[topped]" $topped_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否使用图片水印功能<br><span class="gray">将在论坛上传的图片附件中加上您在下面设置的图片或文字水印<br />开启后请到版块设置里开启</span></td>
+	<td>
+		<input type=radio value=1 name="config[watermark]" $watermark_Y> 开启
+		<input type=radio value=0 name="config[watermark]" $watermark_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否使用头像缩略图功能<br /><span class="gray">论坛上的头像，按照一定比例，缩略成一张清晰的图片</span></td>
+	<td>
+		<input type=radio value=1 name="config[iffthumb]" $iffthumb_Y> 开启
+		<input type=radio value=0 name="config[iffthumb]" $iffthumb_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否使用附件缩略图功能<br /><span class="gray">论坛上的图片附件，按照一定比例，缩略成一张清晰的图片</span></td>
+	<td>
+		<input type=radio value=1 name="config[ifathumb]" $ifathumb_Y> 开启
+		<input type=radio value=0 name="config[ifathumb]" $ifathumb_N>关闭
+	</td>
+</tr>
+<tr class="tr3">
+	<td>是否开启自助友情链接<br />会员可在前台自助申请友情链接（每个会员只能申请一次），管理员审核通过后在前台显示</td>
+	<td>
+		<input type=radio value=1 name="config[ifselfshare]" $ifselfshare_Y>开启
+		<input type=radio value=0 name="config[ifselfshare]" $ifselfshare_N>关闭
+	</td>
+</tr>
+</table>
+<br />
+<center><input type="submit" name="hello" value=" 保存并应用" class="btn"> <input type="submit" name="recovery" value=" 恢复默认值" class="btn2"></center><br/>
+</form>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

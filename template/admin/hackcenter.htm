@@ -1,0 +1,82 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<h3>插件安装步骤</h3>
+<div class="tr5">
+1. 将插件文件上传到<b>插件目录(hack/)</b><br />2. 在“<b>未安装插件</b>”列表中选择安装您需要的插件<br />3. 插件前台导航名称及显示位置修改请到“<b>模式导航->站点导航</b>”
+</div>
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="edit">
+<h2>已安装插件</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 s3" align="center">
+<td width=30%>插件名称</td>
+<td class="tal">插件管理</td>
+<td class="tal" width=20%>插件目录</td>
+<!-- <td width=20%>前台显示方式</td> -->
+<td width=20% class="tal">卸载</td></tr>
+<!--
+EOT;
+foreach ($installdb['index'] as $key => $value) {
+$value[2] = $value[2]==2 ? '直接显示' :($value[2]==1 ? '下拉菜单显示' : '不显示');print <<<EOT
+-->
+<tr class="tr3" align="center"><td><input class="input" name="hackname[$value[1]]" value="$value[0]" size="30"></td>
+<td><a class="fourm-two" href="$admin_file?adminjob=hack&hackset=$value[1]" style="color:blue" title="点击管理此插件"><span class="edit"></span></a></td>
+<td class="tal">/hack/$value[1]</td>
+<!-- <td>
+<select name="hackopen[$value[1]]" style="width:70%">
+<option value="0" ${$value[1].'_0'}>不显示</option>
+<option value="1" ${$value[1].'_1'}>下拉菜单显示</option>
+<option value="2" ${$value[1].'_2'}>直接显示</option>
+</select>
+</td> -->
+<td><a class="fourm-two" href="$value[4]" onclick="return checkhackset()" title="卸载"><span class="del"></span></a></td></tr>
+<!--
+EOT;
+}foreach ($installdb['noindex'] as $key => $value) {
+$value[2] = $value[2]==2 ? '直接显示' :($value[2]==1 ? '下拉菜单显示' : '不显示');print <<<EOT
+-->
+<tr class="tr3" align="center"><td><input class="input" name="hackname[$value[1]]" value="$value[0]" size="30"></td>
+<td><a class="fourm-two" href="$admin_file?adminjob=hack&hackset=$value[1]" style="color:blue" title="点击管理此插件"><span class="edit"></span></a></td>
+<td class="tal">/hack/$value[1]</td>
+<!-- <td><span class="gray">无前台文件</span>
+	<input type="hidden" name="hackopen[$value[1]]" value="0">
+</td> -->
+<td><a class="fourm-two" href="$value[4]" onclick="return checkhackset()" title="卸载"><span class="del"></span></a></td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br>
+<center><input type='submit' value='提 交' class="btn"></center></form><br>
+<script language="JavaScript">
+function checkhackset(){
+	return confirm("卸载插件将同时删除插件相关的数据，您确定要卸载此插件吗?");
+}
+</script>
+<h2>未安装插件</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 s3" align="center">
+<td>插件名称</td>
+<td class="tal" width=20%>插件目录</td>
+<td width=20%>前台显示方式</td>
+<td width=20%>管理选项</td></tr>
+<!--
+EOT;
+foreach ($uninstalldb as $value) {
+$value[2] = $value[2]==2 ? '直接显示' :($value[2]==1 ? '下拉菜单显示' : '不显示');print <<<EOT
+-->
+<tr class="tr3" align="center">
+<td>$value[0]</td>
+<td>/hack/$value[1]</td>
+<td>$value[2]</td>
+<td><a href="$value[3]">安装</a></td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br/>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

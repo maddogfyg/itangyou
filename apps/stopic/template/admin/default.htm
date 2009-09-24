@@ -1,0 +1,198 @@
+<!--
+<?php 
+
+print <<<EOT
+-->
+
+<script language="JavaScript" src="js/pw_ajax.js"></script>
+
+<ul class="nav5 cc2">
+	<li class="current"><a href="javascript:;" hidefocus="true">布局分类</a></li>
+	<li><a href="javascript:;" hidefocus="true">编辑属性</a></li>
+	<li><a href="javascript:;" hidefocus="true">生成专题</a></li>
+</ul>
+
+<form action="$stopic_admin_url" method="post" enctype="multipart/form-data" onsubmit="return checkSubmit();">
+<table width="100%">
+	<tr class="tr3">
+		<td width="20%">
+			<input id="notNew" name="is_new_category" type="radio" value="0" checked /> 选择专题分类
+		</td>
+		<td>
+			<select name="category_id" id="category">
+<!--
+EOT;
+foreach ($category_list as $category) {
+print <<<EOT
+-->
+				<option value="{$category['id']}">{$category['title']}</option>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>
+			<input name="is_new_category" type="radio" value="1" /> 或者创建新的分类
+		</td>
+		<td>
+			<input id="newCategoryName" name="new_category" type="text" class="input" onchange="checkNewCategoryName()" />
+			<span id="newCategoryNameError" style="display:none;"><font color="red">请填写新的分类的名称</font></span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td colspan="2">
+		<p class="pd5">
+			选用布局 <font color="red">*</font> ：
+			<span id="layoutSelectError" style="display:none;"><font color="red">请在下面选择专题的布局</font></span>
+		</p>
+		<ul class="zt-list cc2">
+<!--
+EOT;
+foreach ($layout_list as $layout_name => $layout) {
+print <<<EOT
+-->
+			<li>
+				<img src="{$layout['logo']}" />
+				<p><input name="layout_select" type="radio" value="{$layout_name}" />{$layout['desc']}</p>
+			</li>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+		</ul>
+<!--
+		<p class="pd5">或者 选择已有的素材</p>
+		<div id="showCopy"></div>
+-->
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td colspan="2">
+		<p class="pd5">
+			选择风格样式：
+		</p>
+		<div class="choose" style="margin-bottom:10px;height:149px;overflow-y:scroll;">
+			<div class="p10" style="padding-bottom:0">
+				<ul class="zt-list3 cc2" id="style_ul">
+<!--
+EOT;
+foreach ($styles as $key => $style) {
+print <<<EOT
+-->
+					<li id="style_{$key}">
+						<a href="javascript:;" hidefocus="true"><img src="{$style[minipreview]}" title="$style[name]" /></a>
+					</li>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+				</ul>
+			</div>
+		</div>
+		<input type="hidden" value="" name="style" id="style">
+		</td>
+	</tr>
+<!--
+	<tr class="tr3">
+		<td>选择内容来源(关联板块)</td>
+		<td>
+		<select name="">
+			<option value="0">请选择</option>
+		</select>
+		</td>
+	</tr>
+-->
+	<tr class="tr3">
+		<td>&nbsp;</td>
+		<td>
+			<input type="hidden" name="job" value="draw" />
+			<input type="hidden" name="jobact" value="preadd">
+			<input type="submit" value="下一步" class="btn" />
+		</td>
+	</tr>
+</table>
+</form>
+<script language="javascript" src="apps/stopic/js/selectstyle.js"></script>
+<script language="javascript">
+function changeSelects(isCheckNew) {
+	if (isCheckNew && !getObj('notNew').checked) return ;
+	setTimeout(function() {showStopicCopy();}, 200);
+}
+function showStopicCopy() {
+	getObj('showCopy').innerHTML = '加载中...';
+	ajax.send("$ajaxurl", "job=ajax&jobact=showcopy&cid="+getCategoryId(), function(){
+		getObj('showCopy').innerHTML = ajax.request.responseText;
+	});
+	return true;
+}
+function getCategoryId() {
+	if (getObj('notNew').checked) return getObj('category').value;
+	return 0;
+}
+function selectLayoutOrCopy(area) {
+	if (area == 'layout') {
+		var elements = document.getElementsByName("copy_stopic_id");
+		for (var i=0;i <elements.length;i++){
+			elements[i].checked = false;
+		}
+	} else {
+		var elements = document.getElementsByName("layout_select");
+		for (var i=0;i <elements.length;i++){
+			elements[i].checked = false;
+		}
+	}
+}
+
+function checkNewCategoryName() {
+	var categoryName = getObj("newCategoryName").value;
+	if (!getObj('notNew').checked && "" == categoryName) {
+		getObj('newCategoryNameError').style.display = '';
+	} else {
+		getObj('newCategoryNameError').style.display = 'none';
+		return true;
+	}
+	return false;
+}
+function checkLayoutSelect() {
+	if (!getRadioValue('layout_select')) {
+		getObj('layoutSelectError').style.display = '';
+		return false;
+	} else {
+		getObj('layoutSelectError').style.display = 'none';
+		return true;
+	}
+}
+function checkSubmit() {
+	var b1 = checkNewCategoryName()
+	var b2 = checkLayoutSelect();
+	return b1 && b2;
+}
+
+
+function getRadioValue(radioName){
+	var obj;
+	obj=document.getElementsByName(radioName);
+	if(obj!=null){
+		var i;
+		for(i=0;i<obj.length;i++){
+			if(obj[i].checked){
+				return obj[i].value;
+			}
+		}
+	}
+	return null;
+}
+
+var select = New(selectStyle,['style_ul','style']);
+</script>
+
+<!--
+EOT;
+?>
+-->

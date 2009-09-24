@@ -1,0 +1,125 @@
+<!--<?php
+include_once PrintEot('left');
+if (empty($action)) {print <<<EOT
+-->
+<style type="text/css">
+.mode-forum-list{padding:10px 10px 0 0;margin-bottom:10px;border-bottom:1px dashed #cccccc;}
+.mode-forum-list li{float:left;margin:0 10px 10px 0;width:200px;height:300px;}
+.mode-forum-list li p{padding:5px 20px;line-height:2;color:#333333;}
+.mode-forum-list li p input{ vertical-align:middle;}
+
+.mode-forum-add{line-height:1.5;color:#333333;}
+.mode-forum-add table{margin-top:20px;}
+.mode-forum-add th{width:100px; text-align:left;}
+.mode-forum-add td,.mode-forum-add th{padding:10px 10px 10px 0;}
+.mode-forum-add td span{margin-right:12px;}
+.mode-forum-add td input,.mode-forum-add-list ul li input,.mode-forum-add-list input{ vertical-align:middle;}
+
+.mode-forum-add-list{padding:10px 0 20px;line-height:2;border-bottom:1px dashed #cccccc;}
+.mode-forum-add-list p{padding:10px 0;}
+.mode-forum-add-list .over-y{width:400px;border:1px solid #cccccc;background:#ffffff;height:299px;overflow-y:scroll;}
+.mode-forum-add-list ul{margin-top:-1px;}
+.mode-forum-add-list ul li{border-top:1px solid #e4e4e4;padding-left:8px;}
+.mode-forum-add-list ul li span{margin:5px 5px 0 0;}
+.mode-forum-add-list ul li:hover{background:#f8f8f8;}
+.mode-forum-add-list ul .current{background:#f0f0f0;}
+</style>
+<ul class="nav3">
+<!--
+EOT;
+if(!$cid){print <<<EOT
+-->
+	<li><a href="$basename" class="two">模板中心</a></li>
+	<!-- <li><a href="$basename&action=cate">模块中心</a></li> -->
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	<li><a href="$admin_file?adminjob=mode&admintype=area_edittpl" class="two">本站模板管理</a></li>
+	<li><a style="cursor:pointer;" onclick="parent.PW.Dialog({'id': 'area_selecttpl','name': '模板中心','url': '$admin_file?adminjob=mode&admintype=area_selecttpl'}).loadIframe('$admin_file?adminjob=mode&admintype=area_selecttpl');">去模板中心</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<div class="c"></div>
+<form action="$basename" method="post">
+<input type="hidden" name="step" value="2" />
+<input type="hidden" name="cid" value="$cid" />
+<!--
+EOT;
+if(!$cid || $cid=='index'){print <<<EOT
+-->
+<h2>首页模板选择</h2>
+<ul class="mode-forum-list cc2">
+<li><img src="mode/area/themes/$area_indextpl/images/default/preview/index.jpg" width="180" height="220" />
+	<p class="tac"> $area_indextpl
+<!--
+EOT;
+if(!$cid){print <<<EOT
+-->
+<span class="s1">(默认)</span>
+<!--
+EOT;
+}print <<<EOT
+-->
+		<br /><span class="gray">当前模板</span>
+		<!-- <span class="fr"><a href="#">预览</a></span> -->
+		<div class="c"></div>
+	</p>
+</li>
+<!--
+EOT;
+foreach($tplLib['index'] as $value){print <<<EOT
+-->
+<li><img src="mode/area/themes/$value/images/default/preview/index.jpg" width="180" height="220"/>
+	<p class="tac"> $value <br />
+		<span class=""><input name="index" type="radio" value="$value" />设置为当前模板</span>
+		<!-- <span class="fr"><a href="#">预览</a></span> -->
+		<div class="c"></div>
+	</p>
+</li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<!--
+EOT;
+}if(!$cid || is_numeric($cid)){print <<<EOT
+-->
+<h2>频道模板选择</h2>
+<ul class="mode-forum-list cc2">
+<li><div style="height:130px;overflow:hidden;"><img src="mode/area/themes/$area_catetpl/images/default/preview/cate.jpg" width="180" /></div>
+	<p class="tac"> $area_catetpl <span class="s1">(默认)</span><br />
+		<span class="gray">当前模板</span>
+		<!-- <span class="fr"><a href="#">预览</a></span> -->
+		<div class="c"></div>
+	</p>
+</li>
+<!--
+EOT;
+foreach($tplLib['cate'] as $value){print <<<EOT
+-->
+<li><div style="height:130px;overflow:hidden;"><img src="mode/area/themes/$value/images/default/preview/cate.jpg" width="180" /></div>
+	<p class="tac"> $value <br />
+		<span class=""><input name="cate" type="radio" value="$value" />设置为当前模板</span>
+		<!-- <span class="fr"><a href="#">预览</a></span> -->
+		<div class="c"></div>
+	</p>
+</li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul><br />
+<!--
+EOT;
+}print <<<EOT
+-->
+<center><input type="submit" value="保存为站点模板" class="btn" /></center>
+</form>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

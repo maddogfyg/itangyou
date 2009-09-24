@@ -1,0 +1,358 @@
+<!--<?php
+print <<<EOT
+-->
+<div class="y-bg"></div>
+<div class="y-bg2"></div>
+<div class="y-bg-content">
+<div class="cc">
+		<div id="menu-bar" class="w180 fl home-info">
+			<div class="tac"><img src="$usericon"$imglen border="0"></div>
+					<p class="tac bor-bot">
+
+<!--
+EOT;
+if($u==$winduid){print <<<EOT
+-->
+					<a href="profile.php?action=modify&info_type=face" class="gray" target="_blank">编辑头像</a>
+
+<!--
+EOT;
+}print <<<EOT
+-->
+					</p>
+<!--
+EOT;
+if ($isGM){print <<<EOT
+-->	
+					<ul class="list-50 cc bor-bot">
+					  <li><a href="$db_adminfile?adminjob=setuser&action=edit&uid=$userdb[uid]" target="_blank">编辑用户</a></li>
+                        <li><a href="$db_adminfile?adminjob=banuser&username=$userdb[username]" target="_blank">会员禁言</a></li>
+                        <li><a href="$db_adminfile?adminjob=superdel&admintype=article&action=deltpc&fid=-1&ifkeep=1&author=$userdb[username]&lines=30&ttable=auto" target="_blank">删除主题</a></li>
+                        <li><a onMouseOver="postdbopen('menu_userpost','del_post');" id="del_post" href="$db_adminfile?adminjob=superdel&admintype=article&action=delrpl&fid=-1&author=$userdb[username]&nums=30" target="_blank">删除回复</a></li>
+                        <li><a href="$db_adminfile?adminjob=superdel&admintype=delmember&action=del&schname=$userdb[username]&groupid=$userdb[groupid]&regdate=all&schlastvisit=all&item=14" target="_blank">清除用户</a></li>
+					</ul>
+					 <div id="menu_userpost" class="menu" style="display:none;">
+                    <table width="120" cellspacing="1" cellpadding="5">
+                            <tr>
+                                <th class="h">用户回复</th>
+                            </tr>
+                            <tr>
+                                <td class="f_one"><a id="ptable_0" href="">回复表</a></td>
+                            </tr>
+<!--
+EOT;
+foreach($p_list as $value){print <<<EOT
+-->
+                            <tr>
+                                <td class="f_one"><a id="ptable_$value" href="">回复表{$value}</a></td>
+                            </tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+                    </table>
+                    </div>
+					<SCRIPT type="text/javascript" LANGUAGE="JavaScript" src="js/core/postdbopen.js"></SCRIPT>	
+		
+<!--
+EOT;
+}if ($u!=$winduid && ($ismyfriend == false || $db_share_open && !$shareGM || $_G['allowreport']) || $ismyfriend == true){print <<<EOT
+-->
+                    <ul class="list-50 cc bor-bot">
+<!--
+EOT;
+if($ismyfriend == false && $winduid != $u){print <<<EOT
+-->
+						<li><span id="statehtml"><img src="$pwModeImg/operation/add.png" align="absmiddle" /> <a id="fri_icon" href="javascript:;" onclick="changeFriend('$friendcheck','$userdb[uid]','add');"><span id="friendstate">加为好友</span></a></span></li>
+<!--
+EOT;
+}elseif($ismyfriend == true){print <<<EOT
+-->
+						<li><span id="statehtml"><img src="$pwModeImg/operation/del.png" align="absmiddle" /> <a id="fri_icon" href="javascript:;" onclick="changeFriend('$friendcheck','$userdb[uid]','del');" class="del"><span id="friendstate">解除好友</span></a></span></li>
+<!--
+EOT;
+}if($u!=$winduid){print <<<EOT
+-->
+                        <li><img src="$pwModeImg/operation/mail.png" align="absmiddle" /> <a style="cursor: pointer;" id="message" onclick="sendmsg('pw_ajax.php?action=msg&touid=$userdb[uid]','','message')">发短消息</a></li>
+<!--
+EOT;
+if($db_share_open && !$shareGM){print <<<EOT
+-->
+						<li><img src="$pwModeImg/operation/share.png" align="absmiddle" /> <a style="cursor: pointer;" id="share" href="javascript:;" onclick="sendmsg('operate.php?action=share&ajax=1&type=user&id=$userdb[uid]','',this.id);">分享用户</a></li>
+<!--
+EOT;
+}if($_G['allowreport']){print<<<EOT
+-->
+						<li><img src="$pwModeImg/operation/report.png" align="absmiddle" /> <a style="cursor: pointer;"  id="report_user" onclick="sendmsg('pw_ajax.php?action=report&type=user&tid=$u','',this.id);">举报该贴</a></li>
+<!--
+EOT;
+}}print <<<EOT
+-->
+                    </ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+<script language="javascript">
+var friendcheck = '$friendcheck';
+var pwModeImg = '$pwModeImg';
+function changeFriend(type,u,type2){
+	if (type2 == 'add'){
+		if (type == '1'){
+			sendmsg('pw_ajax.php?action=addfriend&touid='+u);
+		} else {
+			ajax.send('mode.php?m=o&q=ajax&a=addfriend&u='+u,'',function(){
+				var rText = ajax.request.responseText.split("|");
+				if (rText[0] == 'success') {
+					getObj('statehtml').innerHTML = '<img align=\"absmiddle\" src=\"'+pwModeImg+'/operation/del.png\"/><a id=\"fri_icon\" style=\"cursor: pointer;\" onclick=\"changeFriend(\''+friendcheck+'\',\''+u+'\',\'del\');\"><span id=\"friendstate\">解除好友</span></a>';
+					showDialog('success','操作成功!',1);
+				} else {
+					ajax.guide();
+				}
+			});
+		}
+	} else {
+		var friendstate = getObj('friendstate');
+		pwConfirm('是否确认解除',friendstate,function(){
+			ajax.send('mode.php?m=o&q=ajax&a=delfriend&u='+u,'',function(){
+				var rText = ajax.request.responseText.split("|");
+				if (rText[0] == 'success') {
+					getObj('statehtml').innerHTML = '<img align=\"absmiddle\" style=\"margin-bottom: 1px;\" src=\"'+pwModeImg+'/operation/add.png\"/><a id=\"fri_icon\" style=\"cursor: pointer;\" onclick=\"changeFriend(\''+friendcheck+'\',\''+u+'\',\'add\');\"><span id=\"friendstate\">加为好友</span></a>';
+					showDialog('success','操作成功!',1);
+				} else {
+					ajax.guide();
+				}
+			});
+		});
+	}
+}
+</script>                   
+                    
+                    <ul class="list-app-small">
+                        <li>
+<!--
+EOT;
+if($appcount[owrite][1]){print <<<EOT
+-->                         
+                        	<span class="fr red">新</span>
+<!--
+EOT;
+}print <<<EOT
+-->                             
+                            <img src="$pwModeImg/icon/record.png" align="absmiddle" />
+<!--
+EOT;
+if($SpaceShow){print<<<EOT
+-->
+							&nbsp;<a href="{$spaceurl}q=write">记录</a>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+							&nbsp;<a href="javascript:;">记录</a>
+<!--
+EOT;
+}print<<<EOT
+-->
+							<span class="gray2 f9">({$appcount[owrite][0]})</span>
+                        </li>
+<!--
+EOT;
+if($db_dopen){print <<<EOT
+-->
+                        <li>
+<!--
+EOT;
+if($appcount[diary][1]){print <<<EOT
+-->                         
+                        	<span class="fr red">新</span>
+<!--
+EOT;
+}print <<<EOT
+-->                           
+                        	<img src="$pwModeImg/icon/log.png" align="absmiddle" />
+<!--
+EOT;
+if($SpaceShow){print<<<EOT
+-->
+							&nbsp;<a href="{$spaceurl}q=diary">日志</a>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+							&nbsp;<a href="javascript:;">日志</a>
+<!--
+EOT;
+}print<<<EOT
+-->
+							 <span class="gray2 f9">({$appcount[diary][0]})</span>
+                        </li>
+<!--
+EOT;
+}if($db_phopen){print <<<EOT
+-->
+                        <li>
+<!--
+EOT;
+if($appcount[photo][1]){print <<<EOT
+-->                             
+                        	<span class="fr red">新</span>
+<!--
+EOT;
+}print <<<EOT
+-->                             
+                            <img src="$pwModeImg/icon/albums.png" align="absmiddle" />
+<!--
+EOT;
+if($SpaceShow){print<<<EOT
+-->
+							&nbsp;<a href="{$spaceurl}q=photos">相册</a>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+							&nbsp;<a href="javascript:;">相册</a>
+<!--
+EOT;
+}print<<<EOT
+-->
+							 <span class="gray2 f9">({$appcount[photo][0]})</span>
+                        </li>
+<!--
+EOT;
+}if($db_share_open){print <<<EOT
+-->
+                        <li>
+<!--
+EOT;
+if($appcount[share][1]){print <<<EOT
+-->                      
+                      		<span class="fr red">新</span>
+<!--
+EOT;
+}print <<<EOT
+-->                             
+                            <img src="$pwModeImg/icon/share.png" align="absmiddle" />
+<!--
+EOT;
+if($SpaceShow){print<<<EOT
+-->
+							&nbsp;<a href="{$spaceurl}q=share">分享</a>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+							&nbsp;<a href="javascript:;">分享</a>
+<!--
+EOT;
+}print<<<EOT
+-->
+							 <span class="gray2 f9">({$appcount[share][0]})</span>
+                        </li>
+<!--
+EOT;
+}print <<<EOT
+-->
+                        <li>
+<!--
+EOT;
+if($appcount[topic][1]){print <<<EOT
+-->      
+                        	<span class="fr red">新</span>
+<!--
+EOT;
+}print <<<EOT
+-->
+                        	<img src="$pwModeImg/icon/posts.png" align="absmiddle" />
+<!--
+EOT;
+if($SpaceShow){print<<<EOT
+-->
+							&nbsp;<a href="{$spaceurl}q=article">帖子</a>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+							&nbsp;<a href="javascript:;">帖子</a>
+<!--
+EOT;
+}print<<<EOT
+-->
+							 <span class="gray2 f9">({$appcount[topic][0]})</span>
+                        </li>
+<!--
+EOT;
+if($db_groups_open){print <<<EOT
+-->
+                        <li>
+<!--
+EOT;
+if($appcount[group][1]){print <<<EOT
+-->                          
+                        	<span class="fr red">新</span>
+<!--
+EOT;
+}print <<<EOT
+-->                           
+                            <img src="$pwModeImg/icon/groups.png" align="absmiddle" />
+<!--
+EOT;
+if($SpaceShow){print<<<EOT
+-->
+							&nbsp;<a href="{$spaceurl}q=groups">群组</a>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+							&nbsp;<a href="javascript:;">群组</a>
+<!--
+EOT;
+}print<<<EOT
+-->
+							 <span class="gray2 f9">({$appcount[group][0]})</span>
+                        </li>
+<!--
+EOT;
+}print<<<EOT
+-->
+					</ul>
+<!--
+EOT;
+if($SpaceShow){print<<<EOT
+-->
+					<h2 class="list-50">个人积分</h2>
+					<ul class="list-app-small">
+						<li>综合积分:<span class="blue">$totalcredit</span></li>
+						<li>{$credit->cType[rvrc]}:<span class="blue">$userdb[rvrc]</span> <span class="gray">{$credit->cUnit[rvrc]}</span></li>
+						<li>{$credit->cType[money]}:<span class="blue">$userdb[money]</span> <span class="gray">{$credit->cUnit[money]}</span></li>
+						<li>{$credit->cType[credit]}:<span class="blue">$userdb[credit]</span> <span class="gray">{$credit->cUnit[credit]}</span></li>
+						<li>{$credit->cType[currency]}:<span class="blue">$userdb[currency]</span> <span class="gray">{$credit->cUnit[currency]}</span></li>
+<!--
+EOT;
+foreach($_CREDITDB as $key => $value){
+$ucredit = $usercredit[$key] ? $usercredit[$key] : 0;
+print <<<EOT
+-->
+						<li>{$value[0]}:<span class="blue gray2">{$ucredit}</span> <span class="gray">{$value[1]}</span></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+            </div>
+<script language="javascript">
+// JavaScript Document
+var imgMaxWidth=178; //control the pic's size
+var content = document.getElementById("menu-bar");
+M_USER_CTRL="ctrl+鼠标滚轮缩放";
+
+</script>
+<SCRIPT type="text/javascript" LANGUAGE="JavaScript" src="js/core/space.js"></SCRIPT>	
+
+<!--
+EOT;
+?>

@@ -1,0 +1,193 @@
+<!--<?php
+include_once PrintEot('left');
+print<<<EOT
+-->
+<h2><a href="$admin_file?adminjob=app&admintype=article&action=app&job=appslist">返回基础应用列表</a></h2>
+<!--
+EOT;
+if(!$action){print <<<EOT
+-->
+<div>
+<ul class="nav3">
+<li><a href="$basename" class="two">基本设置</a></li>
+<li><a href="$basename&action=hotTypeSet">排行类型设置</a></li>
+</ul>
+<form action="$basename" method="post" >
+<input type="hidden" value="baseSet" name="hot_baseSet"/>
+<table width="100%" cellspacing="0" cellpadding="0">
+  <tr class="tr3">
+    <td width="30%"><span class="xia2">是否开启热榜：</span></td>
+    <td><input type="radio" name="config[hot_open]" value="1" $hot_open_Y/> 开启&nbsp;&nbsp;&nbsp;&nbsp;
+    	<input type="radio" name="config[hot_open]" value="0" $hot_open_N> 关闭  </td>
+  </tr>
+  <tr class="tr3">
+  	<td><span class="xia2">浏览权限：<br></span>（勾选允许浏览的用户组，全不选表示全开放）</td>
+  	<td>$hot_userGroup</td>
+  </tr>
+</table><br>
+<center><input class="btn" type="submit" value="提 交" name="submit"/></center>
+</form>
+</div>
+<!--
+EOT;
+}if($action=="hotTypeSet"){print <<<EOT
+-->
+<div>
+<ul class="nav3">
+<li><a href="$basename">基本设置</a></li>
+<li><a href="$basename&action=hotTypeSet" class="two">排行类型设置</a></li>
+</ul>
+<form action="$basename&action=hotTypeSet" method="post">
+<input type="hidden" name="updateAll" value="updateAll"/>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td align='center'>启用</td>
+		<td>顺序</td>
+		<td>类型（自定义名称）</td>
+		<td>筛选类别</td>
+		<td>筛选时间</td>
+		<td align='center'>显示在热榜首页</td>
+		<td align='center'>操作</td>
+	</tr>
+	
+<!-- 
+EOT;
+if($htmlHotList){
+foreach($htmlHotParentList as $parent => $parentV){ print <<<EOT
+-->
+	<tr class="tr3">
+		<td align='center'><input type="checkBox" value="$parentV[id]" name="active[{$parentV[id]}]"  $parentV[active]/></td>
+		<td><input id="test_1" type="text" value=$parentV[sort] name="sort[{$parentV[id]}]" class="input" size="2"></td>
+		<td><input type="text" value=$parentV[typeName] name="type_name[{$parentV[id]}]" class="input" size="12"></td>
+		<td>$parentV[filterType]</td>
+		<td>$parentV[filterTime]</td>
+		<td align="center"><input type="checkBox" value="$parentV[id]" name="display[{$parentV[id]}]" $parentV[display] /></td>
+		<td><a href="$basename&action=hotEdit&hotId=$parentV[id] ">操作</a></td></td>
+	</tr>
+<!--
+EOT;
+foreach($htmlHotList as $key => $value){
+if($value["parent"]==$parentV["id"]){
+print <<<EOT
+-->	
+	<tr class="tr3">
+		<td align='center'><input type="checkBox" value="$value[id]" name="active[{$value[id]}]"  $value[active]/></td>
+		<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" value=$value[sort] name="sort[{$value[id]}]" class="input" size="2"></td>
+		<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" value=$value[typeName] name="type_name[{$value[id]}]" class="input" size="12"></td>
+		<td>$value[filterType]</td>
+		<td>$value[filterTime]</td>
+		<td align="center"><input type="checkBox" value="$value[id]" name="display[{$value[id]}]" $value[display] /></td>
+		<td><a href="$basename&action=hotEdit&hotId=$value[id] ">操作</a></td></td>
+	</tr>
+<!-- 
+EOT;
+}}}}print <<<EOT
+ -->	
+</table>
+<br>
+<center><input class="btn" type="submit" value="提 交" name="submit"/>&nbsp;&nbsp;
+<input class="btn" type="button" value="恢复默认" name="default" onclick="javascript:location.href='$basename&action=hotTypeSet&updateAll=default'" />
+</center>
+</form>
+</div>
+<!--
+EOT;
+}if($action=="hotEdit"){print <<<EOT
+-->
+<div>
+<ul class="nav3">
+<li><a href="$basename">基本设置</a></li>
+<li><a href="$basename&action=hotTypeSet">排行类型设置</a></li>
+</ul>
+<form action="$basename&action=hotEdit" method="post">
+<input type="hidden" name="updateHot" value="updateHot" />
+<input type="hidden" name="id" value="$rt[id]"/>
+<input type="hidden" name="currentFilterType" value="$filterTypeData[current]"/>
+<input type="hidden" name="currentFilterTime" value="$filterTimeData[current]"/>
+<input type="hidden" name="tag" value="$rt[tag]"/>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="20%">类型名称：</td><td><input type="text" size="20" name="typeName" value="$rt[type_name]" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>是否启用：</td><td><input type="checkbox" name="active" value="1" $active/> </td>
+	</tr>
+	<tr class="tr3">
+		<td>是否显示在热榜首页：</td><td><input type="checkbox" name="display" value="1" $display/> </td>
+	</tr>
+<!-- 
+EOT;
+if($htmlFilterType){
+print <<< EOT
+-->	
+	<tr class="tr3">
+		<td colspan="2">
+			<table cellspacing="0" cellpadding="0">
+			<tr><td colspan="2">筛选类别</td><td colspan="4">（提示：如果全不选，保存为默认选中）</td></tr>
+<!--
+EOT;
+foreach($htmlFilterType as $key => $value){
+print <<< EOT
+-->
+				<tr>
+					<td><input type="checkBox" name="fFilterType[]" value="$value[fAction]" $value[checked] /></td>
+					<td>$value[typeName]</td>
+					<td>显示</td>
+					<td><input type="text" size="15" class="input" name="$value[itemName]" value="$value[itemValue]"/></td>
+					<td>条</td>
+					<td></td>
+				</tr>
+<!-- 
+EOT;
+}print <<< EOT
+-->
+			 </table>
+		</td>
+	</tr>
+<!-- 
+EOT;
+}print <<< EOT
+-->	
+<!-- 
+EOT;
+if($htmlFilterTime){
+print <<< EOT
+-->
+	<tr class="tr3">
+		<td colspan="2">
+			<table cellspacing="0" cellpadding="0">
+			<tr><td colspan="2">筛选时间</td><td colspan="4">（提示：如果全不选，保存为默认选中）</td> </tr>
+<!--
+EOT;
+foreach($htmlFilterTime as $key => $value){
+print <<< EOT
+-->
+				<tr>
+					<td><input type="checkBox" name="fFilterTime[]" value="$value[fAction]" $value[checked] /></td>
+					<td>$value[typeName]</td>
+					<td>显示</td>
+					<td><input type="text" size="15" class="input" name="$value[itemName]" value="$value[itemValue]"/></td>
+					<td>条</td>
+					<td>&nbsp;</td>
+				</tr>
+<!-- 
+EOT;
+}print <<< EOT
+-->
+			 </table>
+		</td>
+	</tr>
+<!-- 
+EOT;
+}print <<< EOT
+-->	
+</table>
+<br>
+<center><input class="btn" type="submit" value="提 交" name="submit"/>&nbsp;&nbsp;
+</center>
+</form>
+</div>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

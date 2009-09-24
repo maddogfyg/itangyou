@@ -1,0 +1,52 @@
+
+.windoo-shadow-aqua div.top .l {
+	background:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/css/windoo.aqua/snw.png',sizingMethod='scale');
+}
+.windoo-shadow-aqua div.top .r {
+	background:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/css/windoo.aqua/sne.png',sizingMethod='scale');
+}
+.windoo-shadow-aqua div.top .m {
+	background:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/css/windoo.aqua/snorth.png',sizingMethod='scale');
+}
+.windoo-shadow-aqua div.bot .l {
+	background:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/css/windoo.aqua/ssw.png',sizingMethod='scale');
+}
+.windoo-shadow-aqua div.bot .r {
+	background:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/css/windoo.aqua/sse.png',sizingMethod='scale');
+}
+.windoo-shadow-aqua div.bot .m {
+	background:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/css/windoo.aqua/ssouth.png',sizingMethod='scale');
+}
+.windoo-shadow-aqua div.mid .l {
+	background:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/css/windoo.aqua/swest.png',sizingMethod='scale');
+}
+.windoo-shadow-aqua div.mid .r {
+	background:none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/css/windoo.aqua/seast.png',sizingMethod='scale');
+}
+
+  DIV.windoo-aqua-ie .windoo-body
+{
+	top: 32px;
+}
+.footStartPanel
+{
+	background:none;
+	width:275px;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/images/startPanelFoot.png',sizingMethod='scale');
+}
+.fixedPadding
+{
+margin-left:-22px;
+}
+#taskbar div
+{
+height:25px;
+}

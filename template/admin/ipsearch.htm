@@ -1,0 +1,109 @@
+<!--<?php
+include_once PrintEot('left');
+if (empty($action) || $action=='force'){
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">IP搜索工具:<br>1.可以根据用户名搜索该用户使用过的所有IP.<br>2.可以根据IP地址搜索使用过该IP的所有用户(<font color=blue>此项功能存在负载性,大型站点请谨慎使用!</font>).<br></div>
+
+<form action="$basename&" method=post>
+<input type="hidden" name="action" value="byname">
+<h2>根据用户名搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="35%">用户名</td>
+<td><input class="input" type="text" size="20" name="username"></td></tr>
+</table>
+<br><center><input type=submit value="提 交" class="btn"></center></form><br/>
+
+<form action="$basename&" method=post>
+<input type="hidden" name="action" value="byip">
+<h2>根据IP地址搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="35%"> <span style="color:blue">由于该功能具有一定的负载性，会员超过10万，帖子超过30万的站点系统将自动禁止使用该功能</span></td>
+<td><input class="input" type="text" size="20" name="userip"></td></tr>
+</table>
+<br><center><input type=submit value="提 交" class="btn"></center></form><br/>
+<!--
+EOT;
+}elseif($action=="byname"){print <<<EOT
+-->
+$pages
+<div class="c"></div>
+<h2>根据用户名搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac s3">
+<td width="5%"2>ID</td>
+<td>用户名</td>
+<td>IP</td>
+<td>使用时间</td>
+</tr>
+<!--
+EOT;
+for($i=$start;$i<$end;$i++){
+$value=$ipdb[$i];
+$id=$i+1;
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>$id</td>
+<td><a href="$admin_file?adminjob=setuser&action=edit&uid=$value[uid]" title="查看用户资料">$value[username]</a></td>
+<td><a href="$basename&action=byip&userip=$value[userip]&type=1" title="搜索该IP相关记录">$value[userip]</a></td>
+<td>$value[lasttime]</td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br/>
+<!--
+EOT;
+}elseif($action=="byip"){print <<<EOT
+print <<<EOT
+-->
+$pages
+<div class="c"></div>
+<form name="form1">
+<h2>根据IP地址搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac">
+<td width="3%">ID</td>
+<td width="20%">IP</td>
+<td width="20%">用户名</td>
+<td>使用时间</td>
+<td width="15%">选项</td>
+</tr>
+<!--
+EOT;
+for($i=$start;$i<$end;$i++){
+$value=$userdb[$i];
+$id=$i+1;
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>$id</td>
+<td>$value[userip]</td>
+<td>$value[username]</td>
+<td>$value[lasttime]</td>
+<td>
+<select name="ipoption_$id" onchange="ip_jump('ipoption_$id');">
+<option></option>
+<option value="$basename&action=byname&username=$value[username]&type=1">查看该用户使用过IP</option>
+<option value="$admin_file?adminjob=setuser&action=edit&uid=$value[uid]">查看用户资料</option>
+<option value="$admin_file?adminjob=superdel&admintype=article&action=deltpc&fid=-1&author=$value[username]">
+查看该用户的主题</option>
+<option value="$admin_file?adminjob=superdel&admintype=article&action=delrpl&fid=-1&author=$value[username]">
+查看该用户的回复</option>
+</select>
+</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table></form><br/>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>
+-->

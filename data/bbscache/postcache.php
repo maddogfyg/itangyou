@@ -1,0 +1,24 @@
+<?php
+$faces=array(
+	'default'=>array(
+		'name'=>'默认表情',
+		'child'=>array('2','14','13','12','11','10','9','8','7','6','5','4','3','15',),
+	),
+);
+$face=array(
+	'2'=>array('default/1.gif','',''),
+	'14'=>array('default/13.gif','',''),
+	'13'=>array('default/12.gif','',''),
+	'12'=>array('default/11.gif','',''),
+	'11'=>array('default/10.gif','',''),
+	'10'=>array('default/9.gif','',''),
+	'9'=>array('default/8.gif','',''),
+	'8'=>array('default/7.gif','',''),
+	'7'=>array('default/6.gif','',''),
+	'6'=>array('default/5.gif','',''),
+	'5'=>array('default/4.gif','',''),
+	'4'=>array('default/3.gif','',''),
+	'3'=>array('default/2.gif','',''),
+	'15'=>array('default/14.gif','',''),
+);
+?>

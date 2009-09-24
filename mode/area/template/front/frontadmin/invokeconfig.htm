@@ -1,0 +1,63 @@
+<!--<?php
+print <<<EOT
+-->
+<table width="100%" cellspacing="0" cellpadding="5">
+	<tr><th class="h" colspan="2" style="cursor:move" onmousedown="read.move(event);"><span class="fr" style="margin-top:2px;cursor:pointer" onclick="closep();"><img src="$imgpath/close.gif" /></span>模块属性设置</th></tr>
+	<tr>
+		<td>
+<div class="mode-one">
+	<form action="{$basename}q=frontadmin&action=invokeconfig" method="post" >
+	<dl class="cc2">
+		<dd>
+			<ul>
+				<li>$invokename<span class="fr"><a onclick="sendmsg('{$basename}q=frontadmin&action=default&invokename=$invokename&cateid=$cateid');"  style="cursor:pointer">返回</a></span><strong>$invoke[name]</strong></li>
+
+<!--
+EOT;
+if($invokedata[ifloop]){print <<<EOT
+-->
+				<li>设置循环的版块:(按住ctrl键可多选)</li>
+				<li>$loopmode</li>
+<!--
+EOT;
+}foreach($invokepieces as $piece){print <<<EOT
+-->
+				<li><strong>$piece[title]</strong></li>
+				<li>$piece[func]</li>
+				<li>$piece[rang]</li>
+				<li>调用个数:<input type="text" value="$piece[num]" name="num[$piece[id]]" class="input"></li>
+				<li>缓存更新时间:<input type="text" value="$piece[cachetime]" name="cachetime[$piece[id]]" class="input">(秒)</li>
+<!--
+EOT;
+foreach($piece[param] as $value){print <<<EOT
+-->
+				<li>$value</li>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+<!--
+EOT;
+}print <<<EOT
+-->
+			</ul>
+		</dd>
+	</dl>
+	<div class="c"></div>
+	<input type="hidden" name="invokename" value="$invokename">
+	<input type="hidden" name="scr" value="$scr">
+	<input type="hidden" name="cateid" value="$cateid">
+	<input type="hidden" name="step" value="2">
+	<center>
+		<input type="button" value="提 交" class="btn" onclick="ajax.submit(this.form,function(){sendmsg('{$basename}q=frontadmin&action=default&invokename=$invokename&cateid=$cateid');});">
+	</center>
+	</form>
+</div>
+		
+		</td>
+	</tr>
+</table>
+<!--
+EOT;
+?>-->

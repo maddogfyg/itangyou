@@ -1,0 +1,59 @@
+<!--<?php print <<<EOT
+--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={$db_charset}" />
+<title>$title - Powered by PHPWind</title>
+<meta name="generator" content="PHPWind $wind_version" />
+<meta name="description" content="$seo_desc" /> 
+<meta name="keywords" content="$seo_keyword" />
+<base id="headbase" href="$db_bbsurl/" />
+<link rel="stylesheet" type="text/css" href="$db_bbsurl/apps/stopic/image/style.css" />
+<style>
+html{background:{$layout_config[bgcolor]} url($bg_url) center 0 {$layout_config[bgrepeat]};} /*全局背景*/
+a{color:{$layout_config[fontcolor]}; text-decoration:none;} /*链接字体颜色*/
+.wrap{background:{$layout_config[areabgcolor]};width:960px;margin:20px auto 0;overflow:hidden;} /*内容区域*/
+#nav{background:{$layout_config[navbgcolor]};} /*导航背景*/
+#nav li a{color:{$layout_config[navfontcolor]}; font-size:14px;} /*导航字体颜色*/
+{$layout_config[othercss]}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="header">
+<!--
+EOT;
+if ($banner_url && $banner_url != "http://") {
+print <<<EOT
+-->
+	<img src="$banner_url" />
+<!--
+EOT;
+}
+print <<<EOT
+-->
+	<div id="nav">
+		<ul class="cc">
+<!--
+EOT;
+foreach ($nav_config as $value) {
+print <<<EOT
+-->
+			<li><a href="{$value[url]}">{$value[text]}</a></li>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+		</ul>
+	</div>
+</div>
+<div id="main" class="cc">
+$tpl_content
+</div>
+</div>
+</body>
+</html>
+<!--
+EOT;
+?>-->

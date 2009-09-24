@@ -1,0 +1,56 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="submit" />
+<h2>积分兑换公式</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac s3">
+<td width="8%">ID</td>
+<td>积分Ⅰ</td>
+<td>兑换</td>
+<td>积分Ⅰ</td>
+<td width="7%">启用</td>
+<td width="5%">删</td>
+</tr>
+<!--
+EOT;
+$i=0;
+foreach($jf as $key=>$value){
+$i++;
+$ifcheck = $value[4] ? 'checked' : '';print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>$i</td>
+<td>$value[2] 个 $value[0]</td>
+<td>兑换</td>
+<td>$value[3] 个 $value[1]</td>
+<td><input type="checkbox" name="ifopen[]" value="$key" $ifcheck /></td>
+<td><input type="checkbox" name="selid[]" value="$key" /></td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br /><center><input type="submit" name="hello" class="btn" value="提 交"></center><br/>
+</form>
+
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="add">
+<h2>添加兑换公式</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac">
+<td><input class="input" type="text" name="cchange[2]" size="6" /> 个</td>
+<td><select name="cchange[0]">$creditlist</select></td>
+<td>兑换</td>
+<td><input class="input" type="text" name="cchange[3]" size="6" /> 个</td>
+<td><select name="cchange[1]">$creditlist</select></td>
+</tr>
+</tr></table>
+<br /><center><input type="submit" name="hello" class="btn" value="提 交"></center><br/>
+</form>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

@@ -1,0 +1,358 @@
+<!--<?php
+include_once PrintEot('m_appleft');
+print <<<EOT
+-->
+<!--
+EOT;
+if(!$db_toolbar && $pwForumList){print <<<EOT
+-->
+<div id="menu_forumlist" style="display:none;">
+	<div class="sbar-box-a" style="width:700px;">
+		<div class="sbar-title" style="cursor:pointer" onclick="try{pw_bottom.hiddenTab();read.close();}catch(e){read.close();}">
+				<span class="menu-hidden aimg">隐藏</span>
+				<span id="title_forumlist" class="b">快速浏览</span>
+		</div>
+		<div class="sbar-box-b">
+			<div class="forum-list-popout">
+<!--
+EOT;
+foreach($pwForumList as $key=>$value){print <<<EOT
+-->
+			<dl class="cc">
+				<dt><a href="index.php?cateid=$key" target="_blank">$value[name]</a></dt>
+				<dd class="cc">
+<!--
+EOT;
+foreach($value['child'] as $k=>$v){print <<<EOT
+-->
+					<a href="thread.php?fid=$k" target="_blank" onclick="return pwForumList(true,gIsPost,$k,'',true);"><span>$v</span></a>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</dd>
+			</dl>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</div>
+		</div>
+	</div>
+</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div id="content" class="fr">
+    <div id="content-main" class="fl">
+        <div class="p-update mb10">
+            <dl>
+                <dt><a href="u.php"><img src="$faceurl" height="48" width="48" /></a><a href="profile.php?action=modify&info_type=face" target="_blank">更换头像</a><a href="profile.php?action=modify" target="_blank">更新资料</a></dt>
+
+                <dd>
+                    <div class="tab cc mb10 b"><a href="javascript:;" onclick="return pwForumList(false,true,null,this);" style="cursor:pointer;"><span>站点发贴</span></a><a href="{$basename}q=photos&a=upload"><span>发照片</span></a><a href="{$basename}q=share"><span>分享东东</span></a></div>
+                    <form method="post" action="{$basename}q=write&do=post" onsubmit="submitwrite(this);return false;">
+                    <div class="bubbles mb10">
+                    <div id="writecontent"><span class="fr" style="margin-left:10px;"><a onclick="changeWriteBox('writecontent');" href="javascript:;">更新记录</a> - <a href="mode.php?m=o&q=write&do=view">查看更多</a></span><p onclick="changeWriteBox('writecontent');">{$winddb[honor]} </p>
+										</div>
+                    <div id="writetextarea" style="display:none;">
+						<p class="fl"><input type="text" name="text" id="writetext" onblur="changeWriteBox(this.id);" value="{$winddb[honor]}" style="width:410px;overflow:hidden;"></p>
+					</div>
+                    </div>
+							<span class="fl gray" style="padding-left:10px;display:none;" id="writetext_warn">限 255 字节</span>
+							<span class="fr" id="writebutton" style="display:none;"><span class="button"><span><button type="button" id="write_button" onclick="submitwrite(this.form)">发布</button></span></span></span>
+<!--
+EOT;
+if ($_G['allowhonor']) {print <<<EOT
+-->
+                        	<span id="showtosign" style="display:none;" class="fr"><input id="writetosign" type="checkbox" name="tosign" value="1" checked="checked" style=" vertical-align:middle;margin-bottom:1px;margin-right:2px;" />同步个性签名 </span>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+                        <div>
+                        </div>
+                    </form>
+                </dd>
+<script language="JavaScript">
+var honor = '$winddb[honor]';
+function changeWriteBox(id){
+	var writecontent = getObj('writecontent');
+	var writetextarea = getObj('writetextarea');
+	var writetext_warn = getObj('writetext_warn');
+	var showtosign = getObj('showtosign');
+	var writetext = getObj('writetext');
+	var writebutton = getObj('writebutton');
+	if (id == 'writecontent'){
+		writecontent.style.display = 'none';
+		writetextarea.style.display = '';
+		writetext_warn.style.display = '';
+		writebutton.style.display = '';
+		if (writetext.value == '想要说点啥？' || writetext.value == honor) {
+			writetext.value = '';
+		} else {
+			writetext.value += '';
+		}
+		writetext.focus();
+		if(IsElement('showtosign')){
+			showtosign.style.display = '';
+		}
+	} else {
+		writecontent.style.display = '';
+		setTimeout(function(){
+			writebutton.style.display = 'none';
+			writetextarea.style.display = 'none';
+			writetext_warn.style.display = 'none';
+			if(IsElement('showtosign')){
+				showtosign.style.display = 'none';
+			}
+		},200);
+	}
+}
+function write_quickpost(event){
+	if((event.ctrlKey && event.keyCode == 13) || (event.altKey && event.keyCode == 83)){
+		getObj('write_button').click();
+	}
+}
+</script>
+            </dl>
+        </div>
+<!--
+EOT;
+if ($friend_new_topic) {print <<<EOT
+-->
+        <div class="forum-new mb10">
+            <h2 class="cc">
+                <span class="fl">好友论坛新主题</span>
+                <span class="tab"></span>
+            </h2>
+						<div>
+            <table width="100%">
+<!--
+EOT;
+foreach ($friend_new_topic as $key =>$value){print <<<EOT
+-->
+						 <tr>
+						 <td><a href="read.php?tid=$value[tid]" class="blue" target="_blank">$value[subject]</a></td>
+						 <th width="16"><img src="$value[faceurl]" class="img-20" align="absmiddle" /></th>
+						 <td width="90"><a href="u.php?uid=$value[authorid]" class="mr10 uline">$value[author]</a></td>
+						 <td width="80"><span class="f10 gray" title="$value[postdate]">$value[posttime]</span></td>
+						 </tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+            </table>
+						</div>
+        </div>
+<!--
+EOT;
+}print <<<EOT
+-->
+        <div class="dynamic">
+            <h3 class="cc">
+                <span class="fl">筛选条件:</span>
+                <span class="tab fl">
+                <a href="{$basename}q=home" id='home_default'><span>所有动态</span></a>
+                <a href="{$basename}q=home&f_type=write" id='home_write'><span>记录</span></a>
+<!--
+EOT;
+if($db_dopen){print <<<EOT
+-->
+                <a href="{$basename}q=home&f_type=diary" id='home_diary'><span>日志</span></a>
+<!--
+EOT;
+}if($db_phopen){print <<<EOT
+-->
+                <a href="{$basename}q=home&f_type=photo" id='home_photo'><span>相册</span></a>
+<!--
+EOT;
+}if($db_share_open){print <<<EOT
+-->
+                <a href="{$basename}q=home&f_type=share" id='home_share'><span>分享</span></a>
+<!--
+EOT;
+}if($db_groups_open){print <<<EOT
+-->
+                <a href="{$basename}q=home&f_type=colony" id='home_colony'><span>群组</span></a>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+                <a href="{$basename}q=home&f_type=post" id='home_post'><span>帖子</span></a></span>
+                <a href="{$basename}q=home&f_type=friend" id='home_friend' class="fl">结交动态</a>
+                <a href="javascript:;" id="feedsetting" onclick="sendmsg('mode.php?m=o&q=ajax&a=feedsetting','',this.id)" title="设置特定好友显示动态信息"><img src="$pwModeImg/applied/edit-app.png" style="margin-top:7px;*margin-top:5px;" class="fr" /></a>
+            </h3>
+
+            <div class="dynamic-bg">
+                <div class="dynamic-dl" style="min-height:225px;">
+<!--
+EOT;
+if (!empty($feeds)) {
+foreach ($feeds as $day => $feed) {
+print <<<EOT
+-->
+                <div class="dynamic-h cc b" style="margin:5px 10px;"><div></div><span>$day</span></div>
+								<div class="dynamic dynamic-home">
+<!--
+EOT;
+foreach ($feed as $key => $value) {
+print <<<EOT
+-->
+                    <dl class="cc">
+                        <dt>
+                        	<img src="$value[faceurl]" class="img-20" />
+                         </dt>
+                         <dd class="dd30">
+                         	<a href="u.php?uid=$value[uid]">$value[username]</a>&nbsp;$value[descrip]
+<!--
+EOT;
+if (checkCommType($value[type]) && $value[typeid]>0) {
+print <<<EOT
+-->
+								<div id="com_{$value[type]}_{$value[typeid]}"><P><a style="cursor: pointer;" onclick="javascript:showCommList('$value[type]','$value[typeid]','com_{$value[type]}_{$value[typeid]}',this)">回复</a></p></div>
+<!--
+EOT;
+}print <<<EOT
+-->
+                         </dd>
+                    </dl>
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+<script language="JavaScript" src="js/app_comment.js"></script>
+<!--
+EOT;
+} else { print <<<EOT
+-->
+                    <div class="p10">暂时没有好友动态</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+                </div>
+            </div>
+						<div class="c"></div>
+        </div>
+<script language="JavaScript">
+setCurrent('home_$f_type','home_default','current');
+function submitwrite(o) {
+	if (getObj('writetext').value == '' || getObj('writetext').value == '想说点什么?') {
+		showDialog('error','记录内容必须在3～255个字节之间');
+		return false;
+	}
+	ajax.submit(o);
+	var writebutton = getObj('writebutton');
+	writebutton.style.display = 'none';
+	return true;
+}
+var charset = '$db_charset';
+initCheckTextNum('writetext','writetext_warn',255);
+</script>
+    </div>
+    <div class="w-bg-a fr">
+        <div class="p10">
+
+<!--
+EOT;
+if ($notify_message_num || $private_message_num) {print <<<EOT
+-->
+            <div class="b">通知</div>
+            <ul class="lh24 mb10">
+<!--
+EOT;
+if ($private_message_num){print <<<EOT
+-->
+                <li><a href="message.php?type=newmsg" target="_blank">{$private_message_num}个人消息</a></li>
+<!--
+EOT;
+}if($notify_message_num){print <<<EOT
+-->
+                <li><a href="message.php?type=newmsg" target="_blank">{$notify_message_num}个系统消息</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+            </ul>
+<!--
+EOT;
+}if (!empty($mfriends)) {
+print <<<EOT
+-->
+           <div class="b lh24">好友生日</div>
+<!--
+EOT;
+if($friendbith){
+foreach($friendbith as $value){
+$genderdb = array('祝福他','祝福他','祝福她');
+print <<<EOT
+-->
+							<div class="cc mb10">
+									<img src="$value[face]" class="img-50 fl" />
+									<p>
+											<a title="$value[title]" href="u.php?uid=$value[uid]">$value[username]</a><br />
+										 ($value[month]-$value[day]生日)<br />
+											<a href="javascript:;" id="message_birth" onclick="sendmsg('pw_ajax.php?action=msg&touid=$value[uid]&type=birth','','message_birth')">{$genderdb[$value[gender]]}</a> <a href="javascript:;" id="message" onclick="sendmsg('pw_ajax.php?action=msg&touid=$value[uid]','','message')">发短消息</a>
+									</p>
+							</div>
+<!--
+EOT;
+}}else{
+print <<<EOT
+-->
+				<p class="text mb10">最近没有好友生日</p>
+<!--
+EOT;
+}
+}if (!empty($mfriends)) {print <<<EOT
+-->
+			<div class="bor-top"></div>
+			<div class="mb10 b">可能认识</div>
+			<div class="o-list-img h-90">
+				<ul class="cc tac">
+<!--
+EOT;
+foreach ($mfriends as $value) {
+if ($value[uid] == $winduid) continue;
+print <<<EOT
+-->
+					<li>
+                       	<a title="$value[title]" href="u.php?uid=$value[uid]"><img src="$value[face]" class="img-50 userCard" id="card_sf_{$value[uid]}_{$value[uid]}" /></a>
+                        <br /><a id="add_$value[uid]" onclick="sendmsg('pw_ajax.php?action=addfriend&touid=$value[uid]','',this.id)" style="cursor: pointer;" title="加为好友"><img src="$pwModeImg/operation/add.png" /></a>&nbsp;<a title="$value[username]" href="u.php?uid=$value[uid]">$value[sub_username]</a>
+        			</li>
+<!--
+EOT;
+}print<<<EOT
+-->
+				</ul>
+<script language="JavaScript">window.onReady(userCard.init);</script>
+            </div>
+
+<!--
+EOT;
+}print <<<EOT
+-->
+			<div class="bor-top"></div>
+			<div class="b">社区热门</div>
+			<ul class="list-img cc mb10">
+<!--#foreach ($hotforum as $value) {#-->
+				<li><span class="fr">{$value[addition][article]}</span><a href="$value[url]" target="_blank">$value[title]</a></li>
+<!--#}#-->
+			</ul>
+        </div>
+    </div>
+</div>
+<div class="c"></div>
+<!--
+EOT;
+?>-->

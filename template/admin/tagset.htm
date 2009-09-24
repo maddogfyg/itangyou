@@ -1,0 +1,137 @@
+<!--<?php
+include_once PrintEot('left');
+if(!$action){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="#" class="two">标签管理</a></li>
+<li><a href="$basename&action=addtag">添加标签</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="set" />
+<h2>标签设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="30%">是否开启标签功能</td>
+		<td>
+			<input type="radio" value="1" name="config[iftag]" $iftag_Y>开启
+			<input type="radio" value="0" name="config[iftag]" $iftag_N>关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">是否显示帖子内容标签横线</td>
+		<td>
+			<input type="radio" value="1" name="config[readtag]" $readtag_Y>开启
+			<input type="radio" value="0" name="config[readtag]" $readtag_N>关闭 (只有当开启标签功能时，设置才有效)
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>首页显示热门标签个数 (0为不显示)</td>
+		<td><input size="35" class="input" name="config[tagindex]" value="$db_tagindex"></td>
+	</tr>
+</table><center style="margin-top:10px">
+<input type="submit" value="提 交" class="btn"></center></form><br/>
+
+<form action="$basename" method="post">
+<input type="hidden" name="type" value="$type" />
+<h2>搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac">
+	<td>标签名:<input type="text" class="input" name="keyword" size="15" /></td><td>热门标签:<select name="ifhot" onchange="location.href='$basename&ifhot='+this.value"><option value="0" $sel_0>是</option><option value="1" $sel_1>否</option></select></td><td>标签长度:<input type="text" class="input" name="ls" size="7" /> - <input type="text" class="input" name="le" size="7" /></td><td>使用数:<input type="text" class="input" name="ns" size="5" /> - <input type="text" class="input" name="ne" size="5" /></td><td><input type="submit" value="提 交" class="btn" /></td>
+</tr>
+</table></form><br/>
+
+<form action="$basename&" method="post">
+<input type="hidden" name="ifhot" value="$ifhot" />
+<h2>标签管理</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td>
+<!--
+EOT;
+$num=0;
+foreach($tagdb as $key=>$value){
+$num++; print <<<EOT
+-->
+<div style="width:32%;float:left;height:22px;line-height:22px;"><input type="checkbox" name="selid[]" value="{$value[tagid]}"  onclick="pwJsCheck(this,'div')" /> <a href="$basename&action=tag&tagid={$value[tagid]}">{$value[tagname]}</a> ( {$value[num]} )</div>
+<!--
+EOT;
+if($num%3==0){print <<<EOT
+-->
+<div class="c"></div>
+<!--
+EOT;
+}}print <<<EOT
+-->
+</td></tr>
+</table>$pages<center style="margin-top:10px">
+<input type="radio" name="action" value="deltag" checked />删除标签
+<input type="radio" name="action" value="sethot" />
+<!--
+EOT;
+if($ifhot){print <<<EOT
+-->
+允许为热门标签
+<!--
+EOT;
+}else{print <<<EOT
+-->
+不允许为热门标签
+<!--
+EOT;
+}print <<<EOT
+--></center>
+<br />
+<center>
+<input type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" class="btn" />
+<input type="submit" value="提 交" class="btn" /></center></form><br/>
+<!--
+EOT;
+}elseif($action=='addtag'){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename">标签管理</a></li>
+<li><a href="#" class="two">添加标签</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="addtag" />
+<input type="hidden" name="step" value="2" />
+<h2>批量添加</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="20%">添加 TAG ,多个用“,”分开</td><td><textarea name="tags" style="width:300px;height:100px; margin:.2em"></textarea></td></tr>
+</table><center style="margin-top:10px">
+<input type="submit" value="提 交" class="btn"></center></form><br/>
+<!--
+EOT;
+}elseif($action=='tag'){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename" class="two">标签列表</a></li>
+<li><a href="$basename&action=addtag">添加标签</a></li>
+</ul>
+<div class="c"></div>
+<h2>标签列表 &raquo; $rs[tagname]</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 s3 tac"><td width="8%">ID</td><td>标题</td><td>使用的标签</td><td>关联的标签</td></tr>
+<!--
+EOT;
+$i=($page-1)*$db_perpage;
+foreach($readb as $key=>$value){
+$i++;
+print <<<EOT
+-->
+<tr class="tr3">
+<td class="tac">$i</td>
+<td><a href="read.php?tid=$value[tid]" target="_blank">$value[subject]</a></td>
+<td>$value[tags]</td>
+<td>$value[relatetag]</td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>$pages<br/>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

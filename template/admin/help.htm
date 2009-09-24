@@ -1,0 +1,76 @@
+<!--<?php
+include_once PrintEot('left');
+if(!$action){
+$addurl = $hid ? "&hid=$hid" : '';print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="#" class="two">站点帮助管理</a></li>
+<li><a href="$basename&action=add$addurl">添加帮助项目</a></li>
+</ul>
+<div class="c"></div><h3><b>提示信息</b></h3>
+<div class="tr5">帮助操作注意事项:<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. 标题不能为空<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. 内容支持html<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. 无限级项目，随意创建、删除。删除会将下级项目下所有帮助删除，请小心操作。</div>
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="update" />
+<h2><a href="$basename"><b>站点帮助管理</b></a>$nav</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 s3" align="center">
+<td width="50%" align="left">标题</td>
+<td width="20%">显示顺序</td>
+<td width="30%" class="tal">操 作</td></tr>
+<!--
+EOT;
+foreach($listdb as $value){
+$value[ifchild] && $value[title] = "<a href=\"$basename&hid=$value[hid]\" class=\"xia2\" style=\"text-decoration:underline;\">$value[title]</a>";print <<<EOT
+-->
+<tr class="tr3" align="center"><td align="left">$value[add]$value[title]</td>
+<td><input class="input" name="selid[$value[hid]]" value="$value[order]" size="8"></td>
+<td><a class="fourm-two" href="$basename&action=edit&hup=$value[hup]&hid=$value[hid]" title="编辑"><span class="edit" style="margin-right:1em;"></span></a> <a class="fourm-two" href="$basename&action=delete&hid=$value[hid]" title="删除"><span class="del" style="margin-right:1em;"></span></a><a style="line-height:25px;" class="fl" href="$basename&action=add&hup=$value[hid]">添加子项目</a></td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br />
+<center><input type="submit" class="btn" value="提 交" /></center></form><br/>
+<!--
+EOT;
+}elseif($action=='delete'){print <<<EOT
+-->
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="delete" />
+<input type="hidden" name="hid" value="$hid" />
+<input type="hidden" name="step" value="2" />
+<h3>确认删除</h3>
+<div class="tr5">您确定删除名为“{$dtitle}” 的帮助项目？<br /><font color="#FF0000">请注意: 删除此项目会同时移去其所有子项目。</font></div>
+<center><input type="submit" value="提 交" class="btn" /> <input type="button" value="返 回" class="btn" onclick="window.location = '$basename'" /></center><br/></form>
+<!--
+EOT;
+}elseif($action=='add' || $action=='edit'){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename">站点帮助管理</a></li>
+<li><a href="#" class="two">添加帮助项目</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename" method="post">
+<input type="hidden" name="step" value="2" />
+<input type="hidden" name="action" value="$action" />
+<input type="hidden" name="hid" value="$hid" />
+<h2>帮助项目</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3" align="left"><td width="25%">上级项目</td>
+<td width="*"><select name="hup"><option value="0">作为顶级</option>{$helpslt}</select></td></tr>
+<tr class="tr3" align="left"><td width="25%">显示顺序</td>
+<td width="*"><input type="text" class="input" name="vieworder" value="$vieworder" size="10" /></td></tr>
+<tr class="tr3" align="left"><td width="25%">标题</td>
+<td width="*"><input type="text" class="input" name="title" value="$title" size="60" /></td></tr>
+<tr class="tr3" align="left"><td width="25%">url链接<br />[指定到一个地址，方便发布各种形式的帮助]<br />
+<font color="blue">注:填写此处，内容无须填写</font></td>
+<td width="*"><input type="text" class="input" name="url" value="$url" size="60" /></td></tr>
+<tr class="tr3" align="left"><td width="25%">内容<br />(支持html代码)</td>
+<td width="*"><textarea name="content" rows="16" cols="80">$content</textarea></td></tr>
+</table><br />
+<center><input type="submit" class="btn" value="提 交" /></center><br/></form>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

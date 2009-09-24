@@ -1,0 +1,1071 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<script language="JavaScript">
+function $(id){
+	return document.getElementById(id);
+}
+
+function showSelHtml(d,s) {
+	if(s) $(d).innerHTML = $(s).innerHTML;
+	else $(d).innerHTML = '';
+}
+</script>
+<!--
+EOT;
+if (!$action) {
+if(!$job){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename" class="two">广告管理</a></li>
+	<li><a href="$basename&job=add">添加广告</a></li>
+	<li><a href="$basename&action=cate">广告位管理</a></li>
+	<li><a href="$basename&action=cate&job=edit">添加广告位</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename" method="post">
+<h2>搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td>
+			广告位: <select name="ckey">
+				<option></option>
+				$optCates
+			</select>
+		</td>
+		<td>关键字：<input type="text" class="input" name="keyword" /></td>
+		<td width="45%"><input type="submit" class="btn" value="确 定" /></td>
+	</tr>
+</table></form>
+<br />
+<form method="post" name="FORM" action="$basename&">
+<h2>广告管理</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%"><a onclick="CheckAll(document.FORM)" style="cursor:pointer;">全选</a></td>
+		<td width="5%">顺序</td>
+		<td>描述</td>
+		<td width="7%">类型</td>
+		<td width="15%">广告位</td>
+		<td width="12%">结束时间</td>
+		<td width="10%">状态</td>
+		<td style="60">操作</td>
+	</tr>
+
+<!--
+EOT;
+foreach ($adverts as $value){
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td><input type="checkbox" name="selid[]" value="$value[id]" /></td>
+		<td>{$value['orderby']}</td>
+		<td><a href="$basename&job=edit&id=$value[id]">{$value['descrip']}</a></td>
+		<td>
+<!--
+EOT;
+if($value['config']['type'] == 'txt'){print <<<EOT
+-->
+		文本
+<!--
+EOT;
+}elseif($value['config']['type'] == 'img'){print <<<EOT
+-->
+		图片
+<!--
+EOT;
+}elseif($value['config']['type'] == 'code'){print <<<EOT
+-->
+		代码
+<!--
+EOT;
+}elseif($value['config']['type'] == 'flash'){print <<<EOT
+-->
+		Flash
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+		<td>
+<!--
+EOT;
+if (!isset($cates[$value['ckey']])) {print <<<EOT
+-->
+		<font color=red>广告位不存在</font>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+
+		<a href="$basename&ckey={$value['ckey']}" >{$cates[$value['ckey']]['name']}</a>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+		<td>{$value['etime']}</td>
+		<td>
+<!--
+EOT;
+if(!$cates[$value['ckey']]['ifshow']){print <<<EOT
+-->
+			广告位关闭
+<!--
+EOT;
+}elseif($value['ifshow'] == 1){print <<<EOT
+-->
+			已启用
+<!--
+EOT;
+}elseif($value['uid'] && $value['ifshow'] == -1){print <<<EOT
+-->
+			<font color=red>未验证</font>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+			已下架
+<!--
+EOT;
+}if ($value['uid']) {print <<<EOT
+-->
+			<font color=blue>[租]</font>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+		<td>
+			<a class="fourm-two" href="$basename&job=edit&id=$value[id]" title="编辑"><span class="edit"></span></a>
+			<a class="fourm-two" href="$basename&job=del&selid[]=$value[id]" onclick="if(!confirm('您确认要删除该广告吗?'))return false;" title="删除"><span class="del"></span></a>
+		</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>$pages<br />
+<center>
+	<b>选中操作:  </b>
+	<input type="radio" name="job" value="show" checked /> 启用
+	<input type="radio" name="job" value="hide" /> 下架
+	<input type="radio" name="job" value="del" /> 删除
+	<br /><br />
+	<input type="button" value="全 选" onclick="CheckAll(this.form)" class="btn" />
+	<input type="submit" class="btn" onclick="return confirm('您确认要进行此操作吗?');" value="提 交">
+</center></form>
+<br />
+<!--
+EOT;
+}elseif($job=='add' || $job=='edit'){print <<<EOT
+-->
+<ul class="nav3">
+<!--
+EOT;
+if($job=='edit'){print <<<EOT
+-->
+	<li><a href="$basename">广告管理</a></li>
+	<li><a href="$basename&job=add">添加广告</a></li>
+	<li><a href="$basename&action=cate">广告位管理</a></li>
+	<li><a href="$basename&action=cate&job=edit">添加广告位</a></li>
+	<li><a href="$basename&job=edit&id=$id" class="two">编辑广告</a></li>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	<li><a href="$basename">广告管理</a></li>
+	<li><a href="$basename&job=add" class="two">添加广告</a></li>
+	<li><a href="$basename&action=cate">广告位管理</a></li>
+	<li><a href="$basename&action=cate&job=edit">添加广告位</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<div class="c"></div>
+<script type="text/javascript" language="JavaScript" src="js/date.js"></script>
+<form method="post" name="FORM" action="$basename&job=save&">
+<input type="hidden" name="id" value="$id">
+<h2>添加广告</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td><b>选择表现方式</b></td>
+		<td>
+			<input type="radio" class="input" name="config[type]" value="txt" onclick="showSelHtml('adSet','adtxt')" $type_txt /> 文字
+			<input type="radio" class="input" name="config[type]" value="img" onclick="showSelHtml('adSet','adimg')" $type_img /> 图片
+			<input type="radio" class="input" name="config[type]" value="code" onclick="showSelHtml('adSet','adcode')" $type_code /> 代码
+			<input type="radio" class="input" name="config[type]" value="flash" onclick="showSelHtml('adSet','adflash')" $type_flash /> Flash
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><div id='adSet' style="padding-left:3em;"></div></td>
+	</tr>
+	<tr class="tr3">
+		<td><b>广告描述(*)</b></td>
+		<td><input type="text" class="input" size="70" name="advert[descrip]" value="$advert[descrip]">
+			<span class="gray">广告信息描述，并不在前台显示</span></td>
+	</tr>
+	<tr class="tr3">
+		<td><b>选择广告位(*)</b></td>
+		<td>
+			<select name="advert[ckey]" onchange="showSelCate(this.options[this.selectedIndex].value)">
+				<option value="" disabled>请选择要投放的广告位</option>
+				<option value="" disabled></option>
+				$optCates
+			</select>
+			<span class="gray" id="cateDescrip"></span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><div id="winSet" style="padding-left:3em;"></div></td>
+	</tr>
+	<tr class="tr3">
+		<td>&nbsp;</td>
+		<td><span>广告展示的位置由广告位和所设置的广告范围决定,‘Ctrl’或‘Shift’键进行多选</span><br />
+			<div id="modeSet" style="float:left;margin-right:1em;"></div>
+			<div id="pageSet" style="float:left;margin-right:1em;"></div>
+			<div id="forumSet" style="float:left;margin-right:1em;"></div>
+			<div id="louSet" style="float:left;"></div>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td width="15%"><b>显示顺序</b></td>
+		<td><input type="text" class="input" name="advert[orderby]" value="$advert[orderby]" size="5">
+			<span class="gray">默认顺序为“0”</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td width="15%"><b>是否开启</b></td>
+		<td><input type="radio" name="advert[ifshow]" value="1" class="input" $ifshow_Y >是
+			<input type="radio" name="advert[ifshow]" value="0" class="input" $ifshow_N >否
+			<span class="gray">(开启后,广告位同时被开启)</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><b>开始时间</b> - <b>结束时间</b></td>
+                <td><input type="text" class="input" size="18" name="advert[stime]" id="starttime" value="$advert[stime]" onClick="setAdvert.initDate(this.id);" />
+			--
+			<input type="text" class="input" size="18" name="advert[etime]" id="endtime" value="$advert[etime]" onClick="setAdvert.initDate(this.id);" />
+			<span class="gray">格式：yyyy-mm-dd</span>
+<!--
+EOT;
+if ($showddate) {print <<<EOT
+-->
+			<div id='showddate'>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+			<input type="button" class="btn" value="设置详细展示时间" onclick="getObj('showddate').style.display='';this.style.display='none';" />
+			<div id='showddate' style="display:none;">
+<!--
+EOT;
+}print <<<EOT
+-->
+				<table width="98%" cellspacing="0" cellpadding="0">
+					<tr class="tr3" title="可以设置有效时间段内每月的哪几天周期性显示"><td width="15%">每月展示日期</td><td>
+						<span id="ddate_id"></span>
+					</td></tr>
+					<tr class="tr3" title="可以设置有效时间段内每周的哪几天周期性显示"><td width="15%">每周展示日期</td><td>
+						<span id="dweek_id"></span>
+					</td></tr>
+					<tr class="tr3" title="可以设置有效时间段内每天的哪几个时间段显示"><td width="15%">
+						每日展示时间
+					</td><td>
+						<span id="dtime_id"></span><span class="gray">(可设置每天的哪几个时间段显示，按住ctrl可多选。)</span>
+					</td></tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table><br />
+<center><input type="submit" class="btn" value="提 交"></center>
+</form><br />
+<script type="text/javascript">
+var setAdvert = {
+    handler : '',
+    //init
+    initDate : function(id){
+        ShowCalendar(id);
+        setAdvert.handler = setInterval(function(){
+            setAdvert.checkDate(setAdvert.handler);
+        },1000);
+    },
+
+    checkDate : function(){
+        var starttime = getObj("starttime").value;
+        var endtime = getObj("endtime").value;
+        if(endtime == "" || starttime == ""){
+            return false;
+        }
+        var startD  = new Date(Date.parse(starttime.replace(/-/g,"/")));
+        var endD = new Date(Date.parse(endtime.replace(/-/g,"/")));
+        if(startD-endD>0){
+            getObj("endtime").value = "";
+            alert("抱歉，结束时间不能小于开始时间");
+            return false;
+        }
+        var startArray = starttime.split("-");
+        var endArray = endtime.split("-");
+        //not the same year
+        if(startArray[0]<endArray[0]){
+            return false;
+        }
+        //two month
+        if(endArray[1]-startArray[1] <=2){
+            var dateRange = setAdvert.getDateRange(starttime,endtime);
+            //setAdvert.disableDate(dateRange.days);
+            //setAdvert.disableWeek(dateRange.weeks);
+        }
+        if(endArray[1]==startArray[1] && endArray[2]==startArray[2]){
+            //
+        }
+        showddate(starttime,endtime);
+        clearInterval(setAdvert.handler);
+    },
+
+    getDateRange : function(starttime,endtime){
+        var unit_day = 86400*1000;
+        var startT = Date.parse(starttime.replace(/-/g,"/"));
+        var endT = Date.parse(endtime.replace(/-/g,"/"));
+        var startN = startT+unit_day;
+        var dateArray = [];
+        var weekArray = [];
+        for(i=startT;i<=endT;i+=unit_day){
+            var startND = new Date(i);
+            var td = startND.getDate();
+            var wd = startND.getDay();
+            dateArray.push(td);
+            weekArray.push(wd);
+        }
+        return {days:dateArray,weeks:weekArray};
+    },
+
+    disableDate : function(valids){
+        var ddate = getObj("ddate_id").getElementsByTagName("input");
+        for(i=0;i<ddate.length;i++){
+            var value = ddate[i].value;
+            if(valids.indexOf(value) == -1){
+                ddate[i].disabled = "disabled";
+            }
+        }
+    },
+
+    disableWeek : function(valids){
+        var dweek = getObj("dweek_id").getElementsByTagName("input");
+        for(i=0;i<dweek.length;i++){
+            var value = dweek[i].value;
+            if(valids.indexOf(value) != -1){
+                dweek[i].disabled = "disabled";
+            }
+        }
+    },
+
+    disableTime : function(valids){
+        var dtime = getObj("dtime_id").getElementsByTagName("option");
+        for(i=0;i<dtime.length;i++){
+             var value = dtime[i].value;
+             if(valids.indexOf(value) != -1){
+                dtime[i].disabled = "disabled";
+             }
+        }
+    }
+
+}
+~function()
+{
+   CheckDate=
+	{
+	   getMaxs:function(begin,end,selected)
+		{
+			selected=selected||{days:{},weeks:{},hours:{}};
+			selected.days=selected.days||{};
+			selected.weeks=selected.weeks||{};
+			selected.hours=selected.hours||{};
+
+			var s=new Date(begin.replace(/\-/g,'/')).getTime();
+			var e=new Date(end.replace(/\-/g,'/')+" 23:59:59").getTime();
+			if(e<s)
+			{
+				return !!alert("结束日期不能比开始日期早！");
+			}
+			var c=24*3600*1000;
+			var maxDays=[];
+			var maxWeekDays=[];
+			var dt;
+			for (var i=s,len=e; i<len; i=i+c)
+			{
+				dt=new Date(i).getDate();
+				(","+maxDays.join(",")+",").indexOf(","+(dt<10?"0"+dt:dt)+",")>=0?0:maxDays.push(dt<10?"0"+dt:""+dt);
+				dt=new Date(i).getDay();
+				(","+maxWeekDays.join(",")+",").indexOf(","+dt+",")>=0?0:maxWeekDays.push(dt);
+				if(maxDays.length>=31&&maxWeekDays.length>=7)
+				{
+					break;
+				}
+			}
+			var d=[];
+			var g=[];
+			maxDays.sort();
+			maxWeekDays.sort();
+			for (var i=0,len=maxDays.length; i<len; i++)
+			{
+				maxDays[i]=maxDays[i].replace(/^0/,'');
+				d[i]="<span style='width:45px' class='fl'><input name='ddate[]' type=checkbox value='"+maxDays[i]+"' "+(selected.days[maxDays[i]]?" checked":"")+"> "+maxDays[i]+"</span>";
+			}
+			var w="日一二三四五六".split("");
+			for (var i=0,len=maxWeekDays.length; i<len; i++)
+			{
+				g[i]=[maxWeekDays[i]==0?7:maxWeekDays[i],"<span style='width:90px' class='fl'><input name='dweek[]' type=checkbox value='"+i+"'  "+(selected.weeks[maxWeekDays[i]]?" checked":"")+"> 星期"+w[maxWeekDays[i]] + "</span>"];
+			}
+			g.sort();
+			for (var i=0,len=g.length; i<len; i++)
+			{
+				g[i]=g[i][1];
+			}
+
+			var h=[];
+			for (var i=1,len=24; i<=len; i++)
+			{
+				h[i]=(i-1<10?"0"+(i-1):i-1)+":00 - "+(i<10?"0"+i:i)+":00";
+				h[i]="<option value='"+i+"' "+(selected.hours[i]?"selected":"")+"> "+h[i]+" </option>";
+			}
+			return {days:d,weeks:g,hours:h};
+		}
+	};
+}
+();
+function showddate(stime,etime,data) {
+	var a=CheckDate.getMaxs(stime,etime,data);
+
+	getObj('ddate_id').innerHTML = a.days.join("");
+	getObj('dweek_id').innerHTML = a.weeks.join("");
+	getObj('dtime_id').innerHTML = "<select name='dtime[]' style='height:180px;' multiple><option value=''>&nbsp;</option>"+a.hours.join("")+"</select>";
+}
+<!--
+EOT;
+if ($showddate) {print <<<EOT
+-->
+showddate('$advert[stime]','$advert[etime]',$showddate);
+<!--
+EOT;
+}else{print <<<EOT
+-->
+showddate('$advert[stime]','$advert[etime]');
+<!--
+EOT;
+}print <<<EOT
+-->
+</script>
+
+<div id="adWin" style="display:none;" disabled>
+	<table width="100%" cellspacing="0" cellpadding="0">
+		<tr class="tr3 s3 b"><td colspan="2">弹窗设置</td></tr>
+		<tr class="tr3">
+			<td width="30%">窗口标题</td>
+			<td><input type="text" class="input" name="config[winTitle]" size="40" value="$config[winTitle]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>窗口高度</td>
+			<td><input type="text" class="input" name="config[winHeight]" size="10" value="$config[winHeight]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>窗口宽度</td>
+			<td><input type="text" class="input" name="config[winWidth]" size="10" value="$config[winWidth]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>自动消失时间</td>
+			<td><input type="text" class="input" name="config[winClose]" size="10" value="$config[winClose]">秒</td>
+		</tr>
+	</table>
+</div>
+<div id="adcode" style="display:none;">
+	<table width="100%" cellspacing="0" cellpadding="0">
+		<tr class="tr3 s3 b"><td colspan="2">代码广告</td></tr>
+		<tr class="tr3">
+			<td>广告代码 * <br /><span class="gray">请填写广告代码，支持html代码,最大1024个字符</span></td>
+			<td><textarea name="config[htmlcode]" rows="5" cols="50">$config[htmlcode]</textarea></td>
+		</tr>
+	</table>
+</div>
+<div id="adtxt" style="display:none;">
+	<table width="100%" cellspacing="0" cellpadding="0">
+		<tr class="tr3 s3"><td colspan="2"><b>文字广告</b></td></tr>
+		<tr class="tr3">
+			<td width="30%">文字内容 *</td>
+			<td><input type="text" class="input" size="60" name="config[title]" value="$config[title]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>文字链接 * <span class="gray">( 外链以http://开头 )</span></td>
+			<td><input type="text" class="input" size="60" name="config[link]" value="$config[link]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>文字颜色 <span class="gray">( 例如:red 或则 #EF8684 )</span></td>
+			<td><input type="text" class="input" size="10" name="config[color]" value="$config[color]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>文字大小 <span class="gray">( 例如: 4px 或则 12px )</span></td>
+			<td><input type="text" class="input" size="10" name="config[size]" value="$config[size]"></td>
+		</tr>
+	</table>
+</div>
+<div id="adimg" style="display:none;">
+	<table width="100%" cellspacing="0" cellpadding="0">
+		<tr class="tr3 s3"><td colspan="2"><b>图片广告</b></td></tr>
+		<tr class="tr3">
+			<td width="30%">图片地址 * <span class="gray">( 外链以http://开头 )</span></td>
+			<td><input type="text" class="input" size="60" name="config[url]" value="$config[url]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>图片链接 * <span class="gray">( 外链以http://开头 )</span></td>
+			<td><input type="text" class="input" size="60" name="config[link]" value="$config[link]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>图片大小</td>
+			<td>
+				宽：<input type="text" class="input" size="5" name="config[width]" value="$config[width]" />
+				高：<input type="text" class="input" size="5" name="config[height]" value="$config[height]" /><span class="gray">( 例如: 98% 或 120像素 )</span>
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td>图片提示</td>
+			<td><input type="text" class="input" size="40" name="config[title]" value="$config[title]"></td>
+		</tr>
+	</table>
+</div>
+<div id="adflash" style="display:none;">
+	<table width="100%" cellspacing="0" cellpadding="0">
+		<tr class="tr3 s3"><td colspan="2"><b>Flash广告</b></td></tr>
+		<tr class="tr3">
+			<td width="30%">Flash链接 * <span class="gray">( 外链以http://开头 )</span></td>
+			<td><input type="text" class="input" size="60" name="config[link]" value="$config[link]"></td>
+		</tr>
+		<tr class="tr3">
+			<td>Flash宽度 <span class="gray">( 例如: 120 或 98% )</span></td>
+			<td>高：<input type="text" class="input" size="5" name="config[height]" value="$config[height]">
+				宽：<input type="text" class="input" size="5" name="config[width]" value="$config[width]">
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div style="display:none;" id="c_mode" >
+<select name="modes[]" size="16" style="margin:2px;" multiple>
+	<option value="mode" $selThread_mode >&nbsp;&gt;&gt;所有模式 </option>
+	<option value="" disabled></option>
+<!--
+EOT;
+foreach ($db_modes as $key=>$value) {
+$tmpSelect = ${'mode_'.$key};
+print <<<EOT
+-->
+	<option value="$key" $tmpSelect>&nbsp;&raquo; {$value['m_name']}</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+	<option value="" disabled></option>
+</select></div>
+<div style="display:none;" id="c_page" >
+<select name="pages[]" size="16" style="margin:2px;" multiple>
+	<option value="page" $selThread_page >&nbsp;&gt;&gt;所有页面 </option>
+	<option value="" disabled></option>
+	<option value="index" $selThread_index >&nbsp;&raquo; 模式首页 </option>
+	<option value="cate" $selThread_cate >&nbsp;&raquo; 频道页面</option>
+	<option value="thread" $selThread_thread >&nbsp;&raquo; 主题列表</option>
+	<option value="read" $selThread_read >&nbsp;&raquo; 帖子页面</option>
+	<option value="" disabled></option>
+</select></div>
+<div style="display:none;" id="c_forum" >
+<select name="fids[]" size="16" style="margin:2px;" multiple>
+	<option value="-1" $selFids_all>&nbsp;&gt;&gt;所有版块</option>
+	<option value="" disabled></option>
+	$forumcache
+</select></div>
+<div style="display:none;" id="c_forum_cate" >
+<select name="fids[]" size="16" style="margin:2px;" multiple>
+	<option value="-1" $selFids_all>&nbsp;&gt;&gt;所有版块</option>
+	<option value="" disabled></option>
+	$forum_cate_select
+</select></div>
+<div style="display:none;" id="c_article">
+<select name="lous[]" size="16" style="margin:2px;" multiple>
+	<option value="" disabled>位置选择</option>
+	<option value="-1" $selLou_all >&nbsp;&raquo; 全部&nbsp;</option>
+	<option value="" disabled></option>
+<!--
+EOT;
+for($i=1;$i<65;$i++){
+$tmpSelect = ${'lou_'.$i};
+print <<<EOT
+-->
+	<option value="$i" $tmpSelect>&nbsp;&raquo; #{$i}</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+</select></div>
+<script language="JavaScript">
+function showSelCate(ckey) {
+	ckey=ckey.toLowerCase();
+	if (ckey.indexOf('.popup') != -1) showSelHtml('winSet','adWin');
+	else showSelHtml('winSet','');
+	showSelHtml('modeSet','');
+	showSelHtml('pageSet','');
+	showSelHtml('forumSet','');
+	showSelHtml('louSet','');
+	if (ckey) {
+
+		if (ckey.indexOf('forum.') != -1) {
+			showSelHtml('forumSet','c_forum');
+		}
+		if (ckey.indexOf('layer.') != -1) {
+			showSelHtml('louSet','c_article');
+			//showSelHtml('forumSet',ckey.indexOf('layer.index') != -1 ? 'c_forum_cate' : 'c_forum');
+		}
+		if (ckey.indexOf('site.') != -1 || ckey.indexOf('mode.') == -1) {
+			showSelHtml('modeSet','c_mode');
+			showSelHtml('pageSet','c_page');
+			showSelHtml('forumSet','c_forum');
+		}
+		cateDescrip(ckey);
+	}
+}
+function cateDescrip(ckey) {
+	var descrip = JSONParse($cateDescrip);
+	if (typeof descrip[ckey] != 'undefined')
+		$('cateDescrip').innerHTML = descrip[ckey];
+	else
+		$('cateDescrip').innerHTML = '';
+}
+showSelHtml('adSet','ad{$config['type']}');
+showSelCate('{$advert['ckey']}');
+</script>
+<!--
+EOT;
+}elseif($job=='check'){
+$arr_adtype=array('txt'=>'文字','img'=>'图片','flash'=>'flash');
+$adtype = $arr_adtype[$config[style]];
+$arr_ckey=array('header'=>'头部横幅','footer'=>'底部横幅','text'=>'文字广告','article'=>'楼层广告','leftfloat'=>'对联广告[左]','rightfloat'=>'对联广告[右]','float'=>'漂浮广告','popup'=>'右下弹窗');
+$ckey = $arr_ckey[$advert[ckey]];
+print <<<EOT
+-->
+<h2>广告信息</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="30%">广告类型：</td>
+		<td>$ckey</td>
+	</tr>
+	<tr class="tr3">
+		<td>展现方式：</td>
+		<td>$adtype</td>
+	</tr>
+	<tr class="tr3">
+		<td>价格：</td>
+		<td>$config[price] [{$credit->cType[$config[creditype]]}]/天 *</td>
+	</tr>
+</table>
+
+<br />
+<h2><span class="fr"><a href="$amind_file?adminjob=hack&hackset=advert">返回广告管理</a></span>广告审核</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<!--
+EOT;
+if($config[style]=='txt' || $config[style]=='flash'){
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td>用户名</td>
+		<td>文字说明</td>
+		<td>链接地址</td>
+		<td>开始时间</td>
+		<td>结束时间</td>
+		<td>天数</td>
+		<td>状态</td>
+		<td>操作</td>
+	</tr>
+<!--
+EOT;
+foreach($arr_buyer as $value){
+$advertinfo = $value[config];
+!$advertinfo[starttime] && $advertinfo[starttime] = '-';
+!$advertinfo[endtime] && $advertinfo[endtime] = '-';
+$statedb = array('未审核','通过');
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td>$value[username]</td>
+		<td>$advertinfo[title]</td>
+		<td>$advertinfo[link]</td>
+		<td>$advertinfo[starttime]</td>
+		<td>$advertinfo[endtime]</td>
+		<td>$advertinfo[days]</td>
+		<td>{$statedb[$value[ifcheck]]}</td>
+<!--
+EOT;
+if(!$value[ifcheck]){print <<<EOT
+-->
+		<td><a href="$basename&job=check&id=$id&uid=$value[uid]&step=2">通过</a> | <a href="$basename&job=delbuyad&id=$id&uid=$value[uid]">删除</a></td>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+		<td>-</td>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+<!--
+EOT;
+}elseif($config[style]=='img'){
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td>用户名</td>
+		<td>文字说明</td>
+		<td>图片地址</td>
+		<td>链接地址</td>
+		<td>开始时间</td>
+		<td>结束时间</td>
+		<td>天数</td>
+		<td>状态</td>
+		<td>操作</td>
+	</tr>
+<!--
+EOT;
+foreach($arr_buyer as $value){
+$advertinfo = $value[config];
+!$advertinfo[starttime] && $advertinfo[starttime] = '-';
+!$advertinfo[endtime] && $advertinfo[endtime] = '-';
+$statedb = array('未审核','通过');
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td>$value[username]</td>
+		<td>$advertinfo[title]</td>
+		<td>$advertinfo[url]</td>
+		<td>$advertinfo[link]</td>
+		<td>$advertinfo[starttime]</td>
+		<td>$advertinfo[endtime]</td>
+		<td>$advertinfo[days]</td>
+		<td>{$statedb[$value[ifcheck]]}</td>
+<!--
+EOT;
+if(!$value[ifcheck]){print <<<EOT
+-->
+		<td><a href="$basename&job=check&id=$id&uid=$value[uid]&step=2">通过</a> | <a href="$basename&job=delbuyad&id=$id&uid=$value[uid]">删除</a></td>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+		<td>-</td>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+$pages<br />
+<!--
+EOT;
+}} elseif ($action == 'cate') {
+if (empty($job)){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">广告管理</a></li>
+	<li><a href="$basename&job=add">添加广告</a></li>
+	<li><a href="$basename&action=cate" class="two">广告位管理</a></li>
+	<li><a href="$basename&action=cate&job=edit">添加广告位</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename&action=cate" method="post">
+<h2>搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+
+		<td>关键字：<input type="text" class="input" name="keyword" /></td>
+		<td>是否启用:	<select name="ifshow">
+				<option></option>
+				<option value="1">已启用</option>
+				<option value="2">未启用</option>
+			</select>
+<!-- 			是否出租:	<select name="ifhire">
+				<option></option>
+				<option value="1">可出租</option>
+				<option value="2">不出租</option>
+			</select> -->
+		</td>
+		<td width="25%"><input type="submit" class="btn" value=" 确定 " /></td>
+	</tr>
+</table></form>
+<form method="post" name="FORM" action="$basename&action=cate">
+<h2>广告位管理</h2>
+<table width="98%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%"><a onclick="CheckAll(document.FORM)" style="cursor:pointer;">全选</a></td>
+		<td width="5%">序号</td>
+		<td>名称</td>
+		<td width="30%">标识符</td>
+		<td width="20%">状态</td>
+		<td width="80" class="tal">操作</td>
+	</tr>
+<!--
+EOT;
+$idnum = ($page-1)*$db_perpage;
+foreach($catedb as $key=>$value) {
+$idnum++;
+print <<<EOT
+-->
+	<tr class="tr3" title="{$value['descrip']}">
+		<td><input type="checkbox" name="selid[]" value="$value[id]" /></td>
+		<td width="5%">{$idnum}</td>
+		<td>{$value['name']}</td>
+		<td>{$value['ckey']}</td>
+		<td>
+<!--
+EOT;
+if($value['id']<100){print <<<EOT
+-->
+		默认,
+<!--
+EOT;
+}else{print <<<EOT
+-->
+		自定义,
+<!--
+EOT;
+}if($value['ifshow']){print <<<EOT
+-->
+		已开启
+<!--
+EOT;
+}else{print <<<EOT
+-->
+		未开启
+<!--
+EOT;
+}if($value['ifhire']){print <<<EOT
+-->
+		,可出租({$credit->cType[$value['config']['creditype']]}:{$value['config']['price']}{$credit->cUnit[$value['config']['creditype']]})
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+		<td><a class="fourm-two" href="$basename&action=$action&job=edit&id=$value[id]" title="编辑"><span class="edit"></span></a>
+<!--
+EOT;
+if($value[id] > 100){print <<<EOT
+-->
+		<a class="fourm-two" href="$basename&job=del&action=$action&id=$value[id]" title="删除" onclick="if(!confirm('是否确认要删除该广告位？'))return false;"><span class="del"></span></a>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>$pages<br />
+<center>
+	<b>选中操作:  </b>
+	<input type="radio" name="job" value="show" checked /> 开启
+	<input type="radio" name="job" value="hide" /> 关闭
+	<input type="radio" name="job" value="del" /> 删除<span class="gray">(只删除广告位)</span>
+	<br /><br />
+	<input type="button" value="全 选" onclick="CheckAll(this.form)" class="btn" />
+	<input type="submit" class="btn" onclick="return confirm('您确认要进行此操作吗?');" value="提 交">
+</center></form>
+<!--
+EOT;
+}elseif($job == 'edit'){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">广告管理</a></li>
+	<li><a href="$basename&job=add">添加广告</a></li>
+	<li><a href="$basename&action=cate">广告位管理</a></li>
+<!--
+EOT;
+if($id){print <<<EOT
+-->
+	<li><a href="$basename&action=cate&job=edit">添加广告位</a></li>
+	<li><a href="$basename&action=cate&job=edit&id=$id" class="two">编辑广告位</a></li>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	<li><a href="$basename&action=cate&job=edit" class="two">添加广告位</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<div class="c"></div>
+<form method="post" action="$basename&action=cate" onsubmit="checkData();return false;">
+<input type="hidden" name="job" value="$job" />
+<input type="hidden" name="id" value="$id" />
+<input type="hidden" name="step" value="2" />
+<h2>编辑广告位</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<!--
+EOT;
+if($isDefault){print <<<EOT
+-->
+	<tr class="tr3">
+		<td colspan="2"><font color="#FF9900">系统默认广告位,名称、标识符不可编辑</font></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+	<tr class="tr3">
+		<td class="b" width="20%">名称</td>
+		<td><input type="text" id="cate_name" name="config[name]" value="{$cate['name']}" class="input" maxlength="32" size="30" $isDefault ></td>
+	</tr>
+	<tr class="tr3">
+		<td class="b">标识符</td>
+		<td>
+			<input type="text" id="cate_ckey" name="config[ckey]" value="{$cate['ckey']}" class="input" maxlength="32" size="30" $isDefault >
+<!--
+EOT;
+if(!$isDefault){print <<<EOT
+-->
+				[<span onclick="setCkey('Site');" style="cursor:pointer;">全站</span>]&nbsp;
+				[<span onclick="setCkey('Mode');" style="cursor:pointer;">模式</span>]&nbsp;
+				[<span onclick="setCkey('Forum');" style="cursor:pointer;">版块</span>]&nbsp;
+				[<span onclick="setCkey('Layer');" style="cursor:pointer;">楼层</span>]&nbsp;
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td class="b" width="20%">详细描述</td>
+		<td><textarea name="config[descrip]" rows="5" cols="30" $isDefault >{$cate['descrip']}</textarea></td>
+	</tr>
+ 	<tr class="tr3">
+		<td class="b">广告显示方式</td>
+		<td>
+			<input type="radio" name="config[display]" value="rand" $display_rand /> 随机选一
+			<input type="radio" name="config[display]" value="all" $display_all /> 显示全部
+			<input type="radio" name="config[display]" value="order" $display_order /> 显示顺序中的第一个
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td class="b">是否开启</td>
+		<td><input type="radio" name="config[ifshow]" value="1" class="input" $ifshow_Y >开启
+			<input type="radio" name="config[ifshow]" value="0" class="input" $ifshow_N >关闭
+			<span class="gray">(开启后,才会展示广告位里的广告)</span>
+		</td>
+	</tr>
+<!-- 	<tr class="tr3">
+		<td class="b">是否可出租</td>
+		<td><input type="radio" name="config[ifhire]" value="1" onclick="showSelHtml('hireSet','cateHire');" class="input" $ifhire_Y >是
+			<input type="radio" name="config[ifhire]" value="0" onclick="showSelHtml('hireSet','');" class="input" $ifhire_N >否
+			<span class="gray">(使用相关积分出租广告位,增强站点营销)</span>
+	</td></tr> -->
+	<input type="hidden" name="config[ifhire]" value="0" />
+	<tr>
+		<td colspan="2"><div id="hireSet" style="padding-left:3em;"></div></td>
+	</tr>
+</table><br />
+<center><input type="submit" class="btn" value="提 交"></center>
+</form>
+
+<div id="cateHire" style="display:none;">
+<table width="98%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td>广告位价格</td>
+		<td><input type="text" class="input" name="config[price]" value="{$cate['config']['price']}" size="5" />
+			<select name="config[creditype]">{$CreditList}</select> 价格/天
+			<span class="gray">(出租一天需要多少积分)</span></td>
+	</tr>
+	<tr class="tr3">
+		<td>广告位管理者</td>
+		<td><input type="text" class="input" name="config[operator]" value="{$cate['config']['operator']}" size="30" />
+			<span class="gray">(发送短消息通知该管理者有关广告位出租情况，多个管理者用“,”区分)</span></td>
+	</tr>
+</table>
+</div>
+<!--
+EOT;
+if ($cate['ckey']) {
+	$ckeytext = $cate['ckey'];
+	$fidtext = '$fid';
+	$numtext = '$num';
+	$scrtext = '$SCR';
+}else{
+	$ckeytext = '标识符';
+	$fidtext = '\'[版块ID]\'';
+	$numtext = '\'[楼层数]\'';
+	$scrtext = '\'[访问位置]\'';
+}
+print <<<EOT
+-->
+<h3>广告位代码调用说明</h3>
+<div class="tr5">
+新添加的广告位需要将调用代码添加到相应的模板中,才能使广告位生效.调用代码如下:<br />
+&nbsp;'<b>标识符</b>'为必选参数,方括号中的参数为可选: '[版块ID]','[楼层数]' <br />
+&nbsp;<b>&#36;htmlAdvert</b>&nbsp;为当前显示的广告内容,<b>&#36;arrayAdvert</b>&nbsp;为多广告内容数组<br />
+<textarea rows="5" cols="80" class="gray">
+&#69;&#79;&#84;&#59;
+list(&#36;htmlAdvert,&#36;arrayAdvert) = pwAdvert('$ckeytext',$fidtext,$numtext,$scrtext);
+if(&#36;htmlAdvert) echo &#36;htmlAdvert;
+print &lt;&lt;&lt;&#69;&#79;&#84;
+</textarea>
+</div>
+<script type="text/javascript">
+function checkData(){
+    var regex = /^([a-zA-Z0-9_.]{1,32})$/i;
+    if(getObj("cate_name").value == ""){
+        alert("广告位名称不能为空");
+        return false;
+    }
+    if(regex.test(getObj("cate_ckey").value) == false){
+        alert("广告标示符添加有误，只能为字母、数字、下划线和点号的组合");
+        return false;
+    }
+    submit();
+}
+function setCkey(txt) {
+	var v = getObj('cate_ckey').value;
+	if (v.indexOf(txt) == -1) {
+		v = v + txt + '.';
+		getObj('cate_ckey').value = v;
+	}
+}
+
+<!--
+EOT;
+if($ifhire_Y){print <<<EOT
+-->
+showSelHtml('hireSet','cateHire');
+<!--
+EOT;
+}print <<<EOT
+-->
+</script>
+<!--
+EOT;
+}}include_once PrintEot('adminbottom');
+?>-->

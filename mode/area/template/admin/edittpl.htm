@@ -1,0 +1,113 @@
+<!--<?php
+include_once PrintEot('left');
+if (empty($action)) {print <<<EOT
+-->
+<style type="text/css">
+.mode-forum-list{padding:10px 10px 0 0;border-bottom:1px dashed #cccccc;}
+.mode-forum-list li{float:left;margin:0 10px 10px 0;width:200px;height:300px;}
+.mode-forum-list li p{padding:5px 20px;line-height:2;color:#333333;}
+.mode-forum-list li p input{ vertical-align:middle;}
+
+.mode-forum-add{line-height:1.5;color:#333333;}
+.mode-forum-add table{margin-top:20px;}
+.mode-forum-add th{width:100px; text-align:left;}
+.mode-forum-add td,.mode-forum-add th{padding:10px 10px 10px 0;}
+.mode-forum-add td span{margin-right:12px;}
+.mode-forum-add td input,.mode-forum-add-list ul li input,.mode-forum-add-list input{ vertical-align:middle;}
+
+.mode-forum-add-list{padding:10px 0 20px;line-height:2;border-bottom:1px dashed #cccccc;}
+.mode-forum-add-list p{padding:10px 0;}
+.mode-forum-add-list .over-y{width:400px;border:1px solid #cccccc;background:#ffffff;height:299px;overflow-y:scroll;}
+.mode-forum-add-list ul{margin-top:-1px;}
+.mode-forum-add-list ul li{border-top:1px solid #e4e4e4;padding-left:8px;}
+.mode-forum-add-list ul li span{margin:5px 5px 0 0;}
+.mode-forum-add-list ul li:hover{background:#f8f8f8;}
+.mode-forum-add-list ul .current{background:#f0f0f0;}
+</style>
+<ul class="nav3">
+	<li><a href="$basename" class="two">本站模板管理</a></li>
+	<li><a style="cursor:pointer;" href="$admin_file?adminjob=mode&admintype=area_selecttpl" onclick="parent.PW.Dialog({'id': 'area_selecttpl','name': '模板中心','url': '$admin_file?adminjob=mode&admintype=area_selecttpl','max': false});return false;">去模板中心</a></li>
+</ul>
+<div class="c"></div>
+<form action="$basename" method="post">
+<input type="hidden" name="step" value="2" />
+
+<h2>本站首页模板</h2>
+<ul class="mode-forum-list cc2">
+<li><img id="img_index" src="mode/area/themes/$area_indextpl/images/$indexcss/preview/index.jpg" width="180" />
+	<p class="tac"> 名称：首页模板 <br />
+		选择样式：<select id="select_index" name="csspath[index]" onchange="changeImg('index','$area_indextpl','index');">
+<!--
+EOT;
+foreach($indexpaths as $val){
+if ($area_indextpl==$val) {
+	$select = 'selected="selected"';
+}else{
+	$select = '';
+}
+print <<<EOT
+-->
+			<option value="$val" $select>$val</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</select><br />
+		<span class=""><a href="$admin_file?adminjob=mode&admintype=area_selecttpl&cid=index">选择其他模板</a></span>
+		<div class="c"></div>
+	</p>
+</li>
+<div class="c"></div>
+</ul>
+<div class="c"></div><br />
+<h2>本站各频道模板</h2>
+<ul class="mode-forum-list cc2">
+<!--
+EOT;
+foreach($catedb as $key=>$value){
+$tmpTpl = $area_cateinfo[$key]['tpl'] ? $area_cateinfo[$key]['tpl'] : $area_catetpl;
+print <<<EOT
+-->
+<li>
+<div style="height:130px;overflow:hidden;"><img id="img_$key" src="mode/area/themes/$tmpTpl/images/$value[css]/preview/cate.jpg" width="180" /></div>
+	<p class="tac"> 频道：{$value['name']}模板 <br />
+		选择样式：<select id="select_$key" name="csspath[$key]" onchange="changeImg('$key','$tmpTpl','cate');">
+<!--
+EOT;
+foreach($value[paths] as $val){
+if ($value[css]==$val) {
+	$select = 'selected="selected"';
+}else{
+	$select = '';
+}
+print <<<EOT
+-->
+<option value="$val" $select>$val</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</select><br />
+		<span class=""><a href="$admin_file?adminjob=mode&admintype=area_selecttpl&cid=$key">选择其他模板</a></span>
+		<div class="c"></div>
+	</p>
+</li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<div class="c"></div><br />
+<center><input type="submit" value="保存为站点模板" class="btn" /></center>
+</form>
+<script language="javascript">
+var changeImg = function (id,tpl,scr) {
+	img	= getObj('img_'+id);
+	select = getObj('select_'+id);
+	img.src = 'mode/area/themes/'+tpl+'/images/'+select.value+'/preview/'+scr+'.jpg';
+}
+</script>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

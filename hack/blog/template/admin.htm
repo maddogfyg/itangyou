@@ -1,0 +1,74 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<div style="padding:15px 0 0;"><a href="$admin_file?adminjob=hackcenter">插件中心</a> &raquo; <a href="#">{$db_hackdb[blog][0]}</a></div>
+<!--
+EOT;
+if(empty($action)){
+print <<<EOT
+-->
+<h3>提示信息</h3>
+<div class="tr5">
+此功能为博客与论坛整合设置，使用此功能需要预先安装好博客系统，同时到博客后台进行博客与论坛整合的相关设置
+如果您已经安装好博客系统，您必要完成下面的参数设置才能使您的论坛与博客整合<br/>
+<font color=blue>注：以下填写的信息必须准确无误，否则可能造成论坛与博客不能整合成功</font><br/>
+是否开启博客功能           是否为您的论坛开启博客功能<br/>
+
+博客访问网址               博客访问地址，最后不要加 ‘/’<br/>
+
+博客二级域名设置           博客后台设置的“二级域名”<br/>
+
+博客用户组权限             可设置哪些用户组可以使用博客功能（使用此功能建议关闭博客注册功能）
+</div>
+<form action="$basename" method="post">
+<input type=hidden name="action" value="unsubmit">
+<h2>博客整合设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+	<td>是否开启博客整合功能<br>(需要到插件中心 管理中同时启用该插件方为有效)</td>
+	<td>
+		<input type=radio name="config[bg_ifopen]" value="1" $ifopen_Y> 是 
+		<input type=radio name="config[bg_ifopen]" value="0" $ifopen_N> 否 
+		[ <a href="http://www.phpwind.com/download.php?
+type=system&sign=blog" target="_blank"><font color="blue">Download PHPWind Blog System</font></a> ]
+	</td>
+</tr>
+<!--
+<tr class=b>
+	<td>博客数据库名称</td>
+	<td><input size="35" class="input" name="config[bg_blogdbname]" value="$bg_blogdbname"></td>
+</tr>
+<tr class=b>
+	<td>博客数据库表前缀</td>
+	<td><input size="35" class="input" name="config[bg_blogpre]" value="$bg_blogpre"></td>
+</tr>
+
+<tr class=b>
+	<td>安全校验码：</td>
+	<td><input size="35" class="input" name="config[bg_verifycode]" value="$bg_verifycode"></td>
+</tr> -->
+<tr class="tr3">
+	<td>博客访问网址：(注意不要在最后加 / )</td>
+	<td><input size="35" class="input" name="config[bg_blogurl]" value="$bg_blogurl"></td>
+</tr>
+<tr class="tr3">
+	<td>博客二级域名设置：(格式如：phpwind.net)</td>
+	<td><input size="35" class="input" name="config[bg_domain]" value="$bg_domain"></td>
+</tr>
+<tr class="tr3">
+	<td>博客用户组权限</td>
+	<td>
+		<table width="100%" cellspacing="0" cellpadding="0">
+			<tr>$usergroup</tr>
+		</table>
+	</td>
+</tr>
+</table>
+<br>
+<center><input class="btn" type="submit" value="提 交"></center>
+</form>
+<br>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

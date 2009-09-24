@@ -1,0 +1,178 @@
+<!--<?php print <<<EOT
+--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=$db_charset" />
+<title>$subject$forumtitle$db_bbstitle - Powered by PHPWind.net</title>
+<meta name="generator" content="PHPWind $wind_version" />
+<meta name="keywords" content="$db_metakeyword" />
+<meta name="description" content="$db_metadescrip" />
+<meta http-equiv="x-ua-compatible" content="ie=7" />
+<link rel='archives' title='$db_bbsname' href='$db_bbsurl/simple' />
+<base id="headbase" href="$db_bbsurl/" />
+<link rel="stylesheet" type="text/css" href="$imgpath/wind-reset.css" />
+<link rel="stylesheet" type="text/css" href="$imgpath/user/style.css" />
+<script type="text/javascript" language="JavaScript" src="js/pw_ajax.js"></script>
+<script type="text/javascript" LANGUAGE="JavaScript" src="js/core/core.js"></script>	
+<script type="text/javascript" LANGUAGE="JavaScript" src="js/core/tab.js"></script>	
+<script language="JavaScript">
+var imgpath = '$imgpath';
+var verifyhash = '$verifyhash';
+var winduid = '$winduid';
+var windid	= '$windid';
+var groupid	= '$groupid';
+</script>
+</head>
+<body onkeydown="try{keyCodes(event);}catch(e){}">
+<!--
+EOT;
+if($GLOBALS['groupid'] != 'guest' && $GLOBALS['groupid'] != '' && $GLOBALS['db_toolbar']){print <<<EOT
+-->
+<!--[if IE 6]>
+<div id="upPanel" name="upPanel">
+<div id="upPanelWrap" class="cc">
+<![endif]-->
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="topbar">
+	<div id="nav-operate">
+		<table width="100%" cellpadding="0" cellspacing="0" border="0">
+			<tr class="vt">
+				<td width="400">
+					<img src="$faceurl" id="iconimg" class="img-20" align="absmiddle" /> <a href="u.php?action=show" class="b" id="td_userinfomore" title="" href="javascript:;">$windid</a>
+					<a href="profile.php" title="设置中心">设置</a>
+<!--
+EOT;
+if (CkInArray($windid,$manager) || $SYSTEM['allowadmincp']) {print <<<EOT
+-->
+					<a href="$db_adminfile" target="_blank">系统设置</a>
+<!--
+EOT;
+}if ($winddb['newpm']>0 && $_G[maxmsg]>0) {print <<<EOT
+-->
+					<a id="td_msg" href="message.php?type=newmsg" title="有新短消息" style="color:red;">新消息<img src="$imgpath/wind/meg.gif" align="absmiddle" /></a>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+					<a id="td_msg" href="message.php" title="短消息" class="icon-meg">短消息</a>
+<!--
+EOT;
+}print <<<EOT
+-->
+					<a href="$loginouturl">退出</a>
+				</td>
+				<td>
+					<a href="faq.php" class="fr">帮助</a>
+					<span class="gray2 fr mr10">|</span>
+					<ul class="user-top-list">
+						<li><a href="index.php?m=bbs">论坛</a></li>
+<!--
+EOT;
+if ($db_modes['area']['ifopen']) {print <<<EOT
+-->
+						<li><a href="index.php?m=area">门户</a></li>
+<!--
+EOT;
+}if ($db_modes['o']['ifopen']) {print <<<EOT
+-->
+						<li><a href="mode.php?m=o">圈子</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</ul>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<!--
+EOT;
+if ($winduid){print<<<EOT
+-->
+<div id="menu_userinfomore" class="menu-post cc" style="display:none;">
+	<div class="menu-b" style="width:26.5em;">
+		<ul class="menu-half cc">
+		<li>等级：$gp_grouptitle
+<!--
+EOT;
+if ($_G['allowhide']) {print <<<EOT
+-->
+		<li>状态：
+<span style="cursor:pointer;" onclick="ajax.send('pw_ajax.php?action=changestate','',changeState)" id="online_state"><!--
+EOT;
+if (GetCookie('hideid') == 1) {print <<<EOT
+--><img src="$imgpath/stealth.png" align="absmiddle" />隐身<!--
+EOT;
+} else {print <<<EOT
+--><img src="$imgpath/online.png" align="absmiddle" />在线<!--
+EOT;
+}print <<<EOT
+--></span>
+<script language="JavaScript">
+function changeState() {
+	var msg = ajax.request.responseText;
+	if (msg == 1){
+		getObj('online_state').innerHTML = '<img src="$imgpath/stealth.png" align="absmiddle" />隐身';
+	}else{
+		getObj('online_state').innerHTML = '<img src="$imgpath/online.png" align="absmiddle" />在线';
+	}
+}
+</script>
+</li>
+<!--
+EOT;
+}print <<<EOT
+-->
+			
+			<li>帖子: $winddb[postnum]</li>
+			<li>今日: $winddb[todaypost]</li>
+			<li>$db_rvrcname: <span class="s2">$userrvrc $db_rvrcunit</span></li>
+			<li>$db_moneyname: <span class="s3">$winddb[money] $db_moneyunit</span></li>
+			<li>$db_creditname: <span class="s3">$winddb[credit] $db_creditunit</span></li>
+			<li>最后登录: <span class="f10">{$_LoginInfo['lastlodate']}</span></li>
+			<li>登录IP: <span class="f10">$onlineip</span></li>
+		</ul>
+	</div>
+</div>
+<!--
+EOT;
+}print<<<EOT
+-->
+<div id="user-wrap">
+	<div id="user-header">
+		<table width="100%">
+			<tr>
+				<td class="tal"><img src="$imgpath/wind/logo.png" /><img src="$imgpath/user/logo-user.png" /></td>
+				<td></td>
+			</tr>
+		</table>
+		<div id="user-nav" class="cc">
+			<div class="nav-home" id="pro_index"><a href="profile.php" hidefocus="true">首页</a></div>
+			<div class="nav-mes" id="pro_message"><img src="images/email.gif" /> <a href="message.php" hidefocus="true">短消息中心</a></div>
+			<ul class="nav-app cc">
+				<li id="pro_modify"><a href="profile.php?action=modify" hidefocus="true">帐号设置</a></li>
+				<li id="pro_privacy"><a href="profile.php?action=privacy" hidefocus="true">隐私</a></li>
+				<li id="pro_userpay"><a href="userpay.php" hidefocus="true">积分</a></li>
+				<li id="pro_permission"><a href="profile.php?action=permission" hidefocus="true">权限</a></li>
+<!--
+EOT;
+if ($_G['atclog']) {print <<<EOT
+-->
+				<li id="pro_log"><a href="profile.php?action=log" hidefocus="true">帖子操作记录</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+				<!-- <li id="pro_index"><a href="#">其他应用</a></li>
+				<li id="pro_index"><a href="#">其他应用</a></li> -->
+			</ul>
+<script language="JavaScript">setCurrent('pro_{$pro_tab}', 'pro_index', 'current');</script>
+		</div>
+	</div>
+<!--
+EOT;
+?>

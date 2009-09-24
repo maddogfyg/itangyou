@@ -1,0 +1,75 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<div class="message" style="line-height:25px;">
+<table width="100%">
+<tr><td width="150" class="tac">
+<img src="$imgpath/admin/ok.gif"></td><td class="tal">
+<p class="b">$msg</p>
+<!--
+EOT;
+if($jumpurl){print <<<EOT
+-->
+<p><meta http-equiv="refresh" content="$t; url=$jumpurl"></p>
+<!--
+EOT;
+}print <<<EOT
+-->
+<p>
+<!--
+EOT;
+if($adminmsg == '1'){print <<<EOT
+-->
+<a href="$basename">返回继续操作</a>
+<!--
+EOT;
+}elseif($adminmsg == '2'){print <<<EOT
+-->
+<form action="$admin_file?adminjob=adminrecord&" method=post>
+<input type="hidden" name="admintype" value="add">
+<input type="hidden" name="jumpurl" value="$basename">
+<span class="gray">输入操作理由 <input class="input" type="text" name="content" value="" size="20"><input class="btn" type="submit" value="确定"><br />
+(请在必要的时候输入理由，以便不同管理员之间更好的配合）</span>
+<a href="$basename">返回继续操作</a>
+</form>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+<form action="$basename&" method=post>
+$inputmsg
+<input class="btn" type="submit" value="确定"> <input type="button" class="btn" onclick="javascript:history.go(-1);return false;" value="返回">
+</form>
+<!--
+EOT;
+}print <<<EOT
+-->
+</p>
+</td></tr>
+</table>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<!--
+EOT;
+?>-->

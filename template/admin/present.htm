@@ -1,0 +1,86 @@
+<!--<?php
+include_once PrintEot('left');
+if(empty($action)){print <<<EOT
+-->
+<script language="JavaScript" src="js/wind_editor.js"></script>
+<form name='FORM' action="$basename" method="post">
+<h2>节日送礼</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td></td><td>
+<input type='radio' name='by' value='0' onclick="sendtype(0)" checked>按用户组
+<input type='radio' name='by' value='1' onclick="sendtype(1)">在线用户</td></tr>
+<tr class="tr3" id="group"><td width="15%" valign="top">接收用户<br></td>
+<td width="85%">
+<table><tr>
+<!--
+EOT;
+$num=0;
+foreach($ltitle as $key=>$value){
+if($key=='1' || $key=='2' || isset($lneed[$key]))continue;
+$num++;
+print <<<EOT
+-->
+<td><input type='checkbox' name='sendto[]' value='$key'>$value</td>
+<!--
+EOT;
+if($num==4){
+$num=0;
+print <<<EOT
+-->
+</tr><tr>
+<!--
+EOT;
+}}print <<<EOT
+-->
+<td><input type="checkbox" name='sendto[]' value='-1'>普通会员</td></tr></table>
+<input type="button" class="btn" name="chkall" value="全 选" onclick="CheckAll(this.form)"><br/><br/>
+</td></tr>
+<tr  class="tr3 xia2"><td colspan="2">赠送积分</td></tr>
+<!--
+EOT;
+foreach($credit->cType as $key=>$val){print <<<EOT
+-->
+<tr class="tr3">
+	<td>$val</td>
+	<td><input type="text" name='present[$key]' class="input"></td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+<tr class="tr3 xia2"><td colspan="2">短消息通知</td></tr>
+<tr class="tr3">
+	<td width="20%">每批发送个数</td>
+	<td><input type="text" name="percount" class="input" value="100" /></td>
+</tr>
+<tr class="tr3">
+	<td width="20%">主题</td>
+	<td><input type="text" name="subject" class="input" size="60" /></td>
+</tr>
+<tr class="tr3" valign="top">
+	<td>内容</td>
+	<td>
+<!--
+EOT;
+require_once (R_P.'template/wind/editor.htm');
+print <<<EOT
+-->
+	</td>
+</tr>
+</table>
+<br><input type=hidden name="action" value="send"><center>
+<input type="submit" class="btn" value="提 交"> <input type="reset" class="btn" value="重 置"></center><br/></form>
+<SCRIPT LANGUAGE="JavaScript">
+function sendtype(ID){
+	var group = document.getElementById("group");
+	if (ID==0){
+		group.style.display = "";
+	}else if (ID==1){
+		group.style.display = "none";
+	}
+}
+</SCRIPT>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

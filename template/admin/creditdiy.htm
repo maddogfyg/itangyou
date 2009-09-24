@@ -1,0 +1,95 @@
+<!--<?php
+include_once PrintEot('left');
+if(empty($action)){
+print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="#" class="two">自定义积分管理</a></li>
+<li><a href="$basename&action=newcredit">添加自定义积分</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">1.自定义积分将加入站点评分，积分排行榜<br>2.用户可以根据特定需要增加自定义积分</div>
+<form action="$basename" method=post onsubmit="return deletecheck();">
+<input type=hidden name=action value='delete'>
+<h2><b>自定义积分列表</b></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+
+<tr class="tr3 tac s3">
+<td width=5%>ID</td><td>名称</td><td>单位</td><td>说明</td>
+<td width=5% class="tal">编辑</td><td width=5%>删除</td></tr>
+<!--
+EOT;
+while($creditdb=$db->fetch_array($credit)){
+print <<<EOT
+-->
+<tr class="tr3 tac"><td >$creditdb[cid]</td><td>$creditdb[name]</td><td>$creditdb[unit]</td>
+<td>$creditdb[description]</td>
+<td><a class="fourm-two" title="编辑" href="$basename&action=edit&cid=$creditdb[cid]"><span class="edit"></span></a></td>
+<td><input type=checkbox name=delcid[] value='$creditdb[cid]'></td></tr>
+
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+<br><center><input type='button' class="btn" name='chkall' value='全 选' onclick='CheckAll(this.form)'>
+<input type=submit value='提 交' class="btn">
+</center></form><br/>
+<script language="javascript">
+function deletecheck(){
+	if(confirm('确定要删除自定义积分吗?删除自定义积分将同时删除会员该项积分数据!')){
+		return true;
+	} else {
+		return false;
+	}
+}
+</script>
+<!--
+EOT;
+} elseif($action=='edit' || $action=='newcredit'){
+print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename">自定义积分管理</a></li>
+<!--
+EOT;
+if($action=='edit'){ print <<<EOT
+-->
+<li><a href="$basename&action=newcredit">添加自定义积分</a></li>
+<li><a href="#" class="two">编辑自定义积分</a></li>
+<!--
+EOT;
+}else{ print <<<EOT
+-->
+<li><a href="#" class="two">添加自定义积分</a></li>
+<!--
+EOT;
+} print <<<EOT
+-->
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">1.自定义积分将加入站点评分，积分排行榜<br>2.用户可以根据特定需要增加自定义积分</div>
+<form action="$basename" method=post>
+<input type=hidden name=action value='$action'>
+<input type=hidden name=cid value='$cid'>
+<input type=hidden name=step value=2>
+<h2><b>自定义积分</b></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+<td width="15%">名称</td>
+<td><input type="text" class="input" name='name' size=40 value='$creditdb[name]'></td></tr>
+<tr class="tr3"><td>说明</td>
+<td><input type="text" class="input" name='description' size=40 value='$creditdb[description]'></td></tr>
+<tr class="tr3"><td>单位</td>
+<td><input type="text" class="input" name='unit' size=5 value='$creditdb[unit]'></td></tr>
+</table>
+<br><center><input type=submit value='提 交' class="btn"></center></form><br/>
+<!--
+EOT;
+}
+include_once PrintEot('adminbottom');
+?>
+-->

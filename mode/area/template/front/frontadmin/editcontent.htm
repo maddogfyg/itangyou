@@ -1,0 +1,82 @@
+<!--<?php
+print <<<EOT
+-->
+<table width="100%" cellspacing="0" cellpadding="5">
+	<tr><th class="h" colspan="2" style="cursor:move" onmousedown="read.move(event);"><span class="fr" style="margin-top:2px;cursor:pointer" onclick="closep();"><img src="$imgpath/close.gif" /></span>{$invokepiece[invokename]}->$invokepiece[title]</th></tr>
+	<tr>
+		<td>
+<h2>
+<a style="cursor:pointer" onclick="sendmsg('{$thisBaseName}&action=default&invokename={$invokepiece[invokename]}');">返回</a>
+<span class="fr">
+<!--
+EOT;
+if($invokepiece['action']=='subject' || $invokepiece['action']=='image'){
+print <<<EOT
+-->
+请输入要调用的帖子tid:<input type="text" class="input" id="pushtid" value="" >
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<input class="btn" type="button" onclick="addPush('$invokepieceid','$fid','$loopid','$cateid');" value="添加">
+&nbsp;</span>
+</h2>
+<div class="mode-one">
+<table cellspacing="0" cellpadding="0" width="100%" id="ftable">
+	<tr  class="tr3 s3">
+		<td width="20">&nbsp;</td>
+<!--
+EOT;
+foreach ($param as $key=>$value) {
+if ($key=='tagrelate') continue;
+$key = getParamName($key,$invokepiece['action']);
+print <<<EOT
+-->
+		<td>{$key}</td>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+		<td width="55">&nbsp;</td>
+	</tr>
+<!--
+EOT;
+$i = 0;
+foreach ($custom as $key=>$value) {
+$temp_offset = $pushs[$key][offset]+1;
+$pushid	= $pushs[$key][id];
+$i++;
+print <<<EOT
+-->
+	<tr id="push_{$key}" class="tr3">
+		<td>$temp_offset</td>
+<!--
+EOT;
+foreach ($param as $k=>$val) {
+if ($k=='tagrelate') continue;
+$value[$k] = substrs($value[$k],25);
+print <<<EOT
+-->
+		<td>$value[$k]</td>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+		<td><a style="cursor:pointer" onclick="sendmsg('{$thisBaseName}&action=editpush&id=$key');return false;">编辑</a>&nbsp;<a style="cursor:pointer" onclick="delPush(this,'$pushid','$cateid');return false;">删除</a></td>
+	</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+</div>
+		</td>
+	</tr>
+</table>
+<!--
+EOT;
+?>-->

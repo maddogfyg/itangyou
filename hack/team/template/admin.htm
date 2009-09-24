@@ -1,0 +1,226 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<div style="padding:15px 0 0;"><a href="$admin_file?adminjob=hackcenter">插件中心</a> &raquo; <a href="#">{$db_hackdb[team][0]}</a></div>
+<!--
+EOT;
+if(empty($action)){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="#" class="two">基本设置</a></li> 
+	<li><a href="$basename&action=sort">考核统计</a></li>
+</ul>
+<div class="c"></div>
+<h3>友情提示</h3>
+<div class="tr5">1、综合评分 = 本月管理操作 * 权重 + 本月发帖数量 * 权重 + 本月在线时间 * 权重；<br />　　2、该团队成员的奖励 = 该成员所属用户组的基本奖励 + 考核奖励 * 综合评分</div>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="set" />
+<h2>团队考核设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="30%">考核范围</td>
+		<td>
+<!--
+EOT;
+foreach($group as $key=>$value){
+$ifcheck = in_array($value['gid'],$_tmconf['group']) ? 'checked' : '';
+print <<<EOT
+-->
+			<div style="width:24%;float:left"><input type="checkbox" name="set[group][]" value="$value[gid]" $ifcheck />$value[grouptitle]</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+			<div class="c"></div>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>考核方案设置<br />综合评分 = 各项参数 * 权重 之和<br />设为0，该参数不参与考核统计总分</td>
+		<td>
+			<table width="200">
+				<tr class="s2"><td width="50%"><b>考核参数</b></td><td><b>考核权重</b></td></tr>
+				<tr><td>本月管理操作</td><td><input type="text" class="input" size="10" name="set[param][opr]" value="{$_tmconf[param][opr]}" /></td></tr>
+				<tr><td>本月发帖数量</td><td><input type="text" class="input" size="10" name="set[param][post]" value="{$_tmconf[param][post]}" /></td></tr>
+				<tr><td>本月在线时间<br />(单位:小时)</td><td><input type="text" class="input" size="10" name="set[param][oltime]" value="{$_tmconf[param][oltime]}" /></td></tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>基本奖励</td>
+		<td>
+			<table>
+				<tr align="center"><td></td>
+<!--
+EOT;
+foreach($credit->cType as $key=>$c){print <<<EOT
+-->
+					<td class="s2"><b>$c</b></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</tr>
+<!--
+EOT;
+foreach($group as $key=>$value){print <<<EOT
+-->
+				<tr><td>$value[grouptitle]</td>
+<!--
+EOT;
+foreach($credit->cType as $k=>$c){print <<<EOT
+-->
+					<td><input type="text" class="input" name="set[wages][$value[gid]][$k]" value="{$_tmconf[wages][$value[gid]][$k]}" size="8" /></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</table>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>考核奖励<br />每单位综合评分奖励多少积分</td>
+		<td><table><tr align="center">
+<!--
+EOT;
+foreach($credit->cType as $k=>$c){print <<<EOT
+-->
+				<td class="s2"><b>$c</b></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</tr>
+			<tr>
+<!--
+EOT;
+foreach($credit->cType as $k=>$c){print <<<EOT
+-->
+				<td><input type="text" class="input" size="8" name="set[bonus][$k]" value="{$_tmconf[bonus][$k]}" /></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</tr></table>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>考核合格分<br />当综合评分>该值时，该管理成员是合格的<br />设为0，则不启用该功能</td>
+		<td><input type="text" class="input" size="15" name="set[eligibility]" value="{$_tmconf[eligibility]}" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>给团队成员发奖励时短消息提醒</td>
+		<td><input type="radio" name="set[ifmsg]" value="1" $ifmsg_Y /> 开启 <input type="radio" name="set[ifmsg]" value="0" $ifmsg_N /> 关闭</td>
+	</tr>
+    <tr class="tr3">
+		<td>短消息标题</td>
+		<td><input type="text" class="input" name="set[msgtitle]" value="$_tmconf[msgtitle]" size="40" /></td>
+	</tr>
+	<tr class="tr3"><td>短消息内容，(变量参数如下设置)：<br />1、\$username => 用户名<br />2、\$db_bbsname => 论坛名<br />3、\$credit => 奖励的积分<br />4、\$time => 当前执行的时间<br />5、使用方法参考右侧</td>
+		<td><div style="float:right;width:250px;height:98px;border:1px solid #ccc;padding:5px;margin-top:2px">尊敬的 \$username：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感谢你们对 \$db_bbsname 的支持!现特发 \$credit 作为奖励.<br /><br />操作日期 \$time</div><textarea name="set[msgdata]" style="width:250px;height:100px">$_tmconf[msgdata]</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td>勉励信功能<br />当设置考核合格分时，给不合格的团队成员发一封特殊的短消息，以勉励其工作</td>
+		<td><input type="radio" name="set[arouse]" value="1" $arouse_Y /> 开启 <input type="radio" name="set[arouse]" value="0" $arouse_N /> 关闭</td>
+	</tr>
+	<tr class="tr3">
+		<td>勉励信内容<br />变量参数与短消息同步</td>
+		<td><textarea name="set[arousemsg]" style="width:250px;height:100px">$_tmconf[arousemsg]</textarea></td>
+	</tr>
+	<tr class="tr3"><td>是否开启自动发放奖励功能<br />此功能需到<a style="color:blue" href="$admin_file?adminjob=plantodo&action=planset&id=5">计划任务</a>里设置自动发放的时间</td><td><input type="radio" name="ifopen" value="1" $ifopen_Y /> 开启 <input type="radio" name="ifopen" value="0" $ifopen_N /> 关闭</td></tr>
+	<tr class="tr3"><td>下次执行时间</td><td>$nexttime</td></tr>
+</table><br />
+<center><input class="btn" type="submit" value="提 交"></center></form>
+</form>
+<!--
+EOT;
+}elseif($action=='sort'){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">基本设置</a></li> 
+	<li><a href="#" class="two">考核统计</a></li>
+</ul>
+<div class="c"></div>
+
+<form action="$basename&" method="post" onsubmit="return checkForm(this);">
+<input type="hidden" name="action" value="payoff" />
+<h2>考核统计</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td>用户名</td>
+		<td>头衔</td>
+		<td>管理统计</td>
+		<td>本月发帖</td>
+		<td>本月在线</td>
+		<td>综合评分</td>
+<!--
+EOT;
+foreach($credit->cType as $k=>$t){print <<<EOT
+-->
+		<td>$t</td>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</tr>
+<!--
+EOT;
+foreach($admindb as $key=>$value){print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td>$key</td>
+		<td>{$ltitle[$value[groupid]]}</td>
+		<td>$value[total]<br /></td>
+		<td>$value[monthpost]</td>
+		<td>$value[monoltime]</td>
+		<td>
+<!--
+EOT;
+if($value['assess']>$_tmconf['eligibility']){print <<<EOT
+-->
+		<font color="blue">$value[assess]</font>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+		<font color="red">$value[assess]</font>
+		<input type="hidden" name="arouse[]" value="$value[uid]" />
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+<!--
+EOT;
+foreach($credit->cType as $k=>$t){print <<<EOT
+-->
+		<td><input type="text" class="input" name="paycredit[$value[uid]][$k]" value="{$value[wages][$k]}" size="8" /></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br />
+<center><input type="submit" class="btn" value="给团队成员发奖励!"></center></form>
+</form>
+<script language="JavaScript">
+var ifopen = parseInt('$rt[ifopen]');
+function checkForm(obj) {
+	if (ifopen==1 && !confirm('您已经开启自动发放奖励的程序了，您确定继续吗?')) {
+		return false;
+	}
+	return true;
+}
+</script>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

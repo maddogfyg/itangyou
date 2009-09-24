@@ -1,0 +1,1354 @@
+<!--<?php
+print <<<EOT
+-->
+<!--<div id="breadCrumb">
+		<a href="index.php">$db_bbsname</a> &raquo; 
+		<a href="u.php">用户中心</a>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+		 &raquo; 我的
+<!--
+EOT;
+}else{print <<<EOT
+-->
+		 &raquo; {$userdb[username]}的
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>-->
+<style type="text/css">
+.s3,a.s3{color:#f06f18;}
+#u-wrap{width:100%;background:url($imgpath/$stylepath/u-wrap.gif) repeat-x $bgcolor;line-height:150%}
+#u-wrap2{width:940px;margin:auto;background:url($imgpath/$stylepath/u-wrap.gif) repeat-x $bgcolor;}
+#u-sidebar{width:200px;float:left}
+#u-content{width:720px;float:right}
+#u-top{width:100%;height:70px;position:relative}
+#u-contentside{width:200px;float:right;border-left:1px solid $tdcolor;padding-left:15px}
+#u-top-nav{position:absolute;bottom:0;height:30px;}
+#u-top-nav ul,#u-top-nav li{height:30px;float:left;padding:0;margin:0;list-style:none;}
+#u-top-nav li a{float:left;padding:0 .8em;margin-right:.5em;font-size:12px;background:$tdcolor;color:$headfontone;line-height:27px;margin-top:2px;}
+#u-top-nav li a:hover{text-decoration:none;background:$headfontone;color:$headcolor;}
+#u-top-nav li.current a{color:$cbgfont;border:1px solid $tablecolor;border-bottom:0;height:29px;background:$bgcolor;margin-top:0}
+#u-top-nav li.current a:hover{color:$cbgfont;}
+#u-contentmain{width:500px;float:left;}
+#u-portrait{padding:.7em;border:1px dotted $cbgborder;background:$bgcolor}
+#u-portrait table{table-layout:fixed;overflow:hidden;width:100%}
+.bgA{background:$forumcolortwo;}
+.u-h1{font-size:16px;display:inline;padding:0;margin:0}
+.u-h5{padding:1em 0 .5em;margin:0;font-size:1.05em;position:relative; background:url($imgpath/$stylepath/dotline.gif) repeat-x 0 1.6em}
+.u-h5 span{background:$bgcolor;padding-right:.5em}
+.u-h5 .r{position:absolute;right:0;background:$bgcolor;font-size:1em;font-weight:100;padding:0 .5em}
+.feed-list,.article-list{padding:.3em 2em .3em 0;margin:0 0 0 1.5em;border-bottom:1px dotted $cbgborder;color:$cbgfont}
+.feed-list dt,.feed-list dd{padding:0;margin:0;line-height:none}
+.article-list dd{display:inline;margin:0 1em 0 0}
+.link1{color:$headfontone}
+.u-content-66 {width:63%;}
+.u-content-33 {width:33%}
+.u-table td,.u-table th{border-bottom:1px dotted $cbgborder;text-align:left;padding:.5em;vertical-align:top}
+.u-table td{color:#aaa;}
+.u-table th{font-weight:100;}
+.u-table .fav{background:url($imgpath/$stylepath/u-fav.gif) no-repeat 0.5em 0.6em;padding-left:2em}
+.u-table .current{background-image:url($imgpath/$stylepath/u-fav-cur.gif);font-weight:bold}
+.u-table .forum{background-image:url($imgpath/$stylepath/u-fav-forums.gif)}
+.u-table2{border:1px dotted $cbgborder;margin-top:1em;}
+.u-table2 td{text-align:center;padding:.2em 0}
+.u-table2 td:hover{background:$cbgcolor;}
+.u-table2 td.current{font-weight:700;background:$cbgcolor;}
+</style>
+<div id="u-wrap">
+	<div id="u-wrap2" class="cc">
+		<div id="u-sidebar">
+			<div id="u-portrait">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+					<tr>
+						<td align="center"><img class="pic" src="$usericon[0]" width="$usericon[2]" height="$usericon[3]" border="0"></td>
+					</tr>
+				</table>
+			</div>
+			<div style="padding:.6em 1.2em" class="bgA">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr><td class="gray">等级</td><td>{$ltitle[$userdb[memberid]]}</td></tr>
+<!--
+EOT;
+if($systitle){print <<<EOT
+-->
+					<tr><td class="gray">身份</td><td>{$systitle}</td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>
+			</div>
+<!--
+EOT;
+if($groupid==3){print <<<EOT
+-->
+			<div style="padding:.6em 0" class="bgA">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr class="tr2"><th colspan="2">管理员操作</th></tr>
+				<tr class="tac" style="height:28px;line-height:28px;"><td>
+					<a class="bta" href="$db_adminfile?adminjob=setuser&action=edit&uid=$userdb[uid]" target="_blank">编辑用户</a></td><td>
+					<a class="bta" href="$db_adminfile?adminjob=banuser&username=$userdb[username]" target="_blank">会员禁言</a></td></tr>
+                <tr class="tac" style="height:28px;line-height:28px;"><td><a class="bta" href="$db_adminfile?adminjob=superdel&admintype=article&action=deltpc&fid=-1&ifkeep=1&author=$userdb[username]&lines=30&ttable=auto" target="_blank">删除主题</a></td><td>
+					<a onMouseOver="postdbopen('menu_userpost','del_post');" class="bta" id="del_post" href="$db_adminfile?adminjob=superdel&admintype=article&action=delrpl&fid=-1&author=$userdb[username]&nums=30" target="_blank">删除回复</a></td></tr>
+				<tr class="tac" style="height:28px;line-height:28px;"><td><a class="bta" href="$db_adminfile?adminjob=superdel&admintype=member&action=del&schname=$userdb[username]&groupid=$userdb[groupid]&regdate=all&schlastvisit=all&item=14" target="_blank">清除用户</a></td><td>
+					</td>
+				</tr>
+				</table>
+			</div>
+<div id="menu_userpost" class="menu" style="display:none;">
+  <table width="120" cellspacing="1" cellpadding="5">
+    <tr>
+      <th class="h">用户回复</th>
+    </tr>
+    <tr>
+      <td class="f_one"><a id="ptable_0" href="">pw_posts</a></td>
+    </tr>
+<!--
+EOT;
+foreach($p_list as $value){print <<<EOT
+-->
+    <tr>
+      <td class="f_one"><a id="ptable_$value" href="">pw_posts$value</a></td>
+    </tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+  </table>
+</div>
+<script language="JavaScript">
+function postdbopen(menuid,aid){
+	read.open(menuid,aid);
+	var obj = getObj(menuid).getElementsByTagName('a');
+	for (var i=0;i<obj.length;i++) {
+		if (obj[i].id && obj[i].id.indexOf('ptable_') != -1) {
+			var ptable = '';
+			var objarray = obj[i].id.split('_');
+			if (parseInt(objarray[1]) > 0) {
+				ptable = '&ptable=' + objarray[1];
+			}
+			getObj(obj[i].id).href = getObj(aid).href + ptable;
+			if (aid == 'del_post') {
+				getObj(obj[i].id).target = "_blank";
+			}
+		}
+	}
+}
+</script>
+<!--
+EOT;
+}print<<<EOT
+-->
+			<div class="bdbA" style="padding:.5em 0">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+					<tr>
+						<td align="center"><img src="$imgpath/email.gif" align="absmiddle" /> <a href="message.php?action=write&touid=$userdb[uid]" target="_blank">发短消息</a></td>
+						<td align="center">
+<!--
+EOT;
+if($userdb['thisvisit']+$db_onlinetime*1.5>$timestamp){print <<<EOT
+-->
+						<img src="$imgpath/$stylepath/u-adf.gif" a="absmiddle" title="在线" />
+						<a onclick="ajax.send('pw_ajax.php?action=addfriend&touid=$uid','',ajax.get);" style="cursor:pointer" title="在线" >加为好友</a></td>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+						<img src="$imgpath/$stylepath/u-adf-no.gif" a="absmiddle" title="离线" />
+						<a onclick="ajax.send('pw_ajax.php?action=addfriend&touid=$uid','',ajax.get);" style="cursor:pointer" title="离线" >加为好友</a></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id="u-content">
+			<div id="u-top">
+				<table border="0" cellspacing="0" cellpadding="0" style="margin-top:.2em; float:left; height:40px; vertical-align:middle">
+					<tr>
+						<td><h1 class="u-h1 b">{$userdb[username]}</h1>
+						</td>
+						<td style="padding-left:1em; line-height:120%">
+<!--
+EOT;
+if($isU){print <<<EOT
+-->
+
+<!--
+EOT;
+if($_G[allowhonor]){print <<<EOT
+-->
+							<span id="honor">
+<!--
+EOT;
+if($winddb['honor']){print <<<EOT
+-->
+								{$winddb[honor]}
+<!--
+EOT;
+}else{print <<<EOT
+-->
+								您还没有设置个性签名
+<!--
+EOT;
+}print <<<EOT
+-->
+							</span>
+							<a id="sethonor" onclick="sendmsg('pw_ajax.php','action=honor',this.id)" class="gray" style="cursor:pointer"><img src="$imgpath/infobox-edit.gif" />编辑</a>
+<script language="JavaScript">
+function honor() {
+	var str = ajax.request.responseText.split("\t");
+	if (str[0] == 'success') {
+		getObj('honor').innerHTML = '&nbsp;' + (str[1] ? str[1] : '您还没有设置个性签名') + '&nbsp;';
+	} else {
+		ajax.guide();
+	}
+}
+</script>
+<!--
+EOT;
+}}else{print <<<EOT
+-->
+							{$userdb[honor]}
+<!--
+EOT;
+}print <<<EOT
+-->
+
+
+						</td>
+					</tr>
+				</table>
+				<div class="c"></div>
+				<div id="u-top-nav">
+					<ul class="b">
+						<li id="u_index"><a href="u.php?uid=$uid">个人首页</a></li>
+						<li id="u_show"><a href="u.php?action=show&uid=$uid">资料</a></li>
+						<li id="u_topic"><a href="u.php?action=topic&uid=$uid">主题</a></li>
+						<li id="u_post"><a href="u.php?action=post&uid=$uid">回复</a></li>
+						<li id="u_favor"><a href="u.php?action=favor&uid=$uid">收藏</a></li>
+						<li id="u_friend"><a href="u.php?action=friend&uid=$uid">好友</a></li>
+						<li id="u_trade"><a href="u.php?action=trade&uid=$uid">商品</a></li>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+						<li id="u_friend"><a href="message.php" target="_blank">消息</a></li>
+						<li id="u_friend"><a href="profile.php" target="_blank">设置</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</ul>
+					<script language="javascript">setCurrent('u_$action','u_index','current');</script>
+				</div>
+			</div>
+<!--
+EOT;
+if (empty($action)) {print <<<EOT
+-->
+			<div id="u-contentmain">
+				<div id="minifeed">
+					<h5 class="u-h5">
+						<span>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+							好友近况
+<!--
+EOT;
+} else {print <<<EOT
+-->
+							个人动态
+<!--
+EOT;
+}print <<<EOT
+-->
+						</span>
+						<a href="u.php?action=feed&uid=$uid" class="r gray">更多</a>
+					</h5>
+<!--
+EOT;
+if ($feed) {
+foreach ($feed as $key => $value) {print <<<EOT
+-->
+					<dl class="feed-list">
+						<dt><a href="u.php?uid=$value[uid]" class="link1">$value[username]</a> $value[descrip]</dt>
+					</dl>
+<!--
+EOT;
+}} else {print <<<EOT
+-->
+					<dl class="feed-list">
+						<dt>最近没有动作!</dt>
+					</dl>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</div>
+				<div id="new-reply">
+					<h5 class="u-h5"><span>最新回复</span><a href="u.php?action=post&uid=$uid" class="r gray">更多</a></h5>
+<!--
+EOT;
+foreach ($postdb as $key => $value) {print <<<EOT
+-->
+					<dl class="article-list">
+						<dt><a href="job.php?action=topost&tid=$value[tid]&pid=$value[pid]" class="link1">{$value[subject]}</a> <span class="gray f9">{$value[postdate]}</span></dt>
+					</dl>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</div>
+			</div>
+			<div id="u-contentside">
+				<div id="new-topic">
+					<h5 class="u-h5"><span>最新主题</span><a href="u.php?action=topic&uid=$uid" class="r gray">更多</a></h5>
+<!--
+EOT;
+foreach ($topicdb as $key => $value) {print <<<EOT
+-->
+					<dl class="article-list">
+						<dt><a href="read.php?tid=$value[tid]" class="link1">{$value[subject]}</a></dt>
+						<dd class="gray"><span class="f9">{$value[postdate]}</span><br />回复{$value[replies]},浏览{$value[hits]}</dd>
+					</dl>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</div>
+			</div>
+<!--
+EOT;
+} elseif ($action == 'feed') {print <<<EOT
+-->
+			<div id="minifeed">
+				<h5 class="u-h5">
+					<span>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+					好友近况
+<!--
+EOT;
+} else {print <<<EOT
+-->
+					个人动态
+<!--
+EOT;
+}print <<<EOT
+-->
+					</span>
+				</h5>
+<!--
+EOT;
+if ($feed) {
+foreach ($feed as $key => $value) {print <<<EOT
+-->
+				<dl class="feed-list">
+					<dt><a href="u.php?uid=$value[uid]" class="link1">$value[username]</a> $value[descrip]</dt>
+				</dl>
+<!--
+EOT;
+}} else {print <<<EOT
+-->
+				<dl class="feed-list">
+					<dt>最近没有动作!</dt>
+				</dl>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</div>$pages
+<!--
+EOT;
+} elseif ($action == 'show') {print <<<EOT
+-->
+			<div class="u-content-66 fl">
+				<div id="u-profile">
+					<h5 class="u-h5"><span>个人信息</span></h5>
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="u-table" style="table-layout:fixed">
+<!--
+EOT;
+if($userdb['groupid']=='6' || $isBan){print <<<EOT
+-->
+						<tr><td>系统</td><th class="s3 b" width="75%">
+<!--
+EOT;
+if($userdb['groupid']=='6'){
+if($bandb['type']==1){print <<<EOT
+-->
+被 $bandb[admin] 于 $bandb[startdate] 禁言 $bandb[days] 天
+<!--
+EOT;
+}else{print <<<EOT
+-->
+被 $bandb[admin] 于 $bandb[startdate] 永久禁言
+<!--
+EOT;
+}}elseif($isBan){
+foreach($bandb as $v){
+if($v['type']==1){print <<<EOT
+-->
+在 {$forum[$v[fid]][name]} 被 $v[admin] 于 $v[startdate] 禁言 $v[days] 天<br />
+<!--
+EOT;
+}else{print <<<EOT
+-->
+在 {$forum[$v[fid]][name]} 被 $v[admin] 于 $v[startdate] 永久禁言<br />
+<!--
+EOT;
+}}}print <<<EOT
+-->
+						</th></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+						<tr>
+							<td>UID</td>
+							<th width="75%">$userdb[uid]</th>
+						</tr>
+						<tr>
+							<td>性别</td>
+							<th width="75%">
+<!--
+EOT;
+if($userdb['gender']==1){print <<<EOT
+-->
+男
+<!--
+EOT;
+}elseif($userdb['gender']==2){print <<<EOT
+-->
+女
+<!--
+EOT;
+}else{print <<<EOT
+-->
+保密
+<!--
+EOT;
+}print <<<EOT
+-->
+							</th>
+						</tr>
+						<tr>
+							<td>生日</td>
+							<th>$userdb[bday]<br /></th>
+						</tr>
+<!--
+EOT;
+if($userdb[site]){print <<<EOT
+-->
+						<tr>
+							<td>个人主页</td>
+							<th><a href="$userdb[site]" target="_blank">$userdb[site]</a><br /></th>
+						</tr>
+<!--
+EOT;
+}foreach ($customfield as $value) {
+if ($winduid != $userdb['uid'] && $value['viewright'] && strpos(",$value[viewright],",",$groupid,")===false) {
+	continue;
+}
+$field = "field_$value[id]";
+if ($value['type'] == 3) {
+	foreach ($value['options'] as $v) {
+		$v = explode('=',$v);
+		$userdb[$field] == $v[0] && $userdb[$field] = $v[1];
+	}
+}
+print <<<EOT
+-->
+						<tr>
+							<td>$value[title]</td>
+							<th>$userdb[$field]<br /></th>
+						</tr>
+<!--
+EOT;
+}if($md_ifopen){print <<<EOT
+-->
+						<tr>
+							<td>勋章</td>
+							<th>
+<!--
+EOT;
+if($userdb['medals']){
+foreach($userdb['medals'] as $value){
+if($_MEDALDB[$value]['picurl']){print <<<EOT
+-->
+							<img src="hack/medal/image/{$_MEDALDB[$value][picurl]}" alt="{$_MEDALDB[$value][name]}" />
+<!--
+EOT;
+}}}else{print <<<EOT
+-->
+							该用户还没有获得勋章
+<!--
+EOT;
+}print <<<EOT
+-->
+							</th>
+						</tr>
+<!--
+EOT;
+}if($colonydb){print <<<EOT
+-->
+						<tr>
+							<td>加入的{$db_hackdb[colony][0]}</td>
+							<th>
+<!--
+EOT;
+foreach($colonydb as $value){print <<<EOT
+-->
+								<a href="hack.php?H_name=colony&cyid=$value[id]&job=view&id=$value[id]" target="_blank">$value[cname]</a>
+<!--
+EOT;
+}print <<<EOT
+-->
+							</th>
+						</tr>
+<!--
+EOT;
+}if($userdb[oicq]){print <<<EOT
+-->
+						<tr>
+							<td>QQ </td>
+							<th>$userdb[oicq]<br /></th>
+						</tr>
+<!--
+EOT;
+}if($userdb[yahoo]){print <<<EOT
+-->
+						<tr>
+							<td>Yahoo</td>
+							<th>$userdb[yahoo]<br /></th>
+						</tr>
+<!--
+EOT;
+}if($userdb[msn]){print <<<EOT
+-->
+						<tr>
+							<td>Msn</td>
+							<th>$userdb[msn]<br /></th>
+						</tr>
+<!--
+EOT;
+}if($userdb[email]){print <<<EOT
+-->
+						<tr>
+							<td>Email</td>
+							<th>$userdb[email]<br /></th>
+						</tr>
+<!--
+EOT;
+}foreach ($custominfo as $key => $value) {
+if($value[2]){
+$value[2]=str_replace("{{$key}}",$customdata[$key],$value[2]);
+$customdata[$key] && $value[4] && $customdata[$key] = $value[4];
+$customdata[$key] = "<a href=\"$value[2]\" target=\"_blank\">$customdata[$key]</a>";
+}print <<<EOT
+-->
+						<tr><td>$value[0]</td><th>{$customdata[$key]}<br /></th></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+<tr>
+						<td>自我简介</td>
+							<th><div style="overflow:hidden;">$userdb[introduce]<br /></div></th>
+						</tr>
+<!--
+EOT;
+if ($isU && $db_ads) {print <<<EOT
+-->
+						<tr><td>如何获得{$credit->cType[credit]}</td><th>
+<!--
+EOT;
+if ($db_ads == 1) {print <<<EOT
+-->
+							1.使用“推荐”功能将文章推荐给朋友<br>2.将下面的链接发给你的朋友<br>链接一:$db_bbsurl/?a=$userdb[username] <br> 链接二:$db_bbsurl/?u=$userdb[uid]
+<!--
+EOT;
+} else {print <<<EOT
+-->
+							1.使用“推荐”功能将文章推荐给朋友<br>2.将下面的链接发给你的朋友,并且引导你的朋友注册成为会员<br>链接一:$db_bbsurl/?a=$userdb[username] <br> 链接二:$db_bbsurl/?u=$userdb[uid]
+<!--
+EOT;
+}print <<<EOT
+-->
+						</th></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</table>
+				</div>
+			</div>
+			<div class="u-content-33 fr">
+				<div id="u-profile-s">
+					<h5 class="u-h5"><span>站点资历</span></h5>
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="u-table">
+						<tr>
+							<td>注册时间 </td>
+							<th>$userdb[regdate]</th>
+						</tr>
+						<tr>
+							<td>在线时间</td>
+							<th>$userdb[onlinetime] </th>
+						</tr>
+						<tr>
+							<td>最后登录</td>
+							<th>$userdb[lastvisit]</th>
+						</tr>
+<!--
+EOT;
+if($isGM || $groupid == '3' || $winduid == $userdb['uid']){print <<<EOT
+-->
+						<tr>
+							<td>最后登录IP</td>
+							<th>{$userdb[onlineip][0]}</th>
+						</tr>
+<!--
+EOT;
+}print <<<EOT
+-->						
+						<tr>
+							<td>综合积分</td>
+							<th>$totalcredit </th>
+						</tr>
+						<tr>
+							<td>发帖</td>
+							<th>$userdb[postnum] </th>
+						</tr>
+						<tr>
+							<td>平均日发帖</td>
+							<th>{$averagepost} (今日:{$userdb[todaypost]})</th>
+						</tr>
+						<tr>
+							<td>精华</td>
+							<th>$userdb[digests] </th>
+						</tr>
+						<tr>
+							<td>{$credit->cType[rvrc]}</td>
+							<th>$userdb[rvrc] {$credit->cUnit[rvrc]} </th>
+						</tr>
+						<tr>
+							<td>{$credit->cType[money]}</td>
+							<th>$userdb[money] {$credit->cUnit[money]} </th>
+						</tr>
+						<tr>
+							<td>{$credit->cType[credit]}</td>
+							<th>$userdb[credit] {$credit->cUnit[credit]} </th>
+						</tr>
+						<tr>
+							<td>{$credit->cType[currency]}</td>
+							<th>$userdb[currency] {$credit->cUnit[currency]} </th>
+						</tr>	
+<!--
+EOT;
+foreach($_CREDITDB as $key => $value){
+$ucredit = $usercredit[$key] ? $usercredit[$key] : 0;
+print <<<EOT
+-->
+						<tr>
+							<td>$value[0]</td>
+							<th>$ucredit $value[1]
+							<br /><span class="gray">($value[2])</span></th>
+						</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</table>
+				</div>
+			</div>
+			<div class="c"></div>
+			<div class="u-profile">
+				<h5 class="u-h5"><span>帖间签名</span></h5>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="u-table">
+					<tr>
+						<th><div style="overflow:hidden;">$userdb[signature]<br /></div></th>
+					</tr>
+				</table>
+			</div>
+<!--
+EOT;
+}elseif($action == 'topic'){print <<<EOT
+-->
+			<div id="u-contentmain">
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td colspan="2"><span class="fr">排序:<a href="u.php?action=topic&uid=$uid&ordertype=postdate&">发表时间</a>&nbsp;<a href="u.php?action=topic&uid=$uid&ordertype=lastpost&">回复时间</a></span></td>
+					</tr>
+<!--
+EOT;
+foreach ($threaddb as $key => $value) {print <<<EOT
+-->
+					<tr>
+					<th>
+					<a href="read.php?tid=$value[tid]" target="_blank">$value[subject]</a>&nbsp;&nbsp;<span class="gray" title="$value[lastpost]">最后回复:<a href="u.php?username=$value[encode_lastposter]">$value[lastposter]</a></span><br />
+					<a href="thread.php?fid=$value[fid]" target="_blank" class="gray">{$value[forum]}</a>
+					<span class="gray f9">[{$value[postdate]}]</span>
+					</th>
+					<td>
+<!--
+EOT;
+if($timestamp-$value[lastpost]<=$db_newtime && $value[replies]){print <<<EOT
+-->
+					<span class="s3">回复:$value[replies]</span>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+					回复:$value[replies]
+<!--
+EOT;
+}print <<<EOT
+-->
+					<br />浏览:$value[hits]</td>
+					</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>$pages
+			</div>
+			<div id="u-contentside">
+				<div id="u-fav-cate">
+					<h5 class="u-h5"><span>主题分类</span></h5>
+					<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tr><td id="ut_index" class="fav"><a href="u.php?action=topic&uid=$uid">全 部</a></td></tr>
+						<tr><td id="ut_digest" class="fav"><a href="u.php?action=topic&uid=$uid&type=digest">精 华</a></td> </tr>
+						<tr><td id="ut_poll" class="fav"><a href="u.php?action=topic&uid=$uid&type=poll">投 票</a></td></tr>
+						<tr><td id="ut_sale" class="fav"><a href="u.php?action=topic&uid=$uid&type=sale">交 易</a></td></tr>
+				</table>
+			</div></div>
+			<script language="javascript">setCurrent('ut_$type','ut_index','current');</script>
+<!--
+EOT;
+}elseif($action == 'post'){print <<<EOT
+-->
+			<div id="u-contentmain">
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td><br /></td>
+						<td width="20%"><br /></td>
+					</tr>
+<!--
+EOT;
+foreach($postdb as $key => $value){print <<<EOT
+-->
+					<tr>
+						<th>
+						<a href="job.php?action=topost&tid=$value[tid]&pid=$value[pid]" target="_blank">$value[subject]</a><br />
+						<a href="thread.php?fid=$value[fid]" target="_blank" class="gray">$value[forum]</a>
+						<span class="gray f9">[$value[postdate]]</span>
+						</th>
+						<td>作者:<a href="u.php?action=show&uid=$value[authorid]" target="_blank" class="gray">$value[author]</a></td>
+					</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>$pages
+			</div>
+			<div id="u-contentside">
+				<div id="u-fav-cate">
+					<h5 class="u-h5"><span>选择表</span></h5>
+					<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+						$p_table
+					</table>
+					<script language="javascript">setCurrent('up_post$ptable','up_post','current');</script>
+				</div></div>
+<!--
+EOT;
+}elseif($action == 'favor'){print <<<EOT
+-->
+			<div id="u-contentmain">
+<!--
+EOT;
+if ($type == 'forum') {
+if ($isU) {print <<<EOT
+-->
+				<form method="post" action="u.php?action=favor&">
+				<input type="hidden" name="verify" value="$verifyhash" />
+				<input type="hidden" name="job" value="delforum" />
+<!--
+EOT;
+}print <<<EOT
+-->
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="50%">版块名称</td>
+						<td>今日发帖</td>
+						<td>主题</td>
+						<td>文章</td>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+						<td><br /></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</tr>
+<!--
+EOT;
+foreach ($favordb as $key => $value) {print <<<EOT
+-->
+					<tr>
+						<td><a href="thread.php?fid=$value[fid]">$value[name]</a></td>
+						<td>$value[tpost]</td>
+						<td>$value[topic]</td>
+						<td>$value[article]</td>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+						<td><input type="checkbox" name="selid[]" value="$value[fid]" /></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+				<center style="margin-top:1em">
+					<input class="bt" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" /> <input class="btn" type="submit" value="提 交" />
+				</center>
+				</form>
+<!--
+EOT;
+}}else{
+if ($isU) {print <<<EOT
+-->
+				<form method="post" action="u.php?action=favor&">
+				<input type="hidden" name="verify" value="$verifyhash" />
+<!--
+EOT;
+}print <<<EOT
+-->
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="65%">标题</td>
+						<td>作者</td>
+						<td>目录</td>
+<!--
+EOT;
+if($isU){print <<<EOT
+-->
+						<td><br /></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</tr>
+<!--
+EOT;
+foreach($favordb as $key => $value){print <<<EOT
+-->
+					<tr>
+						<th><a href="read.php?tid=$value[tid]" target="_blank">$value[subject]</a></th>
+						<td><a href="u.php?uid=$value[authorid]" target="_blank">$value[author]</a></td>
+						<td>$value[sel]<br /></td>
+<!--
+EOT;
+if($isU){print <<<EOT
+-->
+						<td><input type="checkbox" name="selid[]" value="$value[tid]" /></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>$pages
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+				<center style="margin-top:1em">
+					<input type="radio" name="job" value="change" checked />&nbsp;目录转换
+					<select name="type"><option value="0"></option>
+<!--
+EOT;
+foreach ($typeid as $key => $value) {
+$k = $key + 1;
+print <<<EOT
+-->
+						<option value="$k">$value</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</select>&nbsp;<input type="radio" name="job" value="clear" />&nbsp;删除
+					<div style="margin-top:1em">
+						<input class="bt" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" /> <input class="btn" type="submit" value="提 交" />
+					</div>
+				</center>
+				</form>
+<!--
+EOT;
+}}print <<<EOT
+-->
+			</div>
+			<div id="u-contentside">
+				<div id="u-fav-cate">
+					<h5 class="u-h5"><span>收藏分类目录</span></h5>
+					<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tr>
+							<td id="uf_forum" class="fav forum"><a href="u.php?action=favor&uid=$uid&type=forum">收藏的版块</a></td>
+						</tr>
+						<tr>
+							<td id="uf_all" class="fav"><a href="u.php?action=favor&uid=$uid">收藏的帖子</a></td>
+						</tr>
+					</table>
+						<table class="u-table" width="95%" cellpadding="0" cellspacing="0" border="0" style="margin-left:5%">
+						<tr>
+							<td id="uf_0" class="fav"><a href="u.php?action=favor&uid=$uid&type=0">默认分类</a></td>
+						</tr>
+
+<!--
+EOT;
+foreach ($typeid as $key => $value) {
+$k = $key + 1;
+print <<<EOT
+-->
+						<tr>
+							<td id="uf_$k" class="fav">
+<!--
+EOT;
+if($isU){print <<<EOT
+-->
+								<a href="u.php?action=favor&job=deltype&type=$k&uid=$uid&verify=$verifyhash" class="fr" onclick="return Checkinfo();" title="删除目录"><img src="$imgpath/$stylepath/close.gif" /></a>
+<!--
+EOT;
+}print <<<EOT
+-->
+								<a href="u.php?action=favor&uid=$uid&type=$k">$value</a>
+							</td>
+						</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+						<tr>
+							<td>
+								<form method="post" name="form" action="u.php?action=favor&">
+								<input type="hidden" name="verify" value="$verifyhash" />
+								<input type="hidden" name="job" value="addtype" />
+								<strong>添加收藏分类</strong>
+								<div style="padding:.5em 0">名称 <input class="input" type="text" name="type" size="6" /> <input class="btn" type="submit" value="提 交" /></div>
+								</form>
+							</td>
+						</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</table>
+					<script language="javascript">setCurrent('uf_$type','','current');</script>
+				</div>
+			</div>
+<script language="JavaScript">
+var ifcheck = true;
+function CheckAll(form){
+	for(var i=0;i<form.elements.length;i++){
+		var e = form.elements[i];
+		if(e.type=='checkbox') e.checked = ifcheck;
+	}
+	ifcheck = ifcheck == true ? false : true;
+}
+function Checkinfo() {
+	if (confirm('确定要删除该分类吗?')) {
+		return true;
+	} else {
+		return false;
+	}
+}
+</script>
+<!--
+EOT;
+} elseif ($action == 'friend') {
+$u_contentmain = ($isU ? 'id="u-contentmain"' : '');
+print <<<EOT
+-->
+			<div $u_contentmain>
+<!--
+EOT;
+if (empty($job)) {
+if ($isU) {print <<<EOT
+-->
+				<form action="u.php?action=friend" method="post">
+				<input type="hidden" name="uid" value="$uid" />
+				<input type="hidden" name="verify" value="$verifyhash" />
+<!--
+EOT;
+}print <<<EOT
+-->
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="10%">头像</td>
+						<td>用户名</td>
+						<td width="19%">加入时间</td>
+						<td width="20%">操作</td>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+						<td width="4%"><br /></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</tr>
+<!--
+EOT;
+foreach ($frienddb as $key => $value) {print <<<EOT
+-->
+					<tr>
+						<td><a href="u.php?action=show&uid=$value[muid]"><img src="$value[icon]" width="30" height="30" /></td>
+						<td><a href="u.php?action=show&uid=$value[muid]">$value[username]</a>
+<!--
+EOT;
+if ($value['thisvisit'] + $db_onlinetime * 1.5 > $timestamp) {print <<<EOT
+-->
+							<b>在线</b>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+							<b>离线</b>
+<!--
+EOT;
+}print <<<EOT
+-->
+							<br />$value[descrip]</td>
+						<td>$value[joindate]</td>
+						<td>
+							[<a href="message.php?action=write&touid=$value[muid]" target="_blank">发短消息</a>]<br />
+<!--
+EOT;
+if (empty($o) && $isU) {print <<<EOT
+-->
+							[<a href="u.php?action=friend&job=edit&touid=$value[muid]">编辑描述</a>]
+<!--
+EOT;
+}print <<<EOT
+-->
+						</td>
+<!--
+EOT;
+if ($isU) {
+$fuidcheck = $value[muid]==$fuid ? 'checked' : '';
+print <<<EOT
+-->
+						<td><input type="checkbox" name="selid[]" value="$value[muid]" $fuidcheck/></td>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>
+$pages
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+				<center style="margin-top:1em">
+<!--
+EOT;
+if ($o == 'check') {print <<<EOT
+-->
+					<input type="radio" name="job" value="acceptadd" onclick="showbox(this.value)" checked /> 接受并加为好友
+					<input type="radio" name="job" value="accept" onclick="showbox(this.value)" /> 接受
+					<input type="radio" name="job" value="refuse" onclick="showbox(this.value)" /> 拒绝
+					<div id="showbox" style="display:none;margin-top:0.5em">拒绝理由 :<textarea name="refusemsg" style="height:60px;width:200px"></textarea></div>
+					<div style="margin-top:0.5em;">
+						<input class="bt" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" /> <input class="btn" type="submit" value="提 交" />
+					</div>
+<script language="JavaScript">
+function showbox(v) {
+	getObj('showbox').style.display = v == 'refuse' ? '' : 'none';
+}
+</script>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+					<input type="hidden" name="job" value="delete" />
+					<input class="bt" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" /> <input class="btn" type="submit" value="删除好友" />
+<!--
+EOT;
+}print <<<EOT
+-->
+				</center>
+				</form>
+<script language="JavaScript">
+var ifcheck = true;
+function CheckAll(form){
+	for(var i=0;i<form.elements.length;i++){
+		var e = form.elements[i];
+		if(e.type=='checkbox') e.checked = ifcheck;
+	}
+	ifcheck = ifcheck == true ? false : true;
+}
+</script>
+<!--
+EOT;
+}} elseif ($job == 'edit') {print <<<EOT
+-->
+				<form action="u.php?action=friend" method="post">
+				<input type="hidden" name="job" value="edit" />
+				<input type="hidden" name="uid" value="$uid" />
+				<input type="hidden" name="touid" value="$touid" />
+				<input type="hidden" name="step" value="3" />
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="30%">好友<b>$friend[username]</b>的描述</td>
+						<td><input type="text" name="descrip" value="$friend[descrip]" size="40" class="input" /></td>
+					</tr>
+				</table>
+				<div style="margin-top:0.5em;text-align:center"><input class="btn" type="submit" value="提 交" /></div>
+				</form>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</div>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+			<div id="u-contentside">
+				<div id="u-fav-cate">
+				<h5 class="u-h5"><span>好友</span></h5>
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr><td id="ud_index" class="fav"><a href="u.php?action=friend&uid=$uid">好友列表</a></td></tr>
+					<tr><td id="ud_check" class="fav"><a href="u.php?action=friend&uid=$uid&o=check">待验证好友</a></td></tr>
+				</table>
+				<script language="javascript">setCurrent('ud_$o','ud_index','current');</script>
+				</div>
+			</div>
+<!--
+EOT;
+}} elseif ($action == 'trade') {print <<<EOT
+-->
+			<div id="u-contentmain">
+<!--
+EOT;
+if (empty($type)) {print <<<EOT
+-->
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="12%">商品图片</td>
+						<td>商品名称</td>
+						<td width="13%">价格</td>
+						<td width="15%">卖家</td>
+						<td width="18%">交易状态</td>
+					</tr>
+<!--
+EOT;
+foreach ($trade as $key => $value) {print <<<EOT
+-->
+					<tr>
+						<td><img src="$value[icon]" width="40" height="40" /></td>
+						<td><a href="read.php?tid=$value[tid]">$value[subject]</a></td>
+						<td>$value[price]</td>
+						<td><a href="u.php?action=trade&uid=$value[seller]">$value[username]</a></td>
+						<td>
+<!--
+EOT;
+if ($value['ifpay'] == 4) {print <<<EOT
+-->
+						交易失败
+<!--
+EOT;
+} elseif ($value['ifpay'] == 3) {print <<<EOT
+-->
+						交易完成
+<!--
+EOT;
+} elseif ($value['ifpay'] == 2) {print <<<EOT
+-->
+						卖家已发货，<br />确认收货
+<!--
+EOT;
+} elseif ($value['ifpay'] == 1) {print <<<EOT
+-->
+						买家已付款，<br />等待卖家发货
+<!--
+EOT;
+} elseif ($value['ifpay'] == 0) {print <<<EOT
+-->
+						等待买家付款<br />
+<!--
+EOT;
+}print <<<EOT
+-->
+							<div><a style="color:blue;" href="trade.php?action=order&oid=$value[oid]">详情</a></div>
+						</td>
+					</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>
+				$pages
+<!--
+EOT;
+} elseif ($type == 'onsale') {print <<<EOT
+-->
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="12%">商品图片</td>
+						<td>商品名称</td>
+						<td width="13%">价格</td>
+						<td width="12%">商品数量</td>
+						<td width="12%">出售数量</td>
+					</tr>
+<!--
+EOT;
+foreach ($trade as $key => $value) {print <<<EOT
+-->
+					<tr>
+						<td><img src="$value[icon]" width="40" height="40" /></td>
+						<td><a href="read.php?tid=$value[tid]">$value[name]</a></td>
+						<td>$value[price]</td>
+						<td>$value[num]</td>
+						<td>$value[salenum]</td>
+					</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>
+				$pages
+<!--
+EOT;
+} elseif ($type == 'saled'){print <<<EOT
+-->
+				<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td width="12%">商品图片</td>
+						<td>商品名称</td>
+						<td width="13%">价格</td>
+						<td width="15%">买家</td>
+						<td width="18%">交易状态</td>
+					</tr>
+<!--
+EOT;
+foreach ($trade as $key => $value) {print <<<EOT
+-->
+					<tr>
+						<td><img src="$value[icon]" width="40" height="40" /></td>
+						<td><a href="read.php?tid=$value[tid]">$value[subject]</a></td>
+						<td>$value[price]</td>
+						<td><a href="u.php?action=trade&uid=$value[seller]">$value[username]</a></td>
+						<td>
+<!--
+EOT;
+if ($value['ifpay'] == 4) {print <<<EOT
+-->
+						交易失败
+<!--
+EOT;
+} elseif ($value['ifpay'] == 3) {print <<<EOT
+-->
+						交易完成
+<!--
+EOT;
+} elseif ($value['ifpay'] == 2) {print <<<EOT
+-->
+						卖家已发货，<br />确认收货
+<!--
+EOT;
+} elseif ($value['ifpay'] == 1) {print <<<EOT
+-->
+						买家已付款，<br />等待卖家发货
+<!--
+EOT;
+} elseif ($value['ifpay'] == 0) {print <<<EOT
+-->
+						等待买家付款
+<!--
+EOT;
+}print <<<EOT
+-->
+							<div><a style="color:blue;" href="trade.php?action=order&oid=$value[oid]">详情</a></div>
+						</td>
+					</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</table>
+				$pages
+<!--
+EOT;
+}print <<<EOT
+-->
+			</div>
+			<div id="u-contentside">
+				<div id="u-fav-cate">
+					<h5 class="u-h5"><span>商品</span></h5>
+					<table class="u-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tr>
+							<td id="uf_onsale" class="fav"><a href="u.php?action=trade&uid=$uid&type=onsale">出售中的商品</a></td>
+						</tr>
+<!--
+EOT;
+if ($isU) {print <<<EOT
+-->
+						<tr>
+							<td id="uf_buy" class="fav"><a href="u.php?action=trade&uid=$uid">已买入的商品</a></td>
+						</tr>
+						<tr>
+							<td id="uf_saled" class="fav"><a href="u.php?action=trade&uid=$uid&type=saled">已卖出的商品</a></td>
+						</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+					</table>
+				<script language="javascript">setCurrent('uf_$type','uf_buy','current');</script>
+			</div></div>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</div>
+	</div>
+</div>
+<!--
+EOT;
+?>-->

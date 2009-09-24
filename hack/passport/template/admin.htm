@@ -1,0 +1,169 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<div style="padding:15px 0 0;"><a href="$admin_file?adminjob=hackcenter">插件中心</a> &raquo; <a href="#">{$db_hackdb[passport][0]}</a></div>
+<!--
+EOT;
+if(empty($action)){
+print <<<EOT
+-->
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td><input onclick="SetType(0)" type="button" class="btn" value="通行证设置" /> <input onclick="SetType(1)" type="button" class="btn" value="ShopEx" /> <input onclick="SetType(2)" type="button" class="btn" value="DedeCMS" /> <input onclick="SetType(3)" type="button" class="btn" value="PHP168" /> <input onclick="SetType(4)" type="button" class="btn" value="PHPWind" /></td></tr>
+<tr class="tr3"><td>　　PHPWind 通行证系统是为解决多个系统之间会员数据共享问题而开发的，是一套跨服务器，跨域名，跨语言的会员共享系统，实现了不同系统之间共享会员数据和同步会员基本信息，支持不同域名下同步登录，同步退出功能</td></tr>
+</table>
+<br />
+<form name="setform" action="$basename" method="post">
+<input type=hidden name="action" value="unsubmit">
+<h2>通行证设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+	<td width="30%">是否开启通行证</td>
+	<td>
+		<input type=radio name="config[db_pptifopen]" value="1" $ifopen_Y> 是
+		<input type=radio name="config[db_pptifopen]" value="0" $ifopen_N> 否
+	</td>
+</tr>
+<tr class="tr3">
+	<td>通行证私有密钥</td>
+	<td>
+		<input size="35" class="input" id="db_pptkey" name="config[db_pptkey]" value="$db_pptkey">
+		<input type="button" class="btn" value="随机生成私有密钥" onclick="generatekey()">
+	</td>
+</tr>
+<tr class="tr3">
+	<td>将该网站做为通行证的</td>
+	<td>
+		<input type=radio name="config[db_ppttype]" value="server" $type_server onclick="sendtype('server')">服务器端
+		<input type=radio name="config[db_ppttype]" value="client" $type_client onclick="sendtype('client')">客户端
+	</td>
+</tr>
+</table>
+<br>
+<h2>服务器端设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+	<td width="30%">通行证兼容模式</td>
+	<td><input type=radio name="config[db_pptcmode]" value="0" $cmode_N> 关闭
+		<input type=radio name="config[db_pptcmode]" value="1" $cmode_Y> 开启
+		(兼容PHPWind v6.3之前版本的通行证)
+	</td>
+</tr>
+<tr class="tr3">
+	<td width="30%">需要同步登录的客户端地址</td>
+	<td><input type="text" class="input" name="config[db_ppturls]" value="$db_ppturls" size="50" /></td>
+</tr>
+<!-- <tr class="tr3">
+	<td width="30%">客户端地址列表<br>每行填写一个地址 (注意不要在最后加 / )<br>例如：http://www.phpwind.net</td>
+	<td><textarea name="config[db_ppturls]" rows="5" cols="50">$db_ppturls</textarea></td>
+</tr> -->
+</table><br/>
+<h2>客户器端设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+	<td width="30%">通行证服务器地址</td>
+	<td><input id="serverurl" size="35" class="input" name="config[db_pptserverurl]" value="$db_pptserverurl"></td>
+</tr>
+<tr class="tr3">
+	<td>通行证登录地址</td>
+	<td><input id="loginurl" size="35" class="input" name="config[db_pptloginurl]" value="$db_pptloginurl"></td>
+</tr>
+<tr class="tr3">
+	<td>通行证退出地址</td>
+	<td><input id="loginouturl" size="35" class="input" name="config[db_pptloginouturl]" value="$db_pptloginouturl"></td>
+</tr>
+<tr class="tr3">
+	<td>通行证注册地址</td>
+	<td><input id="regurl" size="35" class="input" name="config[db_pptregurl]" value="$db_pptregurl"></td>
+</tr>
+<tr class="tr3">
+	<td>选择需要同步的积分</td>
+	<td>
+<!--
+EOT;
+foreach($credit as $key=>$val){
+$ifchecked=strpos(",$db_pptcredit,",",$key,")!==false ? 'checked' : '';
+print <<<EOT
+-->
+		<input type="checkbox" name="ppt_credit[]" value="$key" $ifchecked>$val
+<!--
+EOT;
+}print <<<EOT
+-->
+	</td>
+</tr>
+</table>
+<br />
+<center><input type="submit" class="btn" value="提 交"></center>
+</form><br/>
+<h3>通行证说明</h3>
+<div class="tr5">
+　　<b>功能说明：</b>实现同步登录，退出功能，共享会员数据，同步积分信息<br />
+　　<b>使用方法：</b>通行证由一个服务器端和多个客户端组成，选择一个系统的会员数据做为通行证服务器，其他系统做为客户端
+<ul style="padding-left:4em;">
+以论坛和博客整合为例说明通行证使用方法：
+<br />
+1. 将论坛做为<b>服务器端</b>，后台设置如下：<br />
+是否开启通行证　　　　是<br />
+通行证私有密钥　　　　随机生成一个私有密钥（各系统私有密钥必须完全相同）<br />
+将该网站做为通行证的　服务器端<br />
+客户端地址　　　　　　博客系统url地址
+<br /><br />
+2. 将博客做为<b>客户端</b>，后台设置如下
+<br />
+是否开启通行证　　　　是<br />
+通行证私有密钥　　　　将服务器端的私有密钥填写到此处（各系统的私有密钥必须完全相同）<br />
+将该网站做为通行证的　客户端<br />
+
+通行证服务器地址　　　论坛系统url地址<br />
+通行证登录地址　　　　login.php（论坛登录地址）<br />
+通行证退出地址　　　　login.php?action=quit（论坛退出登录地址）<br />
+通行证注册地址　　　　{$db_registerfile}（论坛注册地址）<br />
+选择需要同步的积分　　选择需要同步的积分
+<br /><br />
+3. 通行证设置完成！
+</ul>
+</div>
+<br />
+<SCRIPT LANGUAGE="JavaScript">
+function sendtype(show){
+	document.getElementById(show).style.display = "";
+	if(show=='server'){
+		document.getElementById('client').style.display = "none";
+	} else{
+		document.getElementById('server').style.display = "none";
+	}
+}
+var oldkey = "$db_pptkey";
+function generatekey(){
+    var keychars = "abcdefhjmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWYXZ.,:";
+    var keylength = 16;
+    var key = document.getElementById('db_pptkey');
+	if(oldkey=='' || confirm('更改私有密钥需要同时在其他使用通行证接口的应用程序中修改私有密钥，您确认要更改私有密钥？')){
+		oldkey='';
+		key.value = '';
+		for( i = 0; i < keylength; i++ ){
+			key.value += keychars.charAt(Math.floor( Math.random() * keychars.length ))
+		}
+	}
+}
+function SetType(type){
+	var url = 'http://{$pwServer['HTTP_HOST']}/';
+	if(getObj('serverurl').defaultValue == ''){
+		var serverurl = {0 : '',1 : 'shopex',2 : 'dedecms',3 : 'php168',4 : 'phpwind'};
+		getObj('serverurl').value = url + serverurl[type];
+	}
+
+	var loginurl = {0 : '',1 : 'login.php',2 : 'member/login.php',3 : 'login.php',4 : 'login.php'};
+	getObj('loginurl').value = loginurl[type];
+
+	var loginouturl = {0 : '',1 : 'user_logout.php',2 : 'index_do.php?fmdo=login&dopost=exit',3 : 'login.php?action=quit',4 : 'login.php?action=quit'};
+	getObj('loginouturl').value = loginouturl[type];
+
+	var regurl = {0 : '',1 : 'user_register.php',2 : 'member/index_do.php?fmdo=user&dopost=regnew',3 : 'reg.php',4 : 'register.php'};
+	getObj('regurl').value = regurl[type];
+}
+</SCRIPT>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

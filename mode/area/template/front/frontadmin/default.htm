@@ -1,0 +1,70 @@
+<!--<?php
+print <<<EOT
+-->
+<table width="100%" cellspacing="0" cellpadding="5">
+	<tr><th class="h" colspan="2" style="cursor:move" onmousedown="read.move(event);"><span class="fr" style="margin-top:2px;cursor:pointer" onclick="closep();"><img src="$imgpath/close.gif" /></span>模块设置</th></tr>
+	<tr>
+		<td>
+		<h2><span class="fr"><a onclick="sendmsg('{$thisBaseName}&action=invokeconfig&invokename=$invoke[name]&scr=$scr');"  style="cursor:pointer">设置模块属性</a></span><strong>$invoke[name]</strong></h2>
+<div class="mode-one">
+	<dl class="cc2">
+		<dd>
+			<ul>
+				<li style="padding-left:10px">管理模块内容：</li>
+<!--
+EOT;
+foreach($invokepieces as $piece){
+print <<<EOT
+-->
+<!--
+EOT;
+if(!$invoke[ifloop]){print <<<EOT
+-->
+				<li style="padding-left:30px"><a onclick="sendmsg('{$thisBaseName}&action=editcontent&invokepieceid=$piece[id]');" style="cursor:pointer">$piece[title]</a></li>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+				<li style="padding-left:30px">$piece[title]</li>
+<!--
+EOT;
+foreach($invoke[loops] as $loop){print <<<EOT
+-->
+				<li style="padding-left:40px"><a onclick="sendmsg('{$thisBaseName}&action=editcontent&invokepieceid=$piece[id]&loopid=$loop');" style="cursor:pointer">{$forum[$loop][name]}</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+<!--
+EOT;
+}print <<<EOT
+-->
+
+<!--
+EOT;
+}print <<<EOT
+-->
+			</ul>
+		</dd>
+	</dl>
+	<div class="c"></div>
+</div>
+		
+		</td>
+	</tr>
+</table>
+
+<script>
+var editConfigRead = new PwMenu('editconfig');
+function setEditConfig(url,data,id) {
+	editConfigRead.obj = (typeof id == 'undefined' || !id) ? null : getObj(id);
+	//editConfigRead.guide();
+	setTimeout(function(){ajax.send(url,data,function (){ajax.get(editConfigRead)});},300);
+}
+
+</script>
+
+<!--
+EOT;
+?>-->

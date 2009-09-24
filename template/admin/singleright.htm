@@ -1,0 +1,662 @@
+<!--<?php
+include_once PrintEot('left');
+if(empty($action)){
+if(empty($job)){
+print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename" class="two">用户访问权限</a></li>
+	<li><a href="$basename&action=user">用户管理权限</a></li>
+	<li><a href="$basename&action=group">系统组或特殊组用户</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">可以给单个用户指定版块访问权限!<br>当版块设置为需要特殊头衔才能访问，但同时又需要对某单个用户开放,可用此功能指定单个用户的访问权限!<br></div>
+<div class="c"></div>
+
+<form name="justdo" method="post" action="$basename" >
+<h2>快捷操作</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td>搜索用户名:<input type="text" class="input" name="soname">&nbsp;<input class="btn" type="button" value="搜　索" onclick="pwdo('so')" /></td>
+		<td>添加用户名:<input type="text" class="input" name="addname">&nbsp;<input class="btn" type="button" value="添　加" onclick="pwdo('add')" /></td>
+	</tr>
+</table></form>
+<br />
+<form action="$basename" method="post">
+<h2>版块用户访问权限列表</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac s3">
+	<td width="5%"></td>
+	<td width="5%">ID</td>
+	<td width="15%">用户名</td>
+	<td width="60%">级别</td>
+	<td class="tal">编辑</td>
+</tr>
+<!--
+EOT;
+$i=($page-1)*$db_perpage;
+foreach($memberdb as $key=>$member){
+$i++;
+print <<<EOT
+-->
+<tr class="tr3 tac">
+	<td><input id="id_$i" type="checkbox" name="selid[]" value="$member[uid]" onclick="pwJsCheck(this)" /></td>
+	<td>$i</td>
+	<td>$member[username]</td>
+	<td>$member[level]</td>
+	<td class="tal"><a class="fourm-two" title="编辑" href="$basename&action=$action&job=setright&uid=$member[uid]"><span class="edit"></span></a></td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>$pages
+<input type="hidden" name="action" value="$action" />
+<input type="hidden" name="job" value="del" />
+<br /><center><input class="btn" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" />&nbsp;
+<input type="submit" value="删除所选项" class="btn" /></center></form><br/>
+<script language="JavaScript">
+function pwdo(t) {
+	var url = '$basename&';
+	if (t == 'so') {
+		if (document.justdo.soname.value != '') {
+			url += 'username=' + document.justdo.soname.value;
+		} else {
+			alert('请输入用户名！');
+			return false;
+		}
+	} else if (t == 'add') {
+		if (document.justdo.addname.value != '') {
+			url += 'job=setright&username=' + document.justdo.addname.value;
+		} else {
+			alert('请输入用户名！');
+			return false;
+		}
+	} else {
+		return false;
+	}
+	window.location.href = url;
+}
+</script>
+<!--
+EOT;
+}elseif($job=='setright'){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename" class="two">用户访问权限</a></li>
+	<li><a href="$basename&action=user">用户管理权限</a></li>
+	<li><a href="$basename&action=group">系统组或特殊组用户</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">可以给单个用户指定版块访问权限!<br>当版块设置为需要特殊头衔才能访问，但同时又需要对某单个用户开放,可用此功能指定单个用户的访问权限!<br></div>
+<div class="c"></div>
+<form action="$basename" method="post">
+<h2>版块用户访问权限设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3"><td width="30%">用户名</td><td><b>$username<b></td></tr>
+	<tr class="tr3"><td>允许浏览版块:<br><br>(以下两项设置，要此项开启才有效!)<br><br>注:选择版块时可使用 ‘Ctrl’ 键进行多选，也可使用 ‘Shift’ 键或拖动鼠标连续选择多个版块</td><td><select name="visit[]" size="16" multiple>$forum_visit</select></td></tr>
+	<tr class="tr3"><td>允许发表主题:</td><td><select name="post[]" size="16" multiple>$forum_post</select></td></tr>
+	<tr class="tr3"><td>允许发表回复:</td><td><select name="reply[]" size="16" multiple>$forum_reply</select></td></tr>
+</table>
+<input type="hidden" name="action" value="$action" />
+<input type="hidden" name="job" value="$job" />
+<input type="hidden" name="uid" value="$uid" />
+<input type="hidden" name="step" value="2" />
+<br /><center><input type="submit" class="btn" value="提 交" /></center></form><br/>
+<!--
+EOT;
+}}elseif($action=='user'){
+if(empty($job)){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">用户访问权限</a></li>
+	<li><a href="$basename&action=user" class="two">用户管理权限</a></li>
+	<li><a href="$basename&action=group">系统组或特殊组用户</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">可以给单个用户指定版块管理权限，而不需要修改该用户原来所属的用户组头衔!<br />添加用户必须是属于系统组或特殊组的用户。<br /></div>
+
+<h2>快捷操作</h2>
+<div class="tr5">
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td style="line-height:25px;">
+			<form action="$basename" method="post">
+				<input type="hidden" name="action" value="$action" />
+				<b>搜索用户管理权限</b><br />
+				用户名:<input type="text" class="input" name="username" value="$username" />
+				<br />用户组:<select name="gid">$groupcache</select>
+				<br />版　块:<select name="fid">$forumcache</select><br /><input class="btn" type="submit" value="搜　索" style="margin:.5em 0 .5em 3.5em;">
+			</form>
+		</td>
+		<td style="line-height:25px;">
+			<form action="$basename" name="justdo" method="post">
+				<input type="hidden" name="action" value="setright" />
+				<input type="hidden" name="job" value="user" />
+				<b>添加用户管理权限</b><br />
+				用　户　名　:<input type="text" class="input" name="pwuser" />&nbsp;系统组或特殊组用户
+				<br />权限作用版块:<select name="fid">$forumcache</select>
+				<br /><input class="btn" type="button" value="添　加" onclick="pwdo()" style="margin:.5em 0 .5em 6.5em;">
+			</form>
+		</td>
+	</tr>
+</table></div>
+<form name="rForm" action="$basename" method="post">
+<h2>版块用户管理权限列表</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tr3 tac s3">
+		<td width="5%"></td>
+		<td width="5%">ID</td>
+		<td width="15%">用户名</td>
+		<td width="30%">级别</td>
+		<td width="30%">版块</td>
+		<td class="tal">编辑</td>
+		<td class="tal">删除</td>
+	</tr>
+<!--
+EOT;
+$i=($page-1)*$db_perpage;
+foreach ($u_d as $key => $value) {
+$i++;
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td><input type="checkbox" name="selid[]" value="{$value[uid]}_{$value[fid]}_{$value[groupid]}" onclick="pwJsCheck(this)" /></td>
+		<td>$i</td>
+		<td><a href="$basename&action=$action&uid={$value[uid]}">{$value[username]}</a></td>
+		<td><a href="$basename&action=$action&gid={$value[groupid]}">{$ltitle[$value[groupid]]}</a></td>
+		<td><a href="$basename&action=$action&fid={$value[fid]}">{$forum[$value[fid]][name]}</a></td>
+		<td class="tal"><a class="fourm-two" title="编辑" href="$basename&action=setright&job=user&uid=$value[uid]&fid=$value[fid]"><span class="edit"></span></a></td>
+		<td><a class="fourm-two" href="$basename&action=delright&job=user&selid={$value[uid]}_{$value[fid]}_{$value[groupid]}"><span class="del" title="删除"></span></a></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>$pages
+
+<input type="hidden" name="ids" value="{$uid}_{$fid}_{$gid}" />
+<input type="hidden" name="action" value="" />
+<input type="hidden" name="job" value="$action" />
+<input type="hidden" name="all" value="" />
+</form><br />
+<center>
+<span class="s3" id="checkall" style="display:none">全选所有查询结果，共{$count}个选项
+<input id="jscheck" type="checkbox" name="checkall" value="{$uid}_{$fid}_{$gid}" class="btn" onclick="pwSubmit(this)" /><br /></span>
+<input id="jschkall" class="btn" type="button" name="chkall" value="全 选" onclick="pwSubmit(this)" />&nbsp;
+<input id="jsedit" type="button" class="btn" value="编　辑" onclick="pwSubmit(this)"/>&nbsp;
+<a id="jsdel" href="javascript:void(0)" onclick="pwSubmit(this)">删　除</a>
+</center><br/>
+<script language="JavaScript">
+function pwSubmit(_this){
+	if (_this.id == 'jsedit') {
+		document.rForm.action.value = 'batchright';
+		document.rForm.submit();
+	} else if (_this.id == 'jsdel') {
+		if (confirm('确实要删除选项吗？')) {
+			document.rForm.action.value = 'delright';
+			document.rForm.submit();
+		} else {
+			return false;
+		}
+	} else if (_this.id == 'jscheck') {
+		if (_this.checked) {
+			document.rForm.all.value = _this.value;
+		} else {
+			document.rForm.all.value = '';
+		}
+	} else if (_this.id == 'jschkall') {
+		var chk = CheckAll(document.rForm);
+		if($jschk && chk){
+			getObj('checkall').style.display='';
+		}else{
+			getObj('checkall').style.display='none';
+		}
+	} else {
+		return false;
+	}
+}
+
+function pwdo() {
+	if (document.justdo.pwuser.value == '') {
+		alert('请输入用户名！');
+		return false;
+	}
+	if (document.justdo.fid.value == '') {
+		alert('请选择版块！');
+		return false;
+	}
+	document.justdo.submit();
+}
+</script>
+<!--
+EOT;
+}}elseif($action=='group'){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">用户访问权限</a></li>
+	<li><a href="$basename&action=user">用户管理权限</a></li>
+	<li><a href="$basename&action=group" class="two">系统组或特殊组用户</a></li>
+</ul>
+<div class="c"></div>
+<h3><b>提示信息</b></h3>
+<div class="tr5">可以给单用户组指定版块管理权限，而不需要修改该用户组里的全局管理权限!<br /></div>
+
+<h2>快捷操作</h2>
+<div class="tr5">
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr5">
+		<td>
+			<form name="justdo" action="$basename" method="post">
+				<input type="hidden" name="action" value="$action" />
+				添加或搜索:<select name="gid"><option value="">选择用户组</option>$groupcache</select>　AND　<select name="fid"><option value="">选择版块</option>$forumcache</select>&nbsp;
+				<input class="btn" type="submit" value="搜　索">
+				<input class="btn" type="button" value="添　加" onclick="pwdo()">
+			</form>
+		</td>
+	</tr>
+</table></div>
+
+<form name="rForm" action="$basename" method="post">
+<h2>版块用户组管理权限列表</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tr3 tac s3">
+		<td width="5%"></td>
+		<td width="5%">ID</td>
+		<td width="35%">用户组</td>
+		<td width="35%">版块</td>
+		<td class="tal">编辑</td>
+		<td class="tal">删除</td>
+	</tr>
+<!--
+EOT;
+$i=($page-1)*$db_perpage;
+foreach ($g_d as $key => $value) {
+$i++;
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td><input type="checkbox" name="selid[]" value="{$value[uid]}_{$value[fid]}_{$value[gid]}" onclick="pwJsCheck(this)" /></td>
+		<td>$i</td>
+		<td><a href="$basename&action=$action&gid={$value[gid]}">{$ltitle[$value[gid]]}</a></td>
+		<td><a href="$basename&action=$action&fid={$value[fid]}">{$forum[$value[fid]][name]}</a></td>
+		<td class="tal"><a class="fourm-two" title="编辑" href="$basename&action=setright&job=group&gid=$value[gid]&fid=$value[fid]"><span class="edit"></span></a></td>
+		<td><a class="fourm-two" href="$basename&action=delright&job=group&selid={$value[uid]}_{$value[fid]}_{$value[gid]}"><span class="del" title="删除"></span></a></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>$pages
+<input type="hidden" name="action" value="" />
+<input type="hidden" name="job" value="$action" />
+<input type="hidden" name="ids" value="{$uid}_{$fid}_{$gid}" />
+<input type="hidden" name="all" value="0" />
+</form><br />
+<center>
+<span class="s3" id="checkall" style="display:none">全选所有查询结果，共{$count}个选项
+<input id="jscheck" type="checkbox" name="checkall" value="1" class="btn" onclick="pwSubmit(this)"/><br /></span>
+<input id="jschkall" class="btn" type="button" name="chkall" value="全 选" onclick="pwSubmit(this)" />&nbsp;
+<input id="jsedit" type="button" class="btn" value="编　辑" onclick="pwSubmit(this)"/>&nbsp;
+<a id="jsdel" href="javascript:void(0)" onclick="pwSubmit(this)">删　除</a>
+</center><br/>
+<script language="JavaScript">
+function pwSubmit(_this){
+	if (_this.id == 'jsedit') {
+		document.rForm.action.value = 'batchright';
+		document.rForm.submit();
+	} else if (_this.id == 'jsdel') {
+		if (confirm('确实要删除选项吗？')) {
+			document.rForm.action.value = 'delright';
+			document.rForm.submit();
+		} else {
+			return false;
+		}
+	} else if (_this.id == 'jscheck') {
+		if (_this.checked) {
+			document.rForm.all.value = _this.value;
+		} else {
+			document.rForm.all.value = '0';
+		}
+	} else if (_this.id == 'jschkall') {
+		var chk = CheckAll(document.rForm);
+		if($jschk && chk){
+			getObj('checkall').style.display='';
+		}else{
+			getObj('checkall').style.display='none';
+		}
+	} else {
+		return false;
+	}
+}
+
+function pwdo() {
+	var url = '$basename&action=setright';
+	if (document.justdo.gid.value!='') {
+		url += '&gid=' + document.justdo.gid.value;
+	} else {
+		alert('请选择用户组！');
+		return false;
+	}
+	if (document.justdo.fid.value!='') {
+		url += '&fid=' + document.justdo.fid.value;
+	} else {
+		alert('请选择版块！');
+		return false;
+	}
+	window.location.href = url;
+}
+</script>
+<!--
+EOT;
+}elseif($action=='setright'){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">用户访问权限</a></li>
+<!--
+EOT;
+if ($job=='user') {print <<<EOT
+-->
+	<li><a href="$basename&action=user" class="two">用户管理权限</a></li>
+	<li><a href="$basename&action=group">系统组或特殊组用户</a></li>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+	<li><a href="$basename&action=user">用户管理权限</a></li>
+	<li><a href="$basename&action=group" class="two">系统组或特殊组用户</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<div class="c"></div>
+
+<form action="$basename&action=$action" method="post">
+<input type="hidden" name="step" value="2" />
+<input type="hidden" name="job" value="$job" />
+<h2>
+<!--
+EOT;
+if ($job=='user') {print <<<EOT
+-->
+用户版块权限配置
+<!--
+EOT;
+} else {print <<<EOT
+-->
+用户组版块权限配置
+<!--
+EOT;
+}print <<<EOT
+-->
+</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tr5 tac tips ">
+		<td colspan="3"><b>
+<!--
+EOT;
+if ($job=='user') {print <<<EOT
+-->
+用户名:<span class="s3">$username</span><input type="hidden" name="uid" value="$uid" />
+(<span class="s3">$grouptitle</span>)
+<!--
+EOT;
+} else {print <<<EOT
+-->
+&nbsp;&nbsp;用户组：<span class="s3">$grouptitle</span><input type="hidden" name="gid" value="$gid" />
+<!--
+EOT;
+}print <<<EOT
+-->
+&nbsp;&nbsp;所属版块:<span class="s3">$f[name]</span><input type="hidden" name="fid" value="$fid" />
+	</b></td></tr>
+<!--
+EOT;
+foreach ($lang['right']['systemforum'] as $key => $value) {
+eval("\$value[html] = \"".addcslashes($value['html'],'"')."\";");
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td><input type="checkbox" name="othergroup[]" value="$key" onclick="pwJsCheck(this)" /></td>
+		<td>$value[title]</td>
+		<td>$value[html]</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br />
+<h2>高级设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="63%" valign="top">版块权限横向操作<br><br>功能说明:<br>右边复选框显示的版块列表为该用户或用户组在版块中单独设置过管理权限。<br>利用此功能可将一个或多个权限设置同时应用到其它版块中，不再需要逐个版块设置，使操作更加简便<br><br>操作说明:<br>1. <font color=blue>选中</font>需要进行横向操作的<font color=blue>权限设置前面的复选框</font><br>2. 在右边的复选框中<font color=blue>选择</font>需要进行横向操作的<font color=blue>版块</font><br>3. 然后提交即可完成版块权限横向操作<br><br>注:<br>1. 选择版块时可使用 ‘Ctrl’ 键进行多选，也可使用 ‘Shift’ 键或拖动鼠标连续选择多个版块<br>2. 不使用此功能，请不要选中<font color=blue>权限设置前面的复选框</font>和右边的复选框中<font color=blue>版块</font></td>
+		<td><select name="otherfid[]" size="16" multiple>$othersel</select></td>
+	</tr>
+</table>
+<br /><center>
+<input id="jschkall" class="btn" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" />
+<input type="submit" value="提 交" class="btn" />
+</center><br/>
+</form>
+<!--
+EOT;
+}elseif($action == 'batchright'){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">用户访问权限</a></li>
+<!--
+EOT;
+if ($job=='user') {print <<<EOT
+-->
+	<li><a href="$basename&action=user" class="two">用户管理权限</a></li>
+	<li><a href="$basename&action=group">系统组或特殊组用户</a></li>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+	<li><a href="$basename&action=user">用户管理权限</a></li>
+	<li><a href="$basename&action=group" class="two">系统组或特殊组用户</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<div class="c"></div>
+<form name="rForm" action="$basename&action=$action" method="post">
+<input type="hidden" name="step" value="2" />
+<input type="hidden" name="job" value="$job" />
+<input type="hidden" name="ids" value="{$suid}_{$sfid}_{$sgid}" />
+<!--
+EOT;
+if ($all) {print <<<EOT
+-->
+<input type="hidden" name="all" value="1" />
+<!--
+EOT;
+}print <<<EOT
+-->
+<h2>
+<!--
+EOT;
+if ($job=='user') {print <<<EOT
+-->
+批量用户版块权限配置
+<!--
+EOT;
+} else {print <<<EOT
+-->
+批量用户组版块权限配置
+<!--
+EOT;
+}print <<<EOT
+-->
+</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tr5 tac tips">
+		<td colspan="3">
+<b>以下选中的权限将批量修改
+<!--
+EOT;
+if ($suid || $sfid || $sgid) {print <<<EOT
+-->
+属于
+<!--
+EOT;
+if ($suid) {print <<<EOT
+-->
+<span class="s3">$username</span>
+<!--
+EOT;
+}if ($sgid) {print <<<EOT
+-->
+<span class="s3">{$ltitle[$sgid]}</span>
+<!--
+EOT;
+}if ($sfid) {print <<<EOT
+-->
+<span class="s3">{$forum[$sfid][name]}</span>
+<!--
+EOT;
+}print <<<EOT
+-->
+的
+<!--
+EOT;
+}print <<<EOT
+-->
+用户版块权限</b>
+<!--
+EOT;
+if(!$all){print <<<EOT
+-->
+<b>，<a href="#list" class="s3" onclick="getObj('list').style.display='';">查看详细用户列表</span></b>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</td></tr>
+<!--
+EOT;
+foreach ($lang['right']['systemforum'] as $key => $value) {
+if (!isset(${$key.'_Y'}) && !isset(${$key.'_N'})) ${$key.'_N'} = 'checked';
+eval("\$value[html] = \"".addcslashes($value['html'],'"')."\";");
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td><input id="check_$key" type="checkbox" name="othergroup[]" value="$key" onclick="pwJsCheck(this)" /></td>
+		<td>$value[title]</td>
+		<td>$value[html]</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<br /><center>
+<input id="jschkall" class="btn" type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" />
+<input type="submit" value="提 交" class="btn" onclick="return pwSubmit(this.form);" />
+</center><br/>
+<!--
+EOT;
+if (!$all) {print <<<EOT
+-->
+<a name="list"></a>
+<div class="tt" id="list" style="display:none">
+<!--
+EOT;
+if ($job == 'user') {print <<<EOT
+-->
+<h2><a href="javascript:scroll(0,0);" class="fr" style="cursor:pointer;" onclick="getObj('list').style.display='none';">顶端</a>以上选中的权限设置，将批量应用到以下用户所在版块的个人管理权限</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 tac s3">
+		<td width="5%">ID</td>
+		<td width="15%">用户名(级别)</td>
+		<td width="30%">版块</td>
+	</tr>
+<!--
+EOT;
+$i=0;
+foreach ($u_d as $key => $value) {
+$i++;
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td>$i<input type="hidden" name="selid[]" value="{$value[uid]}_{$value[fid]}_{$value[gid]}" /></td>
+		<td>{$value[username]}({$ltitle[$value[groupid]]})</td>
+		<td>{$forum[$value[fid]][name]}</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<!--
+EOT;
+}elseif($job == 'group'){print <<<EOT
+-->
+<h2>版块用户组管理权限列表</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tr3 tac s3">
+		<td width="5%">ID</td>
+		<td width="15%">用户组</td>
+		<td width="30%">版块</td>
+	</tr>
+<!--
+EOT;
+$i=0;
+foreach ($g_d as $key => $value) {
+$i++;
+print <<<EOT
+-->
+	<tr class="tr3 tac">
+		<td>$i<input type="hidden" name="selid[]" value="{$value[uid]}_{$value[fid]}_{$value[gid]}" /></td>
+		<td>{$ltitle[$value[gid]]}</td>
+		<td>{$forum[$value[fid]][name]}</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+</form>
+<script type="text/javascript">
+	var form = document.rForm;
+	for (var i=0;i<form.elements.length-2;i++){
+		var e = form.elements[i];
+		if(e.type=='radio'){
+			e.onclick = function(){
+				getObj('check_'+this.name.replace(/group\[([a-z]+)\]/,'$1')).checked = true;
+				pwJsCheck(this);
+			}
+		}
+	}
+	function pwSubmit(form){
+		for (var i=0;i<form.elements.length-2;i++){
+			var e = form.elements[i];
+			if(e.type=='checkbox'){
+				if (e.checked == true) {
+					return true;
+				}
+			}
+		}
+		alert('请在左边框中选择要修改的权限选项');
+		return false;
+	}
+</script>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

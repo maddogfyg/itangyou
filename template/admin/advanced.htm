@@ -1,0 +1,109 @@
+<!--<?php
+include_once PrintEot('left');
+if ($admintype == 'msphinx') {
+print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$admin_file?adminjob=advanced&admintype=msphinx" class="two">Sphinx全文索引配置</a></li>
+	<li><a href="$admin_file?adminjob=advanced&admintype=mmemcache">Memcache 缓存配置</a></li>
+</ul>
+<h3>介绍说明</h3>
+<div class="tr5">
+Sphinx是一个基于SQL的全文检索引擎，可以结合MySQL,PostgreSQL做全文搜索，它可以提供比数据库本身更专业的搜索功能，使得应用程序更容易实现专业化的全文检索。Sphinx特别为一些脚本语言设计搜索API接口，如PHP,Python,Perl,Ruby等，同时为MySQL也设计了一个存储引擎插件。<a href="http://www.sphinxsearch.com/" target="_blank">http://www.sphinxsearch.com/</a>
+</div>
+<h2>全文索引管理</h2>
+<form action="{$baseUrl}" method="post" >
+<input type="hidden" name="step" value="2" />
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="25%">是否开启全文索引</td>
+		<td><input type="radio" name="isopen" value="1" {$isopenCheck[1]}/> 是 <input type="radio" name="isopen" value="0" {$isopenCheck[0]}/> 否</td>
+	</tr>
+	<tr class="tr3">
+		<td>服务器主机地址</td>
+		<td><input type="text" name="host" value="{$configure[host]}" id="host" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>服务器端口号</td>
+		<td><input type="text" name="port" value="{$configure[port]}" id="port" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><input type="button" class="btn" value="测试" name="test" onclick="pingTest();"/></td>
+		<td><input type="submit" class="btn" value="保存" name="save" /></td>
+	</tr>
+</table>
+</form>
+<!--
+EOT;
+}elseif($admintype == 'mmemcache'){print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$admin_file?adminjob=advanced&admintype=msphinx">Sphinx全文索引配置</a></li>
+	<li><a href="$admin_file?adminjob=advanced&admintype=mmemcache" class="two">Memcache 缓存配置</a></li>
+</ul>
+<div class="c"></div>
+<h3>介绍说明</h3>
+<div class="tr5">
+memcached是以LiveJournal旗下Danga Interactive公司的Brad Fitzpatric为首开发的一款开源软件。
+现在已成为从多服务中提高Web应用扩展性的重要因素。许多Web应用都将数据保存到RDBMS中,应用服务器从中读取数据并在浏览器中显示。
+但随着数据量的增大、访问的集中，就会出现RDBMS的负担加重、数据库响应恶化、网站显示延迟等重大影响。memcached是高性能的分布式内存缓存服务器。
+一般的使用目的是，通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度、提高可扩展性。
+Memcache官方网站：<a href="http://www.danga.com/memcached" target="_blank">http://www.danga.com/memcached</a> 。
+</div>
+<h2>Memcache 缓存配置</h2>
+<form action="{$baseUrl}" method="post" >
+<input type="hidden" name="step" value="2" />
+<table width="100%" cellspacing="0" cellpadding="0">
+<!--
+EOT;
+if(!$mcache->exists()){print <<<EOT
+-->
+	<tr class="tr3">
+		<td colspan="2">服务器环境不支持Memcache客户端,请安装</td>
+	</tr>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+	<tr class="tr3">
+		<td width="25%">是否开启Memcache</td>
+		<td>
+			<input type="radio" name="isopen" value="1" {$isopenCheck[1]}/> 是
+			<input type="radio" name="isopen" value="0" {$isopenCheck[0]}/> 否
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>服务器主机地址</td>
+		<td><input type="text" name="host" value="{$configure[host]}" id="host" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>服务器端口号</td>
+		<td><input type="text" name="port" value="{$configure[port]}" id="port" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><input type="button" class="btn" value="测试" name="test" onclick="pingTest();"/></td>
+		<td><input type="submit" class="btn" value="保存" name="save" /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+</form>
+<!--
+EOT;
+}print <<<EOT
+-->
+<script language="JavaScript" src="js/global.js"></script>
+<script language="JavaScript" src="js/pw_ajax.js"></script>
+<script type="text/javascript">
+function pingTest(){
+	var host = getObj("host").value;
+	var port = getObj("port").value;
+	var data = 'ajax=1&host='+host+'&port='+port;
+	sendmsg('{$baseUrl}',data);
+}
+</script>
+<!--
+EOT;
+?>-->

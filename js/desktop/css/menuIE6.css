@@ -1,0 +1,36 @@
+.menu_top
+{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='js/desktop/images/menu_top.png', sizingMethod = 'scale');
+    height: 28px;
+}.menu_bg
+{
+    height: 100 % ;
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'js/desktop/images/menu_bg.png', sizingMethod = 'scale');
+}.menu_bottom
+{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'js/desktop/images/menu_bottom.png', sizingMethod = 'scale');
+    height: 28px;
+}.menu_s
+{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'js/desktop/images/menu_s.png', sizingMethod = 'scale');
+    width: 18px;
+    height: 18px;
+    position: absolute;
+}
+.startPanel
+{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = 'js/desktop/images/startPanel.png', sizingMethod = 'scale');
+}
+.ie6pos
+{
+POSITION: absolute; TOP: 0px
+}
+.menu_item
+{
+padding:15px 0 0 25px;
+}

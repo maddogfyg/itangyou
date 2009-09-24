@@ -1,0 +1,2312 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<form action="$basename" method="post">
+<input type="hidden" name="step" value="2">
+<!--
+EOT;
+if($admintype=='basic' || $settingdb['basic']){
+if($action){print <<<EOT
+-->
+<ul id="basictype" class="nav3">
+	<li><a id="state" style="cursor:pointer" onclick="showaction('basic','state')" $cls_state>站点状态</a></li>
+	<li><a id="info" style="cursor:pointer" onclick="showaction('basic','info')" $cls_info>站点信息</a></li>
+	<li><a id="global" style="cursor:pointer" onclick="showaction('basic','global')" $cls_global>全局参数</a></li>
+</ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+<div id="stypestate" style="display:$display;">
+<h2>站点状态设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">站点状态:</span><br />完全开放：允许任何人访问站点。<br />内部开放：特定会员才能访问站点，通常用于站点内部测试、调试。<br />完全关闭：除站点创始人，其他人都不允许访问站点，一般用于站点关闭、系统维护等情况。</td>
+		<td id="bbsifopen">
+			<input type="radio" value="1" name="config[bbsifopen]" $bbsifopen_1 onclick="showoption('bbsifopen',this.value)"> 完全开放
+			<input type="radio" value="2" name="config[bbsifopen]" $bbsifopen_2 onclick="showoption('bbsifopen',this.value)"> 内部开放
+			<input type="radio" value="0" name="config[bbsifopen]" $bbsifopen_0 onclick="showoption('bbsifopen',this.value)"> 完全关闭
+		</td>
+	</tr>
+	<tbody id="bbsifopen2" style="display:none">
+		<tr class="tr3">
+			<td><span class="xia2">是否只允许特定会员或特定用户组访问:</span><br />关闭则表示允许所有已注册会员访问站点。<br />开启则表示只允许特定会员及特定用户组访问站点，需进一步设置允许访问的特定用户组和特定会员。<br /><b>特定用户组、特定会员、特定IP段可以单独设置，亦可同时设置，同时留空效果等同于完全关闭。</b></td>
+			<td>
+				<input type="radio" value="1" name="config[visitopen]" $visitopen_Y> 开启
+				<input type="radio" value="0" name="config[visitopen]" $visitopen_N> 关闭
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">内部特定用户组:</span><br />在内部状态下，只允许特定用户组访问站点，留空则表示不使用此功能。</font></td>
+			<td>$visitgroup</td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">内部特定IP段:</span><br />在内部状态下，除特定用户组外，允许特定IP段的用户访问站点，如：192.168.1.*，留空则表示不使用此功能，IP段之间请用英文逗号“,”分隔。</font>。你当前登录IP：$onlineip</td>
+			<td><textarea name="config[visitips]" rows="6" cols="48">$db_visitips</textarea></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">内部特定会员:</span><br />在内部状态下，除特定用户组外，允许访问站点的特定会员，留空则表示不使用此功能，会员用户名请用英文逗号“,”分隔。</font></td>
+			<td><textarea name="config[visituser]" rows="6" cols="48">$db_visituser</textarea></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">内部开放提示信息:</span><br />当站点状态选择为内部开放状态下提示的信息。</td>
+			<td><textarea name="config[visitmsg]" rows="6" cols="48">$db_visitmsg</textarea></td>
+		</tr>
+	</tbody>
+	<tbody id="bbsifopen0" style="display:none">
+		<tr class="tr3">
+			<td><span class="xia2">关闭状态信息:</span><br />当站点状态选择为完全关闭状态下提示的信息。</td>
+			<td><textarea name="config[whybbsclose]" rows="6" cols="48">$db_whybbsclose</textarea></td>
+		</tr>
+	</tbody>
+	<tr class="tr3">
+		<td><span class="xia2">定时发帖功能:</span><br />定时打开与关闭发帖功能，设置用户可以使用发帖功能的时间段(24小时制)，支持跨越零点搜索，管理员与总版主不受此限制<br />例如:用户在 每晚20:00 到 次日8:00 这段时间内可以使用发帖，发帖开启于(点)设为:<b>20</b>；发帖关闭于(点)设为:<b>8</b>。</td>
+		<td>
+			<input type="radio" value="1" name="postctl[openpost]" $openpost_Y> 开启
+			<input type="radio" value="0" name="postctl[openpost]" $openpost_N> 关闭
+			<br /><br />
+			发帖开启于(点):<input name="postctl[poststart]" value="$db_poststart" size="2" class="input">
+			发帖关闭于(点):<input name="postctl[postend]" value="$db_postend" size="2" class="input">
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">定时搜索功能:</span><br />定时打开与关闭搜索功能，设置用户可以使用搜索功能的时间段(24小时制)，支持跨越零点搜索，管理员与总版主不受此限制<br />例如:用户在 每晚22:00 到 次日10:00 这段时间内可以使用搜索，搜索开启于(点)设为:<b>22</b>；搜索关闭于(点)设为:<b>10</b>。</td>
+		<td>
+			<input type="radio" value="1" name="schctl[opensch]" $opensch_Y> 开启
+			<input type="radio" value="0" name="schctl[opensch]" $opensch_N> 关闭
+			<br /><br />
+			搜索开启于(点):<input name="schctl[schstart]" value="$db_schstart" size="2" class="input">
+			搜索关闭于(点):<input name="schctl[schend]" value="$db_schend" size="2" class="input">
+		</td>
+	</tr>
+</table><br />
+</div>
+<div id="stypeinfo" style="display:$display;">
+<h3>站点信息设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">站点名称:</span><br />填写您站点的名称。</td>
+		<td><input name="config[bbsname]" value="$db_bbsname" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点地址:</span><br />填写您站点的地址，输入的时候请包括完整的域名。例如: http://www.phpwind.net，不要以斜杠 (“/”) 结尾。</td>
+		<td><input name="config[bbsurl]" value="$db_bbsurl" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">联系链接:</span><br />填写联系站点管理员的链接地址，可以是邮件(比如: mailto:webmaster@phpwind.net) 或其他链接。出现在每页底部。</td>
+		<td><input name="config[ceoconnect]" value="$db_ceoconnect" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">管理员邮箱:</span><br />填写站点管理员的邮箱地址。</td>
+		<td><input name="config[ceoemail]" value="$db_ceoemail" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">ICP 备案信息:</span><br />填写 ICP 备案的信息，例如: 浙ICP备xxxxxxxx号。</td>
+		<td><input name="config[icp]" value="$db_icp" size="40" class="input" /></td>
+	</tr>
+</table><br />
+</div>
+<div id="stypeglobal" style="display:$display;">
+<h2>全局参数设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">站点默认风格:</span><br />选择站点的默认风格。用户在没有指定风格的时候，均使用默认风格。</td>
+		<td><select name="config[defaultstyle]">$sltstyles</select></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启左右分栏:</span><br />左右分栏的开关，开启后可选择分栏的默认模式。</td>
+		<td>
+			<select name="config[columns]">
+				<option value="2" $columns_2>开启，默认使用分栏模式</option>
+				<option value="1" $columns_1>开启，默认使用平板模式</option>
+				<option value="0" $columns_0>关闭左右分栏</option>
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点默认编码:</span><br />选择与您使用的站点编码相同的设置，<font color="#FF0000">无特殊需要请不要随意更改。</font></td>
+		<td>
+			<select name="config[charset]">
+				<option value="gbk" $charset_gbk>简体中文 (gbk)</option>
+				<option value="big5" $charset_big5>繁体中文 (big5)</option>
+				<option value="utf-8" $charset_utf8>UTF8编码 (utf-8)</option>
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">强制设置编码:</span><br />解决国外的空间乱码问题，<font color="#FF0000">无特殊需要请不要随意更改。</font></td>
+		<td>
+			<input name="config[forcecharset]" type="radio" value="1" $forcecharset_Y> 开启
+			<input name="config[forcecharset]" type="radio" value="0" $forcecharset_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点默认时区:</span><br />系统默认时间显示。会员可在前台设置中心进行调整</td>
+		<td>
+			<select name="config[timedf]">
+				<option value="-12" $zone_012>(标准时-12:00) 日界线西</option>
+				<option value="-11" $zone_011>(标准时-11:00) 中途岛、萨摩亚群岛</option>
+				<option value="-10" $zone_010>(标准时-10:00) 夏威夷</option>
+				<option value="-9" $zone_09>(标准时-9:00) 阿拉斯加</option>
+				<option value="-8" $zone_08>(标准时-8:00) 太平洋时间(美国和加拿大)</option>
+				<option value="-7" $zone_07>(标准时-7:00) 山地时间(美国和加拿大)</option>
+				<option value="-6" $zone_06>(标准时-6:00) 中部时间(美国和加拿大)、墨西哥城</option>
+				<option value="-5" $zone_05>(标准时-5:00) 东部时间(美国和加拿大)、波哥大</option>
+				<option value="-4" $zone_04>(标准时-4:00) 大西洋时间(加拿大)、加拉加斯</option>
+				<option value="-3.5" $zone_03_5>(标准时-3:30) 纽芬兰</option>
+				<option value="-3" $zone_03>(标准时-3:00) 巴西、布宜诺斯艾利斯、乔治敦</option>
+				<option value="-2" $zone_02>(标准时-2:00) 中大西洋</option>
+				<option value="-1" $zone_01>(标准时-1:00) 亚速尔群岛、佛得角群岛</option>
+				<option value="111" $zone_111>(格林尼治标准时) 西欧时间、伦敦、卡萨布兰卡</option>
+				<option value="1" $zone_1>(标准时+1:00) 中欧时间、安哥拉、利比亚</option>
+				<option value="2" $zone_2>(标准时+2:00) 东欧时间、开罗，雅典</option>
+				<option value="3" $zone_3>(标准时+3:00) 巴格达、科威特、莫斯科</option>
+				<option value="3.5" $zone_3_5>(标准时+3:30) 德黑兰</option>
+				<option value="4" $zone_4>(标准时+4:00) 阿布扎比、马斯喀特、巴库</option>
+				<option value="4.5" $zone_4_5>(标准时+4:30) 喀布尔</option>
+				<option value="5" $zone_5>(标准时+5:00) 叶卡捷琳堡、伊斯兰堡、卡拉奇</option>
+				<option value="5.5" $zone_5_5>(标准时+5:30) 孟买、加尔各答、新德里</option>
+				<option value="6" $zone_6>(标准时+6:00) 阿拉木图、 达卡、新亚伯利亚</option>
+				<option value="7" $zone_7>(标准时+7:00) 曼谷、河内、雅加达</option>
+				<option value="8" $zone_8>(北京时间) 北京、重庆、香港、新加坡</option>
+				<option value="9" $zone_9>(标准时+9:00) 东京、汉城、大阪、雅库茨克</option>
+				<option value="9.5" $zone_9_5>(标准时+9:30) 阿德莱德、达尔文</option>
+				<option value="10" $zone_10>(标准时+10:00) 悉尼、关岛</option>
+				<option value="11" $zone_11>(标准时+11:00) 马加丹、索罗门群岛</option>
+				<option value="12" $zone_12>(标准时+12:00) 奥克兰、惠灵顿、堪察加半岛</option>
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">服务器时间校正:[分钟]</span><br />如果站点显示时间与服务器时间有差异，可用此功能进行微调。</td>
+		<td><input name="config[cvtime]" value="$db_cvtime" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">默认时间显示格式:</span><br />格式1:yyyy-mm-dd，如2009-09-09<br />格式2:yy-m-d，如09-9-9</td>
+		<td>
+			<input name="config[datefm]" value="$db_datefm" size="40" class="input" /><br />
+			<input type="radio" name="time_f" value="24" $check_24> 24小时制
+			<input type="radio" name="time_f" value="12" $check_12> 12小时制
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">搜索返回的最大结果数:</span><br />搜索一次得到的结果数量</td>
+		<td><input name="config[maxresult]" value="$db_maxresult" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">搜索间隔时间:[秒]</span><br />用户进行一次搜索后，再次进行搜索所需要等待的时间。设置为0则用户随时都可以搜索。</td>
+		<td><input name="config[schwait]" value="$db_schwait" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启短信息声音提示:</span><br />打开后，如果发现有新的短信息，则会播放提示声音。</td>
+		<td>
+			<input type="radio" value="1" name="config[msgsound]" $msgsound_Y> 开启
+			<input type="radio" value="0" name="config[msgsound]" $msgsound_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启积分变动提示:</span><br />开启后，当用户在站点积分变动时，将弹出信息通知用户。<br />请先到积分设置对积分流通记录进行设置。</td>
+		<td>
+			<input type="radio" value="1" name="config[ifcredit]" $ifcredit_Y> 开启
+			<input type="radio" value="0" name="config[ifcredit]" $ifcredit_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">显示在页面头部的广告每行显示条数:</span></td>
+		<td><input name="config[txtadnum]" value="$db_txtadnum" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">用户列表最大页数:</span><br />用户列表显示的总页数，建议为1000-2500。0或留空表示不限制。</td>
+		<td><input name="config[maxmember]" value="$db_maxmember" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启副版主功能:</span><br />开启该功能，第一版主有权任命和罢免其他版主。</td>
+		<td>
+			<input type="radio" value="1" name="config[adminset]" $adminset_Y> 开启
+			<input type="radio" value="0" name="config[adminset]" $adminset_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">版块导航弹出式菜单显示:</span><br />版块导航(帖子列表页面、发帖页面弹出下拉菜单显示版块)</td>
+		<td>
+			<input type="radio" value="1" name="config[menu]" $menu_Y> 开启
+			<input type="radio" value="0" name="config[menu]" $menu_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子阅读页个人信息直接显示:</span><br />开启则直接显示，关闭则出现查看站点用户信息，点击即可显示</td>
+		<td>
+			<input type="radio" value="1" name="config[readinfo]" $readinfo_Y> 开启
+			<input type="radio" value="0" name="config[readinfo]" $readinfo_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">AJAX 使用控制:</span><br />主题管理操作(置顶，加亮，提前等)；回复管理操作(删除，禁言，屏蔽等)<br />快捷发帖(引用，编辑)；回复其他操作(评分，推荐，举报等)；首页登录。</td>
+		<td>
+			<input type="checkbox" value="1" name="cajax[]" $ajax_0 /> 主题管理操作
+			<input type="checkbox" value="2" name="cajax[]" $ajax_1 /> 回复管理操作<br />
+			<input type="checkbox" value="4" name="cajax[]" $ajax_2 /> 快捷发帖
+			<input type="checkbox" value="8" name="cajax[]" $ajax_3 /> 回复其他操作
+			<input type="checkbox" value="16" name="cajax[]" $ajax_4 /> 首页登录
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否使用自动跳转:</span><br />如果服务器为NT，关闭此选项时出现无法登录状况，请开启。</td>
+		<td>
+			<input type="radio" value="1" name="config[ifjump]" $ifjump_Y> 开启
+			<input type="radio" value="0" name="config[ifjump]" $ifjump_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">刷新时间间隔:</span><br />您可以开启此功能以阻止用户恶意刷新。启用此限制后，刷新页面必须间隔一定的时间。设置为0则不作限制。</td>
+		<td><input name="config[refreshtime]" value="$db_refreshtime" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">强制输入操作原因:</span><br />为了避免由于管理操作上的不透明而引起站点会员纠纷，管理员可启用此项功能，强制要求在前台进行管理操作时输入操作原因。</td>
+		<td>
+			<input name="config[enterreason]" type="radio" value="1" $enterreason_Y> 开启
+			<input name="config[enterreason]" type="radio" value="0" $enterreason_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">备选操作原因:</span><br />显示于前台管理操作原因备选框中。每行填写一个操作原因，空行表示分隔符“------”。</td>
+		<td><textarea name="config[adminreason]" rows="6" cols="48">$db_adminreason</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">在线用户时限:[分钟]</span><br />如果用户在这段时间，没有点击站点的任何链接，他的会话便会超时。同时，其用户名会从在线用户列表中删除。</td>
+		<td><input name="config[onlinetime]" value="$db_onlinetime" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">统计今日到访会员:</span><br />大型站点建议关闭，影响速度。</td>
+		<td>
+			<input name="config[today]" type="radio" value="1" $today_Y> 开启
+			<input name="config[today]" type="radio" value="0" $today_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点回收站功能:</span><br />关闭回收站功能，删除主题回复时将进行直接删除操作。</td>
+		<td>
+			<input name="config[recycle]" type="radio" value="1" $recycle_Y> 开启
+			<input name="config[recycle]" type="radio" value="0" $recycle_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否在页脚显示程序运行时间:</span></td>
+		<td>
+			<input name="config[footertime]" type="radio" value="1" $footertime_Y> 开启
+			<input name="config[footertime]" type="radio" value="0" $footertime_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">DEBUG 模式运行站点:</span><br />显示程序错误报告信息，站点出现异常时打开此模式，再将错误信息提交给程序开发商，以便尽快得到解决。</td>
+		<td>
+			<input name="config[debug]" type="radio" value="1" $debug_Y> 开启
+			<input name="config[debug]" type="radio" value="0" $debug_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">二级目录/域名功能:</span><br />以二级目录/域名访问方式，功能介绍参照程序包中的“分站点二级域名(目录)功能.txt”文档。</td>
+		<td>
+			<input type="radio" value="0" name="config[forumdir]" $forumdir_0> 不使用<br />
+			<input type="radio" value="1" name="config[forumdir]" $forumdir_1> 直接访问<br />
+			<input type="radio" value="2" name="config[forumdir]" $forumdir_2> 二级域名访问
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">Cookie 路径:</span><br />一般情况下，请填写“/”，如果您在同一个域名下运行了多个站点，便需要将它设置为每个站点所在的目录名以防冲突。如“/bbs/”、“/forum/”。<br /><font color="#FF0000">注意:只有在特殊情况下才需要进行此设置，若您不能肯定，请填写“/”，输入错误的设置会导致您无法登录站点。</font></td>
+		<td><input name="config[ckpath]" value="$db_ckpath" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">Cookie 作用域:</span><br />一般情况下，请留空，如果您的站点有两个不同的网址，如“phpwind.net”、“bbs.phpwind.net”，要使用户在两个不同的域名访问下，仍然能保持登录状态，您需要在设置为“.phpwind.net” (注意域名需要以点开头)。<br /><font color="#FF0000">注意:只有在特殊情况下才需要进行此设置，若您不能肯定，请留空，输入错误的设置会导致您无法登录站点。</font></td>
+		<td><input name="config[ckdomain]" value="$db_ckdomain" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点底部快捷栏:</span><br />是否显示站点底部快捷栏</font></td>
+		<td>
+			<input name="config[toolbar]" type="radio" value="1" $toolbar_Y> 开启
+			<input name="config[toolbar]" type="radio" value="0" $toolbar_N> 关闭
+		</td>
+	</tr>
+</table><br />
+</div>
+<!--
+EOT;
+}if($admintype=='safe' || $settingdb['safe']){
+if($action){print <<<EOT
+-->
+<ul id="safetype" class="nav3">
+	<li><a id="speed" style="cursor:pointer" onclick="showaction('safe','speed')" $cls_speed>速度优化</a></li>
+	<li><a id="seo" style="cursor:pointer" onclick="showaction('safe','seo')" $cls_seo>搜索引擎优化</a></li>
+	<li><a id="gdcode" style="cursor:pointer" onclick="showaction('safe','gdcode')" $cls_gdcode>验证机制</a></li>
+	<li><a id="dir" style="cursor:pointer" onclick="showaction('safe','dir')" $cls_gdcode>动态目录</a></li>
+	<li><a id="safe" style="cursor:pointer" onclick="showaction('safe','safe')" $cls_safe>安全控制</a></li>
+</ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+<div id="stypespeed" style="display:$display;">
+<h3>速度优化设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">进程优化:</span><br />建议<b>15分钟</b>在线<b>1000人</b>以上站点打开此选项。</td>
+		<td>
+			<input type="radio" value="1" name="config[lp]" $lp_Y> 开启
+			<input type="radio" value="0" name="config[lp]" $lp_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">最大在线人数:</span><br />当站点在线人数达到填写的数值时提示错误，留空或0为无限制。</td>
+		<td><input name="config[onlinelmt]" value="$db_onlinelmt" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点在线会员(游客)算法:</span></td>
+		<td>
+			<input type="radio" value="0" name="config[online]" $online_N> 文本在线
+			<input type="radio" value="1" name="config[online]" $online_Y> 数据库在线
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">GZIP 压缩级别:</span><br />设置 GZIP 在输出时的压缩级别: <b>0=关闭GZIP功能，9=最大压缩比</b>。<br />如果您已经在服务器上使用了mod_gzip 或者 mod_deflate，请设置为0关闭GZIP功能，否则强烈推荐使用级别 1。另外，此功能要求 ZLIB 库支持。<br /><br />GZIP 压缩输出简介:使用 GZIP HTML 压缩输出给用户页面，这会减少带宽要求。此功能要求客户端浏览器的支持，以及 HTTP 1.1 兼容。它会产生服务器额外的性能开销。</td>
+		<td><input name="config[obstart]" value="$db_obstart" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">清除页面冗余内容:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[redundancy]" $redundancy_Y> 开启
+			<input type="radio" value="0" name="config[redundancy]" $redundancy_N> 关闭
+		</td>
+	</tr>
+</table><br />
+</div>
+<div id="stypeseo" style="display:$display;">
+<h2>搜索引擎优化设置(SEO)</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="50%"><span class="xia2">Title 描述:</span><br />为首页或其他页面输入站点的标题(title)描述，让搜索引擎更容易找到您的站点。<br />例如:PHPWind 官方论坛</td>
+		<td>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%" align="center">
+				<tr>
+					<td width="30%">首页的描述:</td>
+					<td><input name="bbstitle[index]" value="$db_bbstitle[index]" size="40" class="input" /></td>
+				</tr>
+				<tr>
+					<td>其他页面的描述:</td>
+					<td><input name="bbstitle[other]" value="$db_bbstitle[other]" size="40" class="input" /></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">Meta 关键词:</span><br />为所有页面输入 Meta 关键词，让搜索引擎更容易找到您的站点。<br />例如:php,免费,站点,系统,bbs,mysql,下载</td>
+		<td><input name="config[metakeyword]" value="$db_metakeyword" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">Meta 描述:</span><br />为所有页面输入 Meta 描述，以便能够在搜索引擎中正确搜索到您的站点。<br />例如:PHPWind 站点系统是一套安全、高负载、可扩展、易用等特性的开源软件系统。</td>
+		<td><input name="config[metadescrip]" value="$db_metadescrip" size="40" class="input" /></td>
+	</tr>
+</table><br />
+</div>
+<div id="stypegdcode" style="display:$display;">
+<h2>验证码设置</h2>
+<style type="text/css">
+.gdcode{margin:0;padding:0}
+.gdcode	li{list-style:none;margin:0;padding:0;float:left;width:35%}
+</style>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">开启认证码:</span></td>
+		<td>
+			<ul class="gdcode">
+				<li><input type="checkbox" value="1" name="gdcheck[]" $gdcheck_0 /> 注册</li>
+				<li><input type="checkbox" value="2" name="gdcheck[]" $gdcheck_1 /> 前台登录</li>
+				<li><input type="checkbox" value="4" name="gdcheck[]" $gdcheck_2 /> 发帖</li>
+				<li><input type="checkbox" value="8" name="gdcheck[]" $gdcheck_3 /> 短消息</li>
+				<li><input type="checkbox" value="16" name="gdcheck[]" $gdcheck_4 /> 其它</li>
+				<li><input type="checkbox" value="32" name="gdcheck[]" $gdcheck_5 /> 后台登录</li>
+			</ul>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">发帖验证码限制:</span><br />设置100，则发帖数小于100的会员，将显示验证码;设置0 则关闭该功能。</td>
+		<td><input name="config[postgd]" value="$db_postgd" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">图象验证的识别难度:</span><br />注:由于部分服务器对字体和gif功能支持不友好，如果您的站点开启认证码后出现服务器不稳定现象请关闭“随机字体”，“中文验证码”与“gif动画”这几个选项。</td>
+		<td>
+			<ul class="gdcode">
+				<li><input type="checkbox" value="1" name="gdstyle[]" $gdstyle_0 /> 随机字体</li>
+				<li><input type="checkbox" value="2" name="gdstyle[]" $gdstyle_1 /> 随机字体大小</li>
+				<li><input type="checkbox" value="4" name="gdstyle[]" $gdstyle_2 /> 随机倾斜</li>
+				<li><input type="checkbox" value="8" name="gdstyle[]" $gdstyle_3 /> 随机背景</li>
+				<li><input type="checkbox" value="16" name="gdstyle[]" $gdstyle_4 /> 随机颜色</li>
+				<li><input type="checkbox" value="32" name="gdstyle[]" $gdstyle_5 /> 随机干扰图形</li>
+				<li><input type="checkbox" value="64" name="gdstyle[]" $gdstyle_6 /> gif动画</li>
+			</ul>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">验证码类型:</span></td>
+		<td>
+			<select name="config[gdtype]">
+				<option value="0" $gdtype_0>数字验证码</option>
+				<option value="1" $gdtype_1>英文验证码</option>
+				<option value="2" $gdtype_2>中文验证码</option>
+				<option value="3" $gdtype_3>随 机</option>
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">验证码尺寸:</span><br />尺寸请不要超过 200 * 80。</td>
+		<td>
+			宽:<input name="gdsize[0]" value="$gdsize[0]" size="5" class="input" />(像素)&nbsp;&nbsp;&nbsp;&nbsp;
+			高:<input name="gdsize[1]" value="$gdsize[1]" size="5" class="input" />(像素)
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>验证码个数:</td>
+		<td>
+			<input name="gdsize[2]" value="$gdsize[2]" size="5" class="input" />
+		</td>
+	</tr>
+</table><br />
+<h3>验证问题设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="50%"><span class="xia2">验证问题与答案:</span><br />1、您可以使用简单的文字问题(例如:3+5=?，请输入中文答案)<br /> 2、也可以使用html代码(例如将问题做成一张小图片 &lt;img src="地址" /&gt;)<br />3、多个问题将随机出现一个问题。</td>
+		<td>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%" align="center">
+				<tbody id="qmode" style="display:none"><tr>
+						<td><input name="question[]" value="" size="35" class="input" /></td>
+						<td><input name="answer[]" value="" size="20" class="input" /> <a style="cursor:pointer;color:#FA891B" onclick="deltbody(this);">[删除]</a></td>
+				</tr></tbody>
+				<tr>
+					<td width="50%">问题</td>
+					<td>答案 <a style="cursor:pointer;color:#0000FF" onclick="addtbody('qmode','qbody');">[添加]</a></td>
+				</tr>
+<!--
+EOT;
+foreach($db_question as $key => $value){
+$value = str_replace('"','&quot;',$value);print <<<EOT
+-->
+				<tr>
+					<td><input name="question[]" value="$value" size="35" class="input" /></td>
+					<td><input name="answer[]" value="$db_answer[$key]" size="20" class="input" /> <a style="cursor:pointer;color:#FA891B" onclick="deltbody(this);">[删除]</a></td>
+				</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				<tbody id="qbody"></tbody>
+			</table>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">注册验证问题功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="qcheck[regq]" $regq_Y> 开启
+			<input type="radio" value="0" name="qcheck[regq]" $regq_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">前台登录验证问题功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="qcheck[loginq]" $loginq_Y> 开启
+			<input type="radio" value="0" name="qcheck[loginq]" $loginq_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">发帖验证问题功能:</span><br />设置100，则发帖数小于100的会员，将显示验证问题;设置 0 则关闭该功能。</td>
+		<td><input name="qcheck[postq]" value="$postq" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">短消息验证问题功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="qcheck[msgq]" $msgq_Y> 开启
+			<input type="radio" value="0" name="qcheck[msgq]" $msgq_N> 关闭
+		</td>
+	</tr>
+</table><br />
+</div>
+<div id="stypedir" style="display:$display;">
+<h3>动态目录设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">图片保存目录:</span><br />如果设置绝对路径，必须为空间上的目录。如果发现不可更改，请确认目录可写入。目录分隔符请使用“/”不要使用“\”。</td>
+		<td><input name="config[picpath]" value="$db_picpath" size="40" class="input" $imgdisabled /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">附件保存目录:</span><br />如果设置绝对路径，必须为空间上的目录。如果发现不可更改，请确认目录可写入。目录分隔符请使用“/”不要使用“\”。</td>
+		<td><input name="config[attachname]" value="$db_attachname" size="40" class="input" $attdisabled /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">静态HTML文件保存目录:</span><br />如果设置绝对路径，必须为空间上的目录。如果发现不可更改，请确认目录可写入。目录分隔符请使用“/”不要使用“\”。</td>
+		<td><input name="config[htmdir]" value="$db_htmdir" size="40" class="input" $htmdisabled /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">自动不定期更改图片链:</span><br />小型站点不推荐选开启。</td>
+		<td>
+			<input type="radio" value="1" name="config[autochange]" $autochange_Y> 开启
+			<input type="radio" value="0" name="config[autochange]" $autochange_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">定时更改图片目录防止图片盗链:[小时]</span><br />如果上一选项选否，此项无效。</td>
+		<td>
+			<select name="config[hour]">
+				<option value="4" $hour_4>4</option>
+				<option value="6" $hour_6>6</option>
+				<option value="8" $hour_8>8</option>
+				<option value="12" $hour_12>12</option>
+				<option value="24" $hour_24>24</option>
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">使用跨台固定图片链:</span><br />不使用请写“N”，小型站点不推荐使用，请不要随意更改。</td>
+		<td><input name="config[http]" value="$db_http" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">远程附件连接设置:</span><br />不使用请写“N”，请不要随意更改。</td>
+		<td><input name="config[attachurl]" value="$db_attachurl" size="40" class="input" /></td>
+	</tr>
+</table><br />
+</div>
+<div id="stypesafe" style="display:$display;">
+<h3>安全控制设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">系统负载控制参数:</span><br />当服务器的负载参数大于这个值时，自动开启CC防护模式，建议设置为 3。</td>
+		<td><input name="config[loadavg]" value="$db_loadavg" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">CC攻击防护:</span><br />不 使 用:关闭CC攻击防护。<br />普通模式:建议使用这种模式，可预防站点遭受cc攻击。<br />加强模式:当网站正遭受CC攻击而导致访问速度很慢时，请开启此种模式可阻止攻击。</td>
+		<td>
+			<input type="radio" value="0" name="config[cc]" $cc_0> 不使用
+			<input type="radio" value="1" name="config[cc]" $cc_1> 普通模式
+			<input type="radio" value="2" name="config[cc]" $cc_2> 加强模式
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">安全问题功能:</span><br />如果会员设置了安全问题，需要填写正确的答案才能登录站点，可提高密码安全性。</td>
+		<td>
+			<input type="radio" value="1" name="config[ifsafecv]" $ifsafecv_Y> 开启
+			<input type="radio" value="0" name="config[ifsafecv]" $ifsafecv_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">强制使用安全问题用户组设置:</span><br />可以强制管理权限较高的用户组(如:管理员,总版主,版主)使用安全问题，可提高密码安全性。</td>
+		<td>$safegroup</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">修改用户注册文件文件名:</span></td>
+		<td><input name="config[registerfile]" value="$db_registerfile" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">修改后台登录文件文件名:</span></td>
+		<td><input name="config[adminfile]" value="$db_adminfile" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">内部网IP匹配:</span><br />开启后，站点内用户IP都显示为外网IP。</td>
+		<td>
+			<input type="radio" value="1" name="config[xforwardip]" $xforwardip_Y> 开启
+			<input type="radio" value="0" name="config[xforwardip]" $xforwardip_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">IP验证功能:</span><br />可以加强站点安全，选择开启将对登录者ip进行验证<br />如果与上一次登录ip前2位不同，将要求重新登录。</td>
+		<td>
+			<input type="radio" value="1" name="config[ipcheck]" $ipcheck_Y> 开启
+			<input type="radio" value="0" name="config[ipcheck]" $ipcheck_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">后台登录IP限制:</span><br />此功能可绑定登录后台的 IP，只有在列表内的 IP 才能登录站点，创始人不受限制<br>可以绑定单个IP地址格式如:192.0.0.1，也可以绑定一段IP格式如:192.0.0<br>多个IP "," 分隔。</td>
+		<td><textarea name="config[iplimit]" rows="6" cols="48">$db_iplimit</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点安全验证参数:</span><br />除非站点出现安全危机，请不要随意修改。</td>
+		<td><input name="config[hash]" value="$db_hash" size="40" class="input" /></td>
+	</tr>
+</table><br />
+</div>
+<!--
+EOT;
+}if($admintype=='att' || $settingdb['att']){
+if ($pwatermark == 1){print <<<EOT
+-->
+<div>
+	<h3>水印预览效果</h3>
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td></td>
+		<td><img src="data/bbscache/watermark_preview.jpg"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%" class="tar">图片大小变化:</td>
+		<td>原图大小: $size1 字节 ，处理后的图片大小: $size2 字节，缩小比率($sizerate%)</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">水印位置:</td>
+		<td>
+<!--
+EOT;
+if($config['waterpos'] == 0) {print <<<EOT
+-->
+随机位置
+<!--
+EOT;
+} elseif ($config['waterpos'] == 1) {print <<<EOT
+-->
+顶部居左
+<!--
+EOT;
+} elseif ($config['waterpos'] == 2) {print <<<EOT
+-->
+顶部居中
+<!--
+EOT;
+} elseif ($config['waterpos'] == 3) {print <<<EOT
+-->
+顶部居右
+<!--
+EOT;
+} elseif ($config['waterpos'] == 4) {print <<<EOT
+-->
+底部居左
+<!--
+EOT;
+} elseif ($config['waterpos'] == 5) {print <<<EOT
+-->
+底部居中
+<!--
+EOT;
+} elseif ($config['waterpos'] == 6) {print <<<EOT
+-->
+底部居右
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+	</tr>
+<!--
+EOT;
+if ($config['waterimg']) {print <<<EOT
+-->
+	<tr class="tr3">
+		<td class="tar">水印图片文件:</td>
+		<td><img src="$imgpath/water/$config[waterimg]"></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+	<tr class="tr3">
+		<td class="tar">水印图片文字:</td>
+		<td>$config[watertext]</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">文字水印字体:</td>
+		<td>$config[waterfonts]</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">文字水印字体大小:</td>
+		<td>$config[waterfont]</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">水印图片文字颜色:</td>
+		<td><span style="color:$config[watercolor]">■■■■</span></td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">水印透明度:</td>
+		<td>$config[waterpct]</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">图片质量:</td>
+		<td>$config[jpgquality]</td>
+	<tr>
+	</table>
+</div>
+<!--
+EOT;
+}elseif($pathumb == 1) {print <<<EOT
+-->
+<div>
+	<h3>缩略图预览</h3>
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="30%"></td>
+		<td><img src="$imageurl"></td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">原图宽:</td><td>$source_size[width] 像素</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">原图高:</td><td>$source_size[height] 像素</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">缩略图宽:</td><td>$thumbsize[0] 像素</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">缩略图高:</td><td>$thumbsize[1] 像素</td>
+	</tr>
+	<tr class="tr3">
+		<td class="tar">图片大小变化:</td><td> 原图大小: $size1 字节 ，处理后的图片大小: $size2 字节，缩小比率($sizerate%)</td>
+	</tr>
+	</table>
+</div>
+<!--
+EOT;
+}else{
+if($action){print <<<EOT
+-->
+<ul id="atttype" class="nav3">
+	<li><a id="att" style="cursor:pointer" onclick="showaction('att','att')" $cls_att>附件设置</a></li>
+	<li><a id="watermark" style="cursor:pointer" onclick="showaction('att','watermark')" $cls_watermark>图片水印</a></li>
+	<li><a id="ifathumb" style="cursor:pointer" onclick="showaction('att','ifathumb')" $cls_ifathumb>图片缩略</a></li>
+	<li><a id="ftp" style="cursor:pointer" onclick="showaction('att','ftp')" $cls_ftp>FTP设置</a></li>
+</ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+<div id="stypeatt" style="display:$display;">
+<h3>附件基本设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否开启附件上传功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[allowupload]" $allowupload_Y> 开启
+			<input type="radio" value="0" name="config[allowupload]" $allowupload_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">附件保存方式:</span><br />如果使用非默认的保存方式，请确认 mkdir() 函数可正常使用，否则设置后新上传的附件无法保存，更改不影响已上传附件。</td>
+		<td>
+			<select name="config[attachdir]">
+				<option value="0" $attachdir_ck[0]>全部存入同一目录(默认)</option>
+				<option value="1" $attachdir_ck[1]>按版块存入不同目录</option>
+				<option value="2" $attachdir_ck[2]>按类型存入不同目录</option>
+				<option value="3" $attachdir_ck[3]>按月份存入不同目录</option>
+				<option value="4" $attachdir_ck[4]>按天存入不同目录</option>
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">附件大于多少时使用真实路径下载:[KB]</span><br />当附件比较大时，可减少php进程消耗；当使用远程附件时，可转移流量、减轻服务器负担。留空或0为关闭此功能。</td>
+		<td><input name="config[attachhide]" value="$db_attachhide" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">一次最多上传附件个数:</span></td>
+		<td><input name="config[attachnum]" value="$db_attachnum" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">上传附件允许后缀和最大尺寸:[KB]</span><br />系统限制上传附件最大尺寸:{$maxuploadsize}。</td>
+		<td>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%" align="center">
+				<tbody id="amode" style="display:none"><tr>
+						<td><input name="filetype[]" value="" size="10" class="input" /></td>
+						<td><input name="maxsize[]" value="" size="10" class="input" /> <a style="cursor:pointer;color:#FA891B" onclick="deltbody(this);">[删除]</a></td>
+				</tr></tbody>
+				<tr>
+					<td width="20%">后缀名</td>
+					<td>最大尺寸 <a style="cursor:pointer;color:#0000FF" onclick="addtbody('amode','abody');">[添加]</a></td>
+				</tr>
+<!--
+EOT;
+foreach($db_uploadfiletype as $key => $value){print <<<EOT
+-->
+				<tr>
+					<td><input name="filetype[]" value="$key" size="10" class="input" /></td>
+					<td><input name="maxsize[]" value="$value" size="10" class="input" /> <a style="cursor:pointer;color:#FA891B" onclick="deltbody(this);">[删除]</a></td>
+				</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				<tbody id="abody"></tbody>
+			</table>
+		</td>
+	</tr>
+</table><br />
+</div>
+
+<style>
+.menu{position:absolute;background:#fff url($imgpath/$stylepath/menubg.gif) center top repeat-x;border:1px solid $headborder;}
+.color_input{float:left;border:0px;height:17px;width:111px;}
+.color_image{float:left;}
+</style>
+<script type="text/javascript" language="JavaScript">
+var admin_file = '$admin_file';
+function findPosX(obj) {
+	var curleft = 0;
+	if (obj.offsetParent) {
+		while (obj.offsetParent) {
+			curleft += obj.offsetLeft
+			obj = obj.offsetParent;
+		}
+	} else if (obj.x) {
+		curleft += obj.x;
+	}
+	return curleft - getLeft();
+}
+function findPosY(obj) {
+	var curtop = 0;
+	if (obj.offsetParent) {
+		while (obj.offsetParent) {
+			curtop += obj.offsetTop
+			obj = obj.offsetParent;
+		}
+	} else if (obj.y) {
+		curtop += obj.y;
+	}
+	return curtop - getTop();
+}
+function pickReback(obj,color){
+	if (typeof obj == 'string') {
+		obj = getObj(obj);
+	}
+	obj.style.color = color;
+}
+function waterPreview(){
+	var waterconfig = new Array("config[waterimg]","config[watertext]","config[waterfont]","config[watercolor]","config[waterpct]","config[jpgquality]");
+	var url = admin_file+'?adminjob=settings&admintype=att&pwatermark=1&';
+	url += 'config[waterpos]='+encodeURIComponent(getObj('config[waterpos]').value)+'&'+'config[waterfonts]='+encodeURIComponent(getObj('config[waterfonts]').value)+'&';
+	var objs = document.getElementsByTagName("input");
+	for (var i = 0;i < objs.length; i++) {
+		for (var n in waterconfig) {
+			if (waterconfig[n] == objs[i].name){
+				url += objs[i].name +'='+ encodeURIComponent(objs[i].value) + '&';
+			}
+		}
+	}
+	window.open(url);
+}
+
+function thumbPreview(){
+	var url = admin_file+'?adminjob=settings&admintype=att&pathumb=1&athumbsize[athumbwidth]='+encodeURIComponent(getObj('athumbsize[athumbwidth]').value)+'&athumbsize[athumbheight]='+encodeURIComponent(getObj('athumbsize[athumbheight]').value)+'&';
+	window.open(url);
+}
+</script>
+<script type="text/javascript" language="JavaScript" src="js/color_picker.js"></script>
+
+<div id="stypewatermark" style="display:$display;">
+<h3>图片水印</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否使用图片水印功能:</span><br />将在论坛上传的图片附件中加上您在下面设置的图片或文字水印。（<font color="blue">同时在版块基本权限里开启方可使用</blue>）</td>
+		<td>
+			<input type="radio" value="1" name="config[watermark]" $watermark_Y> 开启
+			<input type="radio" value="0" name="config[watermark]" $watermark_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否为 gif 格式图片加水印:</span><br />由于 GD 库函数存在漏洞，请选择以下选项为gif格式图片加水印。<br />强制:程序将不对 PHP 版本做判断，强制加水印。<br />开启:判断 PHP 版本,版本符合，则加水印。<br />关闭:关闭水印功能。<br />不影响的 PHP 版本(<font color="blue">4.4.3</font>、<font color="blue">4.4.4</font>、<font color="blue">5.1.5 以上</font>)。</td>
+		<td>
+			<input type="radio" value="2" name="config[ifgif]" $ifgif_2> 强制开启<br />
+			<input type="radio" value="1" name="config[ifgif]" $ifgif_1> 开启<br />
+			<input type="radio" value="0" name="config[ifgif]" $ifgif_0> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">添加水印的图片大小控制:</span><br />只对超过程序设置的大小的附件图片才加上水印图片或文字。留空或0为无限制。</td>
+		<td>
+			宽:<input name="config[waterwidth]" value="$db_waterwidth" size="10" class="input" />(像素)&nbsp;&nbsp;&nbsp;&nbsp;
+			高:<input name="config[waterheight]" value="$db_waterheight" size="10" class="input" />(像素)
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">水印位置:</span></td>
+		<td>
+			<select name="config[waterpos]" id="config[waterpos]">
+				<option value="0" $waterpos_ck_0>随机位置</option>
+				<option value="1" $waterpos_ck_1>顶部居左</option>
+				<option value="2" $waterpos_ck_2>顶部居中</option>
+				<option value="3" $waterpos_ck_3>顶部居右</option>
+				<option value="7" $waterpos_ck_7>中心位置</option>
+				<option value="4" $waterpos_ck_4>底部居左</option>
+				<option value="5" $waterpos_ck_5>底部居中</option>
+				<option value="6" $waterpos_ck_6>底部居右</option>
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">水印图片文件名:</span><br />水印图片存放路径:$imgpath/water，如果水印图片不存在，则使用文字水印。</td>
+		<td><input name="config[waterimg]" value="$db_waterimg" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">水印图片文字:</span></td>
+		<td><input name="config[watertext]" value="$db_watertext" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">文字水印字体选择:</span><br />字体必须为'.ttf'后辍文件，上传 字体到以下路径<br>英文字体目录:/fonts/en/<br />中文字体目录:/fonts/ch/</td>
+		<td>
+			<select class="input" name="config[waterfonts]" id="config[waterfonts]">
+				<optgroup label="英文字体">$enoption</optgroup>
+<!--
+EOT;
+if($choption){print <<<EOT
+-->
+				<optgroup label="中文字体">$choption</optgroup>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">水印图片文字字体大小:</span></td>
+		<td><input name="config[waterfont]" value="$db_waterfont" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">水印图片文字颜色:</span><br />十六进制颜色值，默认为#FF0000(红色)。</td>
+		<td><div class="input fl"><input id="watercolor" value="$db_watercolor" name="config[watercolor]" class="color_input" /><img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'watercolor',function(){pickReback('watercolor_s',color_picker)})"></div> <span id='watercolor_s' style="color:$db_watercolor">■■■■</span></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">水印透明度:</span><br />决定图片水印清晰度，其值范围从 0 到 100。</td>
+		<td><input name="config[waterpct]" value="$db_waterpct" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">图片质量:</span><br />决定 jpg 格式图片的质量，其值范围从 0 到 100。</td>
+		<td><input name="config[jpgquality]" value="$db_jpgquality" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><input type="button" class="btn" value="水印图片预览" onclick="waterPreview();">&nbsp;<font color="blue">(无需保存即可预览)</font></td>
+		<td></td>
+	</tr>
+</table><br />
+</div>
+<div id="stypeifathumb" style="display:$display;">
+<h3>图片缩略</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td><span class="xia2">是否使用附件缩略图功能:</span><br />论坛上的图片附件，按照一定比例，缩略成一张清晰的图片。</td>
+		<td>
+			<input type="radio" value="1" name="config[ifathumb]" $ifathumb_Y> 开启
+			<input type="radio" value="0" name="config[ifathumb]" $ifathumb_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">附件缩略图宽高控制:</span><br />只对超过宽高控制的图片才进行缩略。留空或0为不缩略图片。</td>
+		<td>
+			宽:<input id="athumbsize[athumbwidth]" name="athumbsize[athumbwidth]" value="$db_athumbwidth" size="10" class="input" />(像素)&nbsp;&nbsp;&nbsp;&nbsp;
+			高:<input id="athumbsize[athumbheight]" name="athumbsize[athumbheight]" value="$db_athumbheight" size="10" class="input" />(像素)
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><input type="button" class="btn" value="图片缩略预览" onclick="thumbPreview();">&nbsp;<font color="blue">(无需保存即可预览)</font></td>
+		<td></td>
+	</tr>
+</table>
+</div>
+<div id="stypeftp" style="display:$display;">
+<h3>FTP设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否使用FTP方式上传:</span><br />本功能适合上传附件到远程服务器，尤其针对镜像站点，可将附件传至主站点，便于附件的统一管理。</td>
+		<td>
+			<input type="radio" value="1" name="config[ifftp]" $ifftp_Y> 开启
+			<input type="radio" value="0" name="config[ifftp]" $ifftp_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点附件地址:</span><br />例如:http://www.phpwind.net/attachment</td>
+		<td><input name="config[ftpweb]" value="$db_ftpweb" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">FTP服务器地址:</span></td>
+		<td><input name="ftp[server]" value="$ftp_server" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">FTP服务器端口:</span></td>
+		<td><input name="ftp[port]" value="$ftp_port" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">FTP上传目录:</span><br />请确保该目录等同于主站点的attachment目录。</td>
+		<td><input name="ftp[dir]" value="$ftp_dir" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">FTP帐号:</span></td>
+		<td><input name="ftp[user]" value="$ftp_user" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">FTP密码:</span></td>
+		<td><input name="ftp[pass]" value="$ftp_pass" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">FTP超时:[秒]</span><br />系统将在这个时间内等待服务器的响应。</td>
+		<td><input name="ftp[timeout]" value="$ftp_timeout" size="40" class="input" /></td>
+	</tr>
+</table><br />
+</div>
+<!--
+EOT;
+}
+}if($admintype=='credit' || $settingdb['credit']){
+if($action){print <<<EOT
+-->
+<ul id="credittype" class="nav3">
+	<li><a id="name" style="cursor:pointer" onclick="showaction('credit','name')" $cls_name>积分名称设置</a></li>
+	<li><a id="prize" style="cursor:pointer" onclick="showaction('credit','prize')" $cls_prize>帖子奖惩选项</a></li>
+	<li><a id="pass" style="cursor:pointer" onclick="showaction('credit','pass')" $cls_pass>积分流通记录</a></li>
+	<li><a id="supple" style="cursor:pointer" onclick="showaction('credit','supple')" $cls_supple>充值积分设置</a></li>
+</ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+<div id="stypename" style="display:$display;">
+<h3>积分名称设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3" align="center">
+		<td width="15%">积分类型</td>
+		<td>积分名称</td>
+		<td>积分单位</td>
+	</tr>
+	<tr class="tr3" align="center">
+		<td>货币</td>
+		<td>&nbsp;&nbsp;<input name="config[moneyname]" value="{$credit->cType[money]}" size="30" class="input" /></td>
+		<td>&nbsp;&nbsp;<input name="config[moneyunit]" value="{$credit->cUnit[money]}" size="30" class="input" /></td>
+	</tr>
+	<tr class="tr3" align="center">
+		<td>威望</td>
+		<td>&nbsp;&nbsp;<input name="config[rvrcname]" value="{$credit->cType[rvrc]}" size="30" class="input" /></td>
+		<td>&nbsp;&nbsp;<input name="config[rvrcunit]" value="{$credit->cUnit[rvrc]}" size="30" class="input" /></td>
+	</tr>
+	<tr class="tr3" align="center">
+		<td>贡献值</td>
+		<td>&nbsp;&nbsp;<input name="config[creditname]" value="{$credit->cType[credit]}" size="30" class="input" /></td>
+		<td>&nbsp;&nbsp;<input name="config[creditunit]" value="{$credit->cUnit[credit]}" size="30" class="input" /></td>
+	</tr>
+	<tr class="tr3" align="center">
+		<td>交易币</td>
+		<td>&nbsp;&nbsp;<input name="config[currencyname]" value="{$credit->cType[currency]}" size="30" class="input" /></td>
+		<td>&nbsp;&nbsp;<input name="config[currencyunit]" value="{$credit->cUnit[currency]}" size="30" class="input" /></td>
+	</tr>
+</table><br />
+</div>
+<div id="stypeprize" style="display:$display;">
+<h3>帖子奖惩选项</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3" align="center">
+		<td width="15%">积分名称</td>
+		<td>精华主题(+)</td>
+		<td>发表主题(+)</td>
+		<td>发表回复(+)</td>
+		<td>取消精华(-)</td>
+		<td>删除主题(-)</td>
+		<td>删除回复(-)</td>
+	</tr>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$value</td>
+		<td><input name="creditset[Digest][$key]" value="{$creditset[Digest][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Post][$key]" value="{$creditset[Post][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Reply][$key]" value="{$creditset[Reply][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Undigest][$key]" value="{$creditset[Undigest][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Delete][$key]" value="{$creditset[Delete][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Deleterp][$key]" value="{$creditset[Deleterp][$key]}" size="8" class="input" /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+	<tr class="tr3"><td colspan="7" style="padding-left:1em">注:<b>威望积分</b>支持小数点后一位，其他积分只允许整数！</td></tr>
+</table><br />
+</div>
+<div id="stypepass" style="display:$display;">
+<h3>积分流通记录</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td colspan="7" style="line-height:18px;padding-left:1em">此功能可以详细记录某种积分的流通情况，帮助站长更加清晰地掌握论坛的积分状况！</td>
+	</tr>
+	<tr class="tr3" align="center">
+		<td width="15%">积分名称</td>
+		<td>注册</td>
+		<td>帖子奖惩</td>
+		<td>评分</td>
+		<td>悬赏</td>
+		<td>插件相关</td>
+		<td>其他</td>
+	</tr>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$value</td>
+		<td><input type="checkbox" name="creditlog[reg][$key]" value="1" {$creditlog[reg][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[topic][$key]" value="1" {$creditlog[topic][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[credit][$key]" value="1" {$creditlog[credit][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[reward][$key]" value="1" {$creditlog[reward][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[hack][$key]" value="1" {$creditlog[hack][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[other][$key]" value="1" {$creditlog[other][$key]} /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td></td>
+		<td>
+			<a href="javascript:void(0);" onclick="creditSelectByType('reg');">全选</a>
+		</td>
+		<td>
+			<a href="javascript:void(0);" onclick="creditSelectByType('topic');">全选</a>
+		</td>
+		<td>
+			<a href="javascript:void(0);" onclick="creditSelectByType('credit');">全选</a>
+		</td>
+		<td>
+			<a href="javascript:void(0);" onclick="creditSelectByType('reward');">全选</a>
+		</td>
+		<td>
+			<a href="javascript:void(0);" onclick="creditSelectByType('hack');">全选</a>
+		</td>
+		<td>
+			<a href="javascript:void(0);" onclick="creditSelectByType('other');">全选</a>
+		</td>
+	</tr>
+</table>
+<br />
+</div>
+<script language="javascript">
+function creditSelectByType(typeName) {
+	var checkStatus = getCreditCheckAllStatus(typeName) ? false : true;
+	var checkElements = getObj("stypepass").getElementsByTagName("input");
+	var regStr = new RegExp('^creditlog.' + typeName + '.', "gi");
+	for (var i=0; i<checkElements.length; i++) {
+		if (checkElements[i].type == 'checkbox' && checkElements[i].name.match(regStr)) {
+			checkElements[i].checked = checkStatus;
+		}
+	}
+}
+function getCreditCheckAllStatus(typeName) {
+	var checkElements = getObj("stypepass").getElementsByTagName("input");
+	var regStr = new RegExp('^creditlog.' + typeName + '.', "gi");
+	for (var i=0; i<checkElements.length; i++) {
+		if (checkElements[i].type == 'checkbox' && checkElements[i].name.match(regStr)) {
+			if (!checkElements[i].checked) return false;
+		}
+	}
+	return true;
+}
+</script>
+<div id="stypesupple" style="display:$display;">
+<h3>充值积分设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">充值积分设置:</span><br />转换比率:与人民币的汇率，通过支付￥1，获得的积分数量！</td>
+		<td>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%" align="center">
+				<tbody id="cmode" style="display:none"><tr>
+						<td>
+							<select name="creditpay[name][]">
+								<option></option>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+								<option value="$key">$value</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+							</select>
+						</td>
+						<td><input name="creditpay[rmbrate][]" value="" size="8" class="input" /></td>
+						<td><input name="creditpay[rmblest][]" value="" size="8" class="input" /></td>
+						<td><input type="checkbox" onclick="checkcpay(this);" /><input type="hidden" name="creditpay[virement][]" value="0" /></td>
+						<td><a style="color:orange;cursor:pointer" onclick="deltbody(this);">[删除]</a></td>
+				</tr></tbody>
+				<tr>
+					<td width="25%">名称</td>
+					<td>转换比率</td>
+					<td>最少充值</td>
+					<td>允许转帐</td>
+					<td><a style="color:blue;cursor:pointer" onclick="addtbody('cmode','cbody');">[添加]</a></td>
+				</tr>
+<!--
+EOT;
+foreach($db_creditpay as $key => $value){
+$ifcheck = $value['virement'] ? 'CHECKED' : '';print <<<EOT
+-->
+				<tr>
+					<td>{$credit->cType[$key]} <input type="hidden" name="creditpay[name][]" value="$key" /></td>
+					<td><input name="creditpay[rmbrate][]" value="$value[rmbrate]" size="8" class="input" /></td>
+					<td><input name="creditpay[rmblest][]" value="$value[rmblest]" size="8" class="input" /></td>
+					<td><input type="checkbox" onclick="checkcpay(this);" {$ifcheck} /><input type="hidden" name="creditpay[virement][]" value="$value[virement]" /></td>
+					<td><a style="color:orange;cursor:pointer" onclick="deltbody(this);">[删除]</a></td>
+				</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+				<tbody id="cbody"></tbody>
+			</table>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">转帐手续费比率:[%]</span></td>
+		<td><input name="config[virerate]" value="$db_virerate" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">最低转帐数:</span></td>
+		<td><input name="config[virelimit]" value="$db_virelimit" size="40" class="input" /></td>
+	</tr>
+</table><br />
+</div>
+<script type="text/javascript">
+function checkcpay(o) {
+	o.nextSibling.value = o.checked === true ? 1 : 0;
+}
+</script>
+<!--
+EOT;
+}if($admintype=='reg' || $settingdb['reg']){print <<<EOT
+-->
+<div class="c"></div>
+<h3>用户注册控制</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">允许新用户注册:</span><br />选择否将禁止游客注册成为会员，但不影响过去已注册的会员的使用。</td>
+		<td>
+			<input type="radio" value="1" name="reg[allowregister]" $allowregister_Y> 开启
+			<input type="radio" value="0" name="reg[allowregister]" $allowregister_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">定期开放注册:</span><br />可以设置每周几或者每月的几号开放注册</td>
+		<td>
+			<input type="radio" value="0" name="reg[registertype]" onclick="registerType(0);" $registertype_0> 不设置
+			<input type="radio" value="1" name="reg[registertype]" onclick="registerType(1);" $registertype_1> 每月
+			<input type="radio" value="2" name="reg[registertype]" onclick="registerType(2);" $registertype_2> 每周
+			<span id="selectweek" style="display:none;">$selectweek_option</span>
+			<span id="selectmonth" style="display:none;">$selectmon_option</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">关闭注册原因:</span></td>
+		<td><textarea name="reg[whyregclose]" rows="6" cols="48">$rg_whyregclose</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">注册许可协议内容编辑:</span><br />可以使用html代码。<br />如: &lt;font color=&quot;red&quot;&gt;您好&lt;/font&gt;&lt;a href=&quot;http://www.phpwind.net&quot;&gt;PHPwind board&lt;/a&gt;<br />代表: <font color="red">您好</font><a href="http://www.phpwind.net">PHPwind board</a></td>
+		<td><textarea name="reg[rgpermit]" rows="6" cols="48">$rg_rgpermit</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">注册时先显示注册协议的弹出框:</span><br />不开启将快速注册。</td>
+		<td>
+			<input type=radio value=1 name="reg[regdetail]" $regdetail_Y> 开启
+			<input type=radio value=0 name="reg[regdetail]" $regdetail_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">注册提示窗:</span><br />当访问站点的用户在还没有注册或未登录的情况下将弹出提示注册的窗口，登录和注册页面除外。</td>
+		<td>
+			<input type="radio" value="1" name="config[regpopup]" $regpopup_Y> 开启
+			<input type="radio" value="0" name="config[regpopup]" $regpopup_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">新用户注册需通过email激活用户:</span><br />选择“开启”将向用户注册 Email 发送一封验证邮件以确认邮箱的有效性，用户收到邮件并激活帐号后才能拥有正常的权限。</td>
+		<td>
+			<input type="radio" value="1" name="reg[emailcheck]" $emailcheck_Y> 开启
+			<input type="radio" value="0" name="reg[emailcheck]" $emailcheck_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">禁止同一IP在多少时间内不能重复注册:[小时]</span><br />0为不限制。</td>
+		<td><input name="reg[allowsameip]" value="$rg_allowsameip" size="8" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">新用户注册发送电子邮件:</span><br />新用户注册后系统自动发送一封EMAIL。</td>
+		<td>
+			<input type="radio" value="1" name="reg[regsendemail]" $regsendemail_Y> 开启
+			<input type="radio" value="0" name="reg[regsendemail]" $regsendemail_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">新用户注册发送短消息:</span><br />新用户注册后系统自动发送一条欢迎短消息。</td>
+		<td>
+			<input type="radio" value="1" name="reg[regsendmsg]" $regsendmsg_Y> 开启
+			<input type="radio" value="0" name="reg[regsendmsg]" $regsendmsg_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">向新注册用户发送的欢迎短消息内容:</span><br />可以使用html代码，{\$rg_name}为新注册用户的用户名，注册时自动赋值。</td>
+		<td><textarea name="reg[welcomemsg]" rows="6" cols="48">$rg_welcomemsg</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">禁止在注册用户名中使用的词语:</span><br />说明:如果你禁用了"<font color="blue">版主</font>"，那么所有含有"<font color="blue">版主</font>"(如:我是<font color="blue">版主</font>)的用户名将被禁止使用，多个词之间用","分隔。</td>
+		<td><textarea name="reg[banname]" rows="6" cols="48">$rg_banname</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">限制注册用户仅能够使用某些邮箱进行注册:</span><br />如果您只使用163的邮箱，可以填写163.com，多个之间用","分开，不限制，请留空。<br />此功能可以帮助用户避免使用限制过多的邮箱服务器来收取站点信件。</td>
+		<td><textarea name="reg[email]" rows="6" cols="48">$rg_email</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">新用户注册是否需要管理员在后台验证通过才能发帖:</span></td>
+		<td>
+			<input type="radio" value="1" name="reg[ifcheck]" $ifcheck_Y> 开启
+			<input type="radio" value="0" name="reg[ifcheck]" $ifcheck_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">注册会员ID不区分大小写:</span><br />建议默认: 关闭。</td>
+		<td>
+			<input type="radio" value="1" name="reg[rglower]" $rglower_Y> 开启
+			<input type="radio" value="0" name="reg[rglower]" $rglower_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">注册会员在多少时间内不能发表文章:[分钟]</span><br />0为不限制。</td>
+		<td><input name="config[postallowtime]" value="$db_postallowtime" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">用户名长度:</span><br />用户名字符的最小和最大长度，最小值不能小于1，最大值不能大于15。</td>
+		<td>
+			<input name="namelen[min]" value="$rg_regminname" size="3" class="input" maxlength="3" /> 最小
+			<input name="namelen[max]" value="$rg_regmaxname" size="3" class="input" maxlength="3" /> 最大
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">密码字符的最小和最大长度</span><br />最小值不能小于1。</td>
+		<td>
+			<input name="pwdlen[min]" value="$rg_regminpwd" size="3" class="input" maxlength="3" /> 最小
+			<input name="pwdlen[max]" value="$rg_regmaxpwd" size="3" class="input" maxlength="3" /> 最大
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">不允许注册帐号与密码相同:</span></td>
+		<td>
+			<input type="radio" value="1" name="reg[npdifferf]" $npdifferf_Y> 是
+			<input type="radio" value="0" name="reg[npdifferf]" $npdifferf_N> 否
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">注册时初始积分:</span></td>
+		<td>
+			<style type="text/css">
+			.regcredit{float:left;margin:0;padding:0;width:100%;}
+			.regcredit li{float:left;width:40%;list-style:none;margin:1px 0;padding:0;}
+			</style>
+			<ul class="regcredit">
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+				<li><input name="regcredit[$key]" value="{$rg_regcredit[$key]}" size="8" class="input" /> $value</li>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</ul>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">会员注册生日年限:</span><br />默认是1960-2000。</td>
+		<td><input name="reg[timestart]" value="$rg_timestart" size="10" class="input" />&nbsp;-&nbsp;<input name="reg[timeend]" value="$rg_timeend" size="10" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">强制密码复杂度:</span><br />密码中必须存在所选字符类型，如果不选则为不限制。</td>
+		<td>
+			<input type="checkbox" name="reg[pwdcomplex][]" value="1" $pwdcomplex_1 /> 小写字母
+			<input type="checkbox" name="reg[pwdcomplex][]" value="2" $pwdcomplex_2 /> 大写字母
+			<input type="checkbox" name="reg[pwdcomplex][]" value="3" $pwdcomplex_3 /> 数字
+			<input type="checkbox" name="reg[pwdcomplex][]" value="4" $pwdcomplex_4 /> 符号
+		</td>
+	</tr>
+</table><br />
+<script language="JavaScript">
+var rg_registertype = '$rg_registertype';
+function registerType(id) {
+	if (id == 1) {
+		getObj('selectmonth').style.display = '';
+		getObj('selectweek').style.display = 'none';
+	} else if (id == 2) {
+		getObj('selectmonth').style.display = 'none';
+		getObj('selectweek').style.display = '';
+	} else if (id == 0) {
+		getObj('selectmonth').style.display = 'none';
+		getObj('selectweek').style.display = 'none';
+	}
+}
+registerType(rg_registertype);
+</script>
+<!--
+EOT;
+}if($admintype=='member' || $settingdb['member']){
+if($action){print <<<EOT
+-->
+<ul id="membertype" class="nav3">
+	<li><a id="post" style="cursor:pointer" onclick="showaction('member','post')" $cls_post>信息发布</a></li>
+	<li><a id="face" style="cursor:pointer" onclick="showaction('member','face')" $cls_face>头像签名</a></li>
+</ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+<div id="stypepost" style="display:$display;">
+<h3>信息发布设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">帖子中表情，动作以及 img，wmv，rm 等标签的最多转换次数:</span><br />建议设置为10 - 30 之间，-1 为不限制。</td>
+		<td><input name="config[cvtimes]" value="$db_cvtimes" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子中 Wind IMG功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="windpost[pic]" $windpost_pic_Y> 开启
+			<input type="radio" value="0" name="windpost[pic]" $windpost_pic_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子中[img]标签的大小控制:</span><br />留空不限制。</td>
+		<td>
+			宽:<input name="windpost[picwidth]" value="$db_windpost[picwidth]" size="5" class="input" />(像素)&nbsp;&nbsp;&nbsp;&nbsp;
+			高:<input name="windpost[picheight]" value="$db_windpost[picheight]" size="5" class="input" />(像素)
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子中[size]标签的大小控制:[最大值]</span><br />留空不限制。</td>
+		<td><input name="windpost[size]" value="$db_windpost[size]" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子中 Wind Flash功能:</span><br />建议关闭。</td>
+		<td>
+			<input type="radio" value="1" name="windpost[flash]" $windpost_flash_Y> 开启
+			<input type="radio" value="0" name="windpost[flash]" $windpost_flash_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子中 Wind (wmv,asf,ra,ram,rm)功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="windpost[mpeg]" $windpost_mpeg_Y> 开启
+			<input type="radio" value="0" name="windpost[mpeg]" $windpost_mpeg_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子中 iframe功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="windpost[iframe]" $windpost_iframe_Y> 开启
+			<input type="radio" value="0" name="windpost[iframe]" $windpost_iframe_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子中检测外链功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="windpost[checkurl]" $windpost_checkurl_Y> 开启
+			<input type="radio" value="0" name="windpost[checkurl]" $windpost_checkurl_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子中动漫传情功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[windmagic]" $windmagic_Y> 开启
+			<input type="radio" value="0" name="config[windmagic]" $windmagic_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启发帖内容验证:</span><br />开启该功能，会员将无法连续发表同一内容的主题。</td>
+		<td>
+			<input type="radio" value="1" name="config[tcheck]" $tcheck_Y> 开启
+			<input type="radio" value="0" name="config[tcheck]" $tcheck_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">标题最大长度:</span></td>
+		<td><input name="config[titlemax]" value="$db_titlemax" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">每篇文章的最大长度:[字节]</span></td>
+		<td><input name="config[postmax]" value="$db_postmax" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">每篇文章的最小长度:[字节]</span></td>
+		<td><input name="config[postmin]" value="$db_postmin" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">post回复时显示提示旧帖数:</span></td>
+		<td><input name="config[showreplynum]" value="$db_showreplynum" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">投票选项个数控制:</span></td>
+		<td><input name="config[selcount]" value="$db_selcount" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">编辑器是否开启自定义代码功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[pwcode]" $pwcode_Y> 开启
+			<input type="radio" value="0" name="config[pwcode]" $pwcode_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">编辑器是否开启帖子格式功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[setform]" $setform_Y> 开启
+			<input type="radio" value="0" name="config[setform]" $setform_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">出售帖允许的积分类型:</span></td>
+		<td>$sellset</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">出售帖允许的积分大小:</span></td>
+		<td>
+			<input name="sellset[price]" value="$db_sellset[price]" size="10" class="input" /> 最高单价限制（0 为不限制）<br />
+			<input name="sellset[income]" value="$db_sellset[income]" size="10" class="input" /> 最高收入限制（0 为不限制）
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">加密帖允许的积分类型:</span></td>
+		<td>$enhideset</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否使用自动贴图:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[autoimg]" $autoimg_Y> 开启
+			<input type="radio" value="0" name="config[autoimg]" $autoimg_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">用户文章被回复是否发送邮件:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[replysendmail]" $replysendmail_Y> 开启
+			<input type="radio" value="0" name="config[replysendmail]" $replysendmail_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">用户文章被回复是否发送站内通知:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[replysitemail]" $replysitemail_Y> 开启
+			<input type="radio" value="0" name="config[replysitemail]" $replysitemail_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">需要发表多少帖子后才能发表有链接地址的帖子</span><br />此设置为防止注册机注册后发带有链接地址的广告,管理员不受此限制</td>
+		<td>
+			<input type="text" value="$db_posturlnum" name="config[posturlnum]" size="5" class="input" >
+		</td>
+	</tr>
+</table>
+</div>
+<div id="stypeface" style="display:$display;">
+<h3>头像签名设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">头像上传控制:</span></td>
+		<td>
+			宽:<input name="upload[imgwidth]" value="$db_imgwidth" size="6" class="input" maxlength="3">(像素) 
+			&nbsp;&nbsp;&nbsp;
+			高:<input name="upload[imglen]" value="$db_imglen" size="6" class="input" maxlength="3">(像素)	&nbsp;&nbsp;&nbsp;大小:
+			<input name="upload[imgsize]"value="$db_imgsize" size="5" class="input" />  (KB)
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启头像上传功能:</span><br />此处为全局控制，此功能关闭则所有用户都不能使用头像上传功能。</td>
+		<td>
+			<input type="radio" value="1" name="upload[upload]" $upload_Y> 开启
+			<input type="radio" value="0" name="upload[upload]" $upload_N> 关闭
+			
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否使用头像缩略图功能:</span><br />站点上的头像，按照一定比例，缩略成一张清晰的图片。</td>
+		<td>
+			<input type="radio" value="1" name="config[iffthumb]" $iffthumb_Y> 开启
+			<input type="radio" value="0" name="config[iffthumb]" $iffthumb_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">头像缩略图宽高控制:</span><br />只对超过宽高控制的图片才进行缩略，设置为0不缩略。</td>
+		<td>
+			宽: <input name="fthumbsize[fthumbwidth]" value="$db_fthumbwidth" size="5" class="input" />(像素)&nbsp;&nbsp;&nbsp;&nbsp; 
+			高: <input name="fthumbsize[fthumbheight]" value="$db_fthumbheight" size="5" class="input" />(像素) 
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">签名最大高度控制:</span></td>
+		<td><input name="config[signheight]" value="$db_signheight" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">签名中 Wind 代码功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[signwindcode]" $signwindcode_Y> 开启
+			<input type="radio" value="0" name="config[signwindcode]" $signwindcode_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">签名中 Wind IMG功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="windpic[pic]" $windpic_pic_Y> 开启
+			<input type="radio" value="0" name="windpic[pic]" $windpic_pic_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">签名中[img]标签的大小控制:</span><br />留空不限制。</td>
+		<td>
+			宽: <input name="windpic[picwidth]" value="$db_windpic[picwidth]" size="5" class="input" />(像素)&nbsp;&nbsp;&nbsp;&nbsp; 
+			高: <input name="windpic[picheight]" value="$db_windpic[picheight]" size="5" class="input" />(像素)
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">签名中[size]标签的大小控制:[最大值]</span><br />留空不限制。</td>
+		<td><input name="windpic[size]" value="$db_windpic[size]" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">签名中 Wind Flash功能:</span><br />建议关闭。</td>
+		<td>
+			<input type="radio" value="1" name="windpic[flash]" $windpic_flash_Y> 开启
+			<input type="radio" value="0" name="windpic[flash]" $windpic_flash_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">签名显示一天需要相应积分数:</span><br />留空或设为‘0’不使用此功能。</td>
+		<td>
+			<input name="config[signmoney]" value="$db_signmoney" size="10" class="input" />
+			<select name="config[signcurtype]">$signcurtype</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td valign="top"><span class="xia2">需要购买签名的用户组:</span><br />该功能配合phpwind-网上银行系统可为站长带来可观的经济来源。</td>
+		<td>$signgroup</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">设置用户登录方式:</span><br />不设置则只支持用户名登录。</td>
+		<td>
+			<input type="checkbox" value="1" name="logintype[]" $logintype_0 /> 用户名
+			<input type="checkbox" value="2" name="logintype[]" $logintype_1 /> UID
+			<input type="checkbox" value="4" name="logintype[]" $logintype_2 /> Email
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否允许更换用户组头衔:</span><br />拥有多个用户组头衔的会员有效。</td>
+		<td>
+			<input type="radio" value="1" name="config[selectgroup]" $selectgroup_Y> 开启
+			<input type="radio" value="0" name="config[selectgroup]" $selectgroup_N> 关闭
+		</td>
+	</tr>
+</table>
+</div>
+<!--
+EOT;
+}if($admintype=='pcache' || $settingdb['pcache']){
+if($action){print <<<EOT
+-->
+<ul id="pcachetype" class="nav3">
+	<li><a id="thread" style="cursor:pointer" onclick="showaction('pcache','thread')" $cls_thread>主题列表内容缓存</a></li>
+	<li><a id="guest" style="cursor:pointer" onclick="showaction('pcache','guest')" $cls_guest>游客缓存</a></li>
+</ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+<div id="stypethread" style="display:$display;">
+<h3>主题列表内容缓存功能</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 s3"><td colspan="2"><b>主题列表内容缓存功能:</b><br />　　主题列表页是站点访问量最高的页面之一(尤其是前面几页)。</td></tr>
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">主题列表内容缓存页数:</span><br />设置 0 为关闭，建议值 10，即缓存前10页内容。</td>
+		<td><input name="config[fcachenum]" value="$db_fcachenum" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">主题列表内容缓存更新间隔 :[秒]</span><br />设置 0 为即时更新，即<b>当有新帖发表时</b>更新缓存内容<br />如果发帖较频繁，建议设置 180 - 300，即 3-5 分钟更新一次缓存内容</td>
+		<td><input name="config[fcachetime]" value="$db_fcachetime" size="40" class="input" /></td>
+	</tr>
+</table>
+</div>
+<div id="stypeguest" style="display:$display;">
+<h3>游客缓存功能</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 s3"><td colspan="2"><b>游客缓存功能:</b><br />　　一般情况下站点的在线用户70%以上为游客，而游客访问的页面内容在一段时间内是不会有太大变化的，因此将游客访问的页面内容缓存起来可以减少数据库因查询大量相同信息而产生的不必要的资源消耗。</td></tr>
+	<tr class="tr3">
+		<td><span class="xia2">缓存目录:</span><br />默认为 data/guestcache 目录，您可以更改为其他目录，请确定您指定的目录有可写权限。</td>
+		<td><input name="config[guestdir]" value="$db_guestdir" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">首页游客缓存设置:[秒]</span><br />设置首页缓存更新时间，0为关闭，建议值:900。</td>
+		<td><input name="config[guestindex]" value="$db_guestindex" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">主题列表页面游客缓存页数:</span><br />设置 0 为关闭，建议值 10，即缓存前10页内容。</td>
+		<td><input name="config[fguestnum]" value="$db_fguestnum" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">主题列表页面游客缓存设置:[秒]</span><br />设置主题列表页面缓存更新时间，建议值:900。</td>
+		<td><input name="config[guestthread]" value="$db_guestthread" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子页面游客缓存页数:</span><br />开启此功能，将产生大量缓存数据，设置 0 为关闭，建议值 3，即缓存前3页内容。</td>
+		<td><input name="config[tguestnum]" value="$db_tguestnum" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子页面游客缓存设置:[秒]</span><br />设置阅读帖子页面缓存更新时间，建议值:900。</td>
+		<td><input name="config[guestread]" value="$db_guestread" size="40" class="input" /></td>
+	</tr>
+</table>
+</div>
+<!--
+EOT;
+}if($admintype=='index' || $settingdb['index']){print <<<EOT
+-->
+<div class="c"></div>
+<h3>首页细节设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+<!-- 	<tr class="tr3">
+		<td width="60%"><span class="xia2">站点默认首页:</span><br />当地址栏里没有指定访问哪个页面时，默认指向的页面。</td>
+		<td>
+			<input type="radio" value="0" name="config[setindex]" $setindex_N /> 站点首页
+			<input type="radio" value="1" name="config[setindex]" $setindex_Y /> home首页
+		</td>
+	</tr> -->
+	<tr class="tr3">
+		<td><span class="xia2">站点首页调用文件:</span></td>
+		<td><input name="config[bfn]" value="$db_bfn" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否显示 今日昨日发帖数 与 版块今日发帖数:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[todaypost]" $todaypost_Y> 开启
+			<input type="radio" value="0" name="config[todaypost]" $todaypost_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">自定义首页各版块的图片logo:</span><br />使用默认:将图标命名为*.gif（*表示对应的版块ID）,上传至images\***\ forumlogo（*代表风格目录名称）即可 <br />使用自定义:在版块设置里上传图片或填写图片地址即可</td>
+		<td>
+			<input type="radio" value="0" name="config[indexfmlogo]" $indexfmlogo_0> 不使用
+			<input type="radio" value="1" name="config[indexfmlogo]" $indexfmlogo_1> 默认
+			<input type="radio" value="2" name="config[indexfmlogo]" $indexfmlogo_2> 自定义
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">下拉框方式显示版主:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[adminshow]" $adminshow_Y> 开启
+			<input type="radio" value="0" name="config[adminshow]" $adminshow_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">首页显示今天生日会员:</span><br />如果选择“开启”，将在站点首页显示今天过生日的会员。</td>
+		<td>
+			<input type="radio" value="1" name="config[indexshowbirth]" $indexshowbirth_Y> 开启
+			<input type="radio" value="0" name="config[indexshowbirth]" $indexshowbirth_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">当没有会员过生日时自动隐藏:</span><br />如果选择“开启”，没有人过生日的时候站点首页将自动隐藏今日生日模块。</td>
+		<td>
+			<input type="radio" value="1" name="config[bdayautohide]" $bdayautohide_Y> 开启
+			<input type="radio" value="0" name="config[bdayautohide]" $bdayautohide_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否显示友情链接:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[indexlink]" $indexlink_Y> 开启
+			<input type="radio" value="0" name="config[indexlink]" $indexlink_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否滚动显示友情链接:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[indexmqshare]" $indexmqshare_Y> 开启
+			<input type="radio" value="0" name="config[indexmqshare]" $indexmqshare_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启自助友情链接:</span><br />会员可在前台自助申请友情链接（每个会员只能申请一次），管理员审核通过后在前台显示。</td>
+		<td>
+			<input type="radio" value="1" name="config[ifselfshare]" $ifselfshare_Y>开启
+			<input type="radio" value="0" name="config[ifselfshare]" $ifselfshare_N>关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">选择参与在线显示的用户组:</span><br />被选择的用户组将参与在线显示，在复选框内填写用户组显示顺序。<br />在线图标以用户组ID命名。<br /><br /><font color="#0000FF">注:参与在线显示的用户组图标必须存在否则无法正常显示<br />&nbsp;&nbsp;&nbsp;&nbsp;如管理员ID为3，在线图标为 3.gif。</font></td>
+		<td>$usergroup</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">首页显示在线用户:</span><br />影响速度。</td>
+		<td>
+			<input type="radio" value="1" name="config[indexonline]" $indexonline_Y> 开启
+			<input type="radio" value="0" name="config[indexonline]" $indexonline_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">首页显示在线游客:</span><br />影响速度。</td>
+		<td>
+			<input type="radio" value="1" name="config[showguest]" $showguest_Y> 开启
+			<input type="radio" value="0" name="config[showguest]" $showguest_N> 关闭
+		</td>
+	</tr>
+</table>
+<!--
+EOT;
+}if($admintype=='thread' || $settingdb['thread']){print <<<EOT
+-->
+<div class="c"></div>
+<h3>主题列表细节设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">分版块主题多少时间表示为新帖:[秒]</span></td>
+		<td><input name="config[newtime]" value="$db_newtime" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">站点主题列表每页显示主题数:</span></td>
+		<td><input name="config[perpage]" value="$db_perpage" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">主题列表最大显示页数:</span><br />主题列表中用户可以查看的最大页数，建议设置为 1000 －2500 之间，0 为不限制。</td>
+		<td><input name="config[maxpage]" value="$db_maxpage" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">主题列表页主题分类默认显示个数:</span></td>
+		<td><input name="config[maxtypenum]" value="$db_maxtypenum" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">点击率延迟更新功能:[小时]</span><br />设置为0则不使用此功能,使用生成html功能将自动使用此功能。</td>
+		<td>
+			<select name="config[hithour]">
+				<option value="0" $hithour_sel[0]>0</option>
+				<option value="1" $hithour_sel[1]>1</option>
+				<option value="4" $hithour_sel[4]>4</option>
+				<option value="6" $hithour_sel[6]>6</option>
+				<option value="8" $hithour_sel[8]>8</option>
+				<option value="12" $hithour_sel[12]>12</option>
+				<option value="20" $hithour_sel[20]>24</option>
+			</select>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">总置顶, 分类置顶功能:</span><br />置顶3: 为总置顶。置顶2: 为分类置顶。置顶1:为本版块置顶。</td>
+		<td>
+			<input type="radio" value="1" name="config[topped]" $topped_Y> 开启
+			<input type="radio" value="0" name="config[topped]" $topped_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">版块内显示在线用户:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[threadonline]" $threadonline_Y> 开启
+			<input type="radio" value="0" name="config[threadonline]" $threadonline_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">各分版块帖子导航里显示表情符:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[threademotion]" $threademotion_Y> 开启
+			<input type="radio" value="0" name="config[threademotion]" $threademotion_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">各分版块帖子里显示快速发表主题:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[threadshowpost]" $threadshowpost_Y> 开启
+			<input type="radio" value="0" name="config[threadshowpost]" $threadshowpost_N> 关闭
+		</td>
+	</tr>
+</table>
+<!--
+EOT;
+}if($admintype=='read' || $settingdb['read']){print <<<EOT
+-->
+<div class="c"></div>
+<h3>帖子阅读页面细节设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">阅读一主题时每页显示帖子数:</span></td>
+		<td><input name="config[readperpage]" value="$db_readperpage" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">匿名的名称:</span><br />发表匿名帖时,用户显示的昵称</td>
+		<td><input name="config[anonymousname]" value="$db_anonymousname" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">阅读帖子时显示在线用户:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[showonline]" $showonline_Y> 开启
+			<input type="radio" value="0" name="config[showonline]" $showonline_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否在帖子页面显示用户加入的群组:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[showcolony]" $showcolony_Y> 开启
+			<input type="radio" value="0" name="config[showcolony]" $showcolony_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">选择要在帖子阅读页面（read.php）显示的自定义积分:</span></td>
+		<td>$showcustom</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">评分时间限制:[小时]</span><br />帖子发表后超过此时间限制其他用户将不能对此帖评分，系统组不受限制，0 为不限制。</td>
+		<td><input name="config[pingtime]" value="$db_pingtime" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">浏览帖子处显示会员IP来源:</span><br />用户权限中可单独设置每个用户组权限，此处关闭则所有用户组都不能查看IP来源。</td>
+		<td>
+			<input type="radio" value="1" name="config[ipfrom]" $ipfrom_Y> 开启
+			<input type="radio" value="0" name="config[ipfrom]" $ipfrom_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启屏蔽禁言会员所有帖子:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[shield]" $shield_Y> 开启
+			<input type="radio" value="0" name="config[shield]" $shield_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否记录会员在线时间并在版块内显示:</span></td>
+		<td>
+			<input type="radio" value="1" name="config[ifonlinetime]" $ifonlinetime_Y>开启
+			<input type="radio" value="0" name="config[ifonlinetime]" $ifonlinetime_N>关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">是否开启帖子页主题相关功能:</span><br />具体设置请到版块-版块管理-设置，对每个版块进行设置；将在每个帖子主题内容下方出现相关信息</td>
+		<td>
+			<input type="radio" value="1" name="config[threadrelated]" $threadrelated_Y>开启
+			<input type="radio" value="0" name="config[threadrelated]" $threadrelated_N>关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子楼层单位</span><br />设置帖子显示楼层的单位，如“楼”将显示为 1 楼</td>
+		<td>
+			<input name="config[floorunit]" value="$db_floorunit" size="40" class="input" />
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">帖子楼层名称</span><br />格式 “楼层名称”或“N:楼层名称”，N代表楼层数（主题帖为0楼），如果没有指定楼层N，则第一行代表主题帖子。其中，连续楼层之间可以用‘，’逗号隔开或换行，N后面的楼层为N+1，以此类推，直到再次出现N。例:<br />0:楼主，沙发，板凳<br />3:地板，地下室<br />100:中奖楼层<br /></td>
+		<td>
+			<textarea name="floorname" rows="6" cols="48" />$floorname</textarea>
+		</td>
+	</tr>
+</table>
+<!--
+EOT;
+}if($admintype=='email' || $settingdb['email']){
+if($action){print <<<EOT
+-->
+<ul id="emailtype" class="nav3">
+	<li><a id="email" style="cursor:pointer" onclick="showaction('email','email');showsubmit('email');" $cls_email>邮件发送</a></li>
+<!--
+EOT;
+if ($ml_mailifopen == 1) {print <<<EOT
+-->
+	<li><a id="checkemail" style="cursor:pointer" onclick="showaction('email','checkemail');showsubmit('checkemail');" $cls_checkemail>邮件检测</a></li>
+<!--
+EOT;
+}print<<<EOT
+-->
+</ul>
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+<div id="stypeemail" style="display:$display;">
+<h3>邮件发送设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否开启发送邮件功能:</span></td>
+		<td>
+			<input type="radio" value="1" name="mail[mailifopen]" $mailifopen_Y> 开启
+			<input type="radio" value="0" name="mail[mailifopen]" $mailifopen_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">邮件发送模式:</span></td>
+		<td id="mailmethod">
+			<input type="radio" value="1" name="mail[mailmethod]" $mailmethod_1 onclick="showoption('mailmethod',this.value)"> mail() 函数发送
+			<input type="radio" value="2" name="mail[mailmethod]" $mailmethod_2 onclick="showoption('mailmethod',this.value)"> SMTP 模块发送
+			<input type="radio" value="3" name="mail[mailmethod]" $mailmethod_3 onclick="showoption('mailmethod',this.value)"> MX 模块发送
+		</td>
+	</tr>
+	<tbody id="mailmethod2" style="display:none">
+		<tr class="tr3 s3"><td colspan="2">SMTP 模块发送设置</td></tr>
+		<tr class="tr3">
+			<td><span class="xia2">SMTP 服务器:</span></td>
+			<td><input name="mail[smtphost]" value="$ml_smtphost" size="40" class="input" /></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">SMTP 端口:</span><br />默认不需修改。</td>
+			<td><input name="mail[smtpport]" value="$ml_smtpport" size="40" class="input" /></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">发信人地址:</span></td>
+			<td><input name="mail[smtpfrom]" value="$ml_smtpfrom" size="40" class="input" /></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">是否需要 AUTH LOGIN 验证:</span><br />1=是，0=否。</td>
+			<td>
+				<input type="radio" value="1" name="mail[smtpauth]" $smtpauth_Y>是
+				<input type="radio" value="0" name="mail[smtpauth]" $smtpauth_N>否
+			</td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">验证用户名:</span></td>
+			<td><input name="mail[smtpuser]" value="$ml_smtpuser" size="40" class="input" /></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">验证密码:</span><br />安全考虑，只显示密码的前后两位，中间显示八个 * 号。</td>
+			<td><input name="mail[smtppass]" value="$ml_smtppass" size="40" class="input" /></td>
+		</tr>
+	</tbody>
+	<tbody id="mailmethod3" style="display:none">
+		<tr class="tr3"><td colspan="2">MX 模块发送设置</td></tr>
+		<tr class="tr3">
+			<td colspan="2">以 www.example.net 为例说明MX模块发送邮件设置<br /><br />域名mx记录:mail.example.net (同时需要在域名控制面版里增加一条mx记录到 mail.example.net)<br />发送邮件帐号:admin@example.net<br />主DNS地址:可联系空间商查询您的服务器的DNS地址<br />辅DNS地址:可联系空间商查询您的服务器的DNS地址</td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">域名mx记录:</span></td>
+			<td><input name="mail[smtphelo]" value="$ml_smtphelo" size="40" class="input" /></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">发送邮件帐号:</span></td>
+			<td><input name="mail[smtpmxmailname]" value="$ml_smtpmxmailname" size="40" class="input" /></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">主DNS地址:</span></td>
+			<td><input name="mail[mxdns]" value="$ml_mxdns" size="40" class="input" /></td>
+		</tr>
+		<tr class="tr3">
+			<td><span class="xia2">辅DNS地址:</span></td>
+			<td><input name="mail[mxdnsbak]" value="$ml_mxdnsbak" size="40" class="input" /></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+<div id="stypecheckemail" style="display:$display;">
+<h3>邮件发送方式</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td>
+<!--
+EOT;
+if ($ml_mailifopen == 1) {
+	if ($ml_mailmethod == 1) {print <<<EOT
+-->
+		mail() 函数发送
+<!--
+EOT;
+	} elseif ($ml_mailmethod == 2) {print <<<EOT
+-->
+		SMTP 模块发送
+<!--
+EOT;
+	} elseif ($ml_mailmethod == 3) {print <<<EOT
+-->
+		MX 模块发送
+<!--
+EOT;
+	}
+}print <<<EOT
+-->
+		</td>
+	</tr>
+</table>
+<!--
+EOT;
+if ($ml_mailifopen == 1) {print <<<EOT
+-->
+<h3>邮件检测</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="15%">发件人地址:</td>
+		<td><input type="text" name="fromemail" id="fromemail" value="" size="30"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="15%">收件人地址:</td>
+		<td><input type="text" name="toemail" id="toemail" value="" size="30"></td>
+	</tr>
+</table>
+<br /><center><input type="button" value="检测邮件发送设置" class="btn" onclick="checkemail();"></center><br />
+<script src="js/pw_ajax.js"></script>
+<script src="js/global.js"></script>
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>
+<!--
+EOT;
+}if($admintype=='jsinvoke' || $settingdb['jsinvoke']){
+print <<<EOT
+-->
+<div class="c"></div>
+<h3>JS调用设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否开启 JS调用:</span><br />此功能允许在您的网站首页或其他地方调用站点的内容。<br />调用方式分为: 版块调用、公告调用、基本信息调用、会员排行调用、文章调用。</td>
+		<td>
+			<input type="radio" value="1" name="config[jsifopen]" $jsifopen_Y> 开启
+			<input type="radio" value="0" name="config[jsifopen]" $jsifopen_N>关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">缓存更新时间:[秒]</span><br />由于部分调用查询比较消耗服务器资源，系统采用了缓存技术实现数据定期更新。<br />建议设置为:900。</td>
+		<td><input name="config[jsper]" value="$db_jsper" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">允许调用网站域名:</span><br />您可以设置允许调用站点内容的网站域名列表，只有在列表中的域名才能调用站点信息。<br />多个域名用 "," 分隔域名，不要包含 http:// 或其他非域名内容，留空不限制。</td>
+		<td><input name="config[bindurl]" value="$db_bindurl" size="40" class="input" /></td>
+	</tr>
+</table>
+<!--
+EOT;
+}if($admintype=='popinfo' || $settingdb['popinfo']){
+print <<<EOT
+-->
+<div class="c"></div>
+<h3>重要页面弹出信息设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">注册页面:</span><br>注册页面的弹出信息，每行填写一条信息，多条信息将随机显示。</td>
+		<td><textarea name="sitemsg[reg]" rows="6" cols="48">$db_sitemsg[reg]</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td width="60%"><b>登录页面:</b><br>登录页面的弹出信息，每行填写一条信息，多条信息将随机显示。</td>
+		<td><textarea name="sitemsg[login]" rows="6" cols="48">$db_sitemsg[login]</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td width="60%"><b>发贴页面:</b><br>发贴页面的弹出信息，每行填写一条信息，多条信息将随机显示。</td>
+		<td><textarea name="sitemsg[post]" rows="6" cols="48">$db_sitemsg[post]</textarea></td>
+	</tr>
+	<tr class="tr3">
+		<td width="60%"><b>回复页面:</b><br>回复页面的弹出信息，每行填写一条信息，多条信息将随机显示。</td>
+		<td><textarea name="sitemsg[reply]" rows="6" cols="48">$db_sitemsg[reply]</textarea></td>
+	</tr>
+</table>
+<!--
+EOT;
+}if($admintype=='wap' || $settingdb['wap']){
+print <<<EOT
+-->
+<div class="c"></div>
+<h3>WAP浏览设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否开启WAP功能<br>开启此功能允许用户通过手机访问站点，实现浏览、发帖、收发短消息等功能</td>
+		<td>
+			<input type="radio" value="1" name="config[wapifopen]" $wapifopen_Y> 开启
+			<input type="radio" value="0" name="config[wapifopen]" $wapifopen_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">WAP 字符集:</span><br />UTF-8 编码占用字节较小，但兼容性较差，遇到乱码等情况可能导致页面无法浏览。<br />UNICODE 编码占用字节较大，但兼容性比UTF-8编码好很多，推荐使用。</td>
+		<td>
+			<input type="radio" value="1" name="config[wapcharset]" $wapcharset_Y> UTF-8
+			<input type="radio" value="0" name="config[wapcharset]" $wapcharset_N> UNICODE
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">WAP 页面长度控制:</span><br />为了提高兼容性请设置为大于0的整数，建议设置为:300-2000 之间。</td>
+		<td><input name="config[waplimit]" value="$db_waplimit" size="40" class="input" /></td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">WAP推荐版块:</span><br />为方便WAP用户查看站点帖子，请设置您想要推荐给WAP用户的版块。</td>
+		<td>$showforums</td>
+	</tr>
+</table>
+<!--
+EOT;
+}
+if ($pwatermark != 1 && $pathumb != 1) {print <<<EOT
+-->
+<span id="submit"><br /><center><input type="submit" value="提 交" class="btn"></center><br /></span>
+<!--
+EOT;
+}print<<<EOT
+-->
+</form>
+<script type="text/javascript">
+<!--
+EOT;
+if($action){print <<<EOT
+-->
+showaction('$admintype','$action');
+function showaction(type,action){
+	if (getObj(type+'type')) {
+		var obj = getObj(type+'type').getElementsByTagName('a');
+		for (var i=0;i<obj.length;i++) {
+			if (obj[i].id==action) {
+				getObj(obj[i].id).className = 'two';
+				getObj('stype'+action).style.display = '';
+				setCookie('admin_'+type,action);
+			} else {
+				getObj(obj[i].id).className = '';
+				getObj('stype'+obj[i].id).style.display = 'none';
+			}
+		}
+	}
+}
+<!--
+EOT;
+if ($admintype == 'email' && $action == 'checkemail') {print <<<EOT
+-->
+	showsubmit('checkemail');
+<!--
+EOT;
+}
+}print <<<EOT
+-->
+showoption('bbsifopen','$db_bbsifopen');
+showoption('mailmethod','$ml_mailmethod');
+addtbody('qmode','qbody');
+addtbody('amode','abody');
+addtbody('cmode','cbody');
+function addtbody(mode,tbody){
+	if (getObj(mode)) {
+		var s = getObj(mode).firstChild.cloneNode(true);
+		getObj(tbody).appendChild(s);
+	}
+}
+function deltbody(obj){
+	var o = obj.parentNode.parentNode;
+	o.parentNode.removeChild(o);
+}
+function showoption(id,val){
+	if (getObj(id)) {
+		var obj = getObj(id).getElementsByTagName('input');
+		for (var i=0;i<obj.length;i++) {
+			if (getObj(id+obj[i].value)) {
+				if (obj[i].value==val) {
+					getObj(id+obj[i].value).style.display = '';
+				} else {
+					getObj(id+obj[i].value).style.display = 'none';
+				}
+			}
+		}
+	}
+}
+function showsubmit(id){
+	if (id == 'checkemail') {
+		getObj('submit').style.display = 'none';
+	}else{
+		getObj('submit').style.display = '';
+	}
+}
+var ajax_basename = '$ajax_basename';
+function checkemail(){
+	var fromemail = getObj('fromemail').value;
+	var toemail = getObj('toemail').value;
+	ajax.send(ajax_basename,'ajax=1&ajaxaction=emailcheck&step=2&fromemail='+fromemail+'&toemail='+toemail,ajax.guide);
+}
+</script>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

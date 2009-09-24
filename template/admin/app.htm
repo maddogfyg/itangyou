@@ -1,0 +1,438 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename&action=app&job=appslist" $cls_app hidefocus="true">应用列表</a></li>
+<!--
+EOT;
+if($action == 'modify'){print<<<EOT
+-->
+	<li><a href="$basename&action=modify" $cls_modify hidefocus="true">密钥修改</a></li>
+<!--
+EOT;
+}print<<<EOT
+-->
+	<li><a href="$basename&action=blooming" $cls_blooming hidefocus="true">帖子交换</a></li>
+	<li><a href="$basename&action=my" $cls_my hidefocus="true">APP用户端</a></li>
+	<li><a href="http://faq.phpwind.net/app.php" target="_blank" hidefocus="true">帮助</a></li>
+</ul>
+<div class="c"></div>
+<!--
+EOT;
+if($action=='my'){
+print <<<EOT
+-->
+<h2>APP平台帐号</h2>
+<div class="tr5">
+<!--
+EOT;
+if($db_appid){print <<<EOT
+-->
+	您好，您在APP平台的帐号为：{$db_appid}
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	您好，您在APP平台未绑定贵站信息，请立即<a href="http://www.phpwind.com/login.php" target="_blank">注册或绑定</a>！
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>
+<h2>版本检测</h2>
+<div class="tr5">
+<!--
+EOT;
+if($app_version){print <<<EOT
+-->
+	当前PHPWind扩展平台用户端最新版本{$app_version} &nbsp;<a href="http://www.phpwind.com/download.php?action=do&did=324" target="_blank">点击下载</a>最新版本 &nbsp;<a href="http://faq.phpwind.net/app.php" target="_blank">安装教程</a><br />
+	我已经安装的版本是 {$personal}
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	服务器不支持fsockopen，APP用户端无法使用！
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>
+<h2>您站点的通用密钥<span style="padding-left:50px;"><a style="color:#CCCC99" href="$basename&action=modify">修改密钥</a></span></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td>密钥一：$db_siteid<input type="hidden" value="$db_siteid"><span style="padding-left:10px"><input type="button" class="btn" value="复制代码" onclick="CopyCode('$db_siteid');"></span></td>
+	</tr>
+	<tr class="tr3">
+		<td>密钥二：$db_siteownerid<input type="hidden" value="$db_siteownerid"><span style="padding-left:10px"><input type="button" class="btn" value="复制代码" onclick="CopyCode('$db_siteownerid');"></span></td>
+	</tr>
+	<tr class="tr3">
+		<td>唯一识别码：$db_sitehash<input type="hidden" value="$db_sitehash"><span style="padding-left:10px"><input type="button" class="btn" value="复制代码" onclick="CopyCode('$db_sitehash');"></span></td>
+	</tr>
+</table>
+<SCRIPT type="text/javascript" LANGUAGE="JavaScript" src="js/core/core.js"></SCRIPT>
+
+<h2>服务器环境要求检测(如果有未通过项，则部分功能可能会受影响)</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td colspan="3">函数检测：fsockopen</td>
+<!--
+EOT;
+if(!$app_version){print <<<EOT
+-->
+		<td>不支持</td>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+		<td>支持</td>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</tr>
+	<tr class="tr3"><td colspan="4">用户端文件检测：未知文件:$cklog[1] &nbsp;&nbsp; 文件被修改:$cklog[3] &nbsp;&nbsp; 文件丢失:$cklog[2]</td></tr>
+<!--
+EOT;
+foreach($dirlist as $dir=>$value){print <<<EOT
+-->
+	<tr><td class="tr4" colspan="4">{$dir}/</td></tr>
+	<tr class="tr3 s3">
+		<td>文件名</td>
+		<td width="20%">文件大小</td>
+		<td width="30%">最后修改时间</td>
+		<td width="20%">文件状态</td>
+	</tr>
+<!--
+EOT;
+foreach($value as $k=>$v){print <<<EOT
+-->
+	<tr class="tr3">
+		<td>$v[0]</td>
+		<td width="20%">$v[1]</td>
+		<td width="30%">$v[2]</td>
+		<td width="20%">
+<!--
+EOT;
+if($v[3]=='1'){print <<<EOT
+-->
+			<font color="green">未知文件</font>
+<!--
+EOT;
+}elseif($v[3]=='2'){print <<<EOT
+-->
+			<font color="blue">文件丢失</font>
+<!--
+EOT;
+}elseif($v[3]=='4'){print <<<EOT
+-->
+			文件正常
+<!--
+EOT;
+}else{print <<<EOT
+-->
+			<font color="red">文件被修改</font>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+	</tr>
+<!--
+EOT;
+}}print <<<EOT
+-->
+</table>
+<!--
+EOT;
+}elseif($action=='modify'){print <<<EOT
+-->
+<form action="$basename" method="post">
+<input type="hidden" name="step" value="2" />
+<input type="hidden" name="action" value="$action" />
+<h2>您站点的通用密钥</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+	<td colspan="2"><p align="left"><strong>什么是通用密钥？很重要！</strong><br />通用密钥是系统安装自动为每个站点生成的，包括一对密钥和一个唯一识别码，将作为您站点的唯一固定标识。<br />这一组密钥在您注册APP平台或修改APP平台帐户时需要用到，而且只有通过创始人身份登录后台才能够看到，请您妥善管理，不要随意泄露。<br />仅当您的数据库发生变化时，密钥可能会重新生成，导致您在APP的操作失效。如有此类情况发生，请及时联系APP服务小组app@phpwind.com。 </p><br /></td>
+</tr>
+<tr class="tr3">
+	<td width="30%">密钥一</td>
+	<td><input type="text" class="input" size="60" name="siteid" value="$siteid"/></td>
+</tr>
+<tr class="tr3">
+	<td>密钥二</td>
+	<td><input type="text" class="input" size="60" name="siteownerid" value="$siteownerid" /></td>
+</tr>
+<tr class="tr3">
+	<td>唯一识别码</td>
+	<td><input type="text" class="input" size="60" name="sitehash" value="$sitehash" /></td>
+</tr>
+</table><br />
+<center><input type="submit" class="btn" value="提 交" name="submit" />　<a href="$basename&action=$action&step=3">自动生成密钥</a></center>
+</form>
+<!--
+EOT;
+}elseif($action=='app'){
+if($job == 'appslist'){print <<<EOT
+-->
+<ul class="nav5 cc2">
+	<li class="current"><a href="$basename&action=app&job=appslist" hidefocus="true">基础应用</a></li>
+	<li><a href="$basename&action=app" hidefocus="true">第三方在线应用</a></li>
+</ul>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td class="tr4">应用名称</td><td class="tr4">URL</td><td class="tr4" colspan="2">操作</td>
+	</tr>
+	<tr class="tr3">
+		<td>帖子</td><td><input class="input" type="text" name="url_article" value="{$db_bbsurl}/apps.php?q=article" size="50" id="url_article" > <a href="javascript:;" onclick="copyUrl('article')">复制</a></td>
+		<td width="100">&nbsp;</td><td width="100"><a href="$admin_file?adminjob=superdel&admintype=article">管理</a></td>
+	</tr>
+	<tr class="tr3">
+		<td>相册</td><td><input class="input" type="text" name="url_photos" value="{$db_bbsurl}/apps.php?q=photos" size="50" id="url_photos" > <a href="javascript:;" onclick="copyUrl('photos')">复制</a></td>
+		<td><a href="$admin_file?adminjob=apps&admintype=app_photos">设置</a></td><td><a href="$admin_file?adminjob=apps&admintype=app_photos&action=albums">管理</a></td>
+	</tr>
+	<tr class="tr3">
+		<td>日志</td><td><input class="input" type="text" name="url_diary" value="{$db_bbsurl}/apps.php?q=diary" size="50" id="url_diary" > <a href="javascript:;" onclick="copyUrl('diary')">复制</a></td>
+		<td><a href="$admin_file?adminjob=apps&admintype=app_diary">设置</a></td><td><a href="$admin_file?adminjob=apps&admintype=app_diary&action=cp">管理</a></td>
+	</tr>
+	<tr class="tr3">
+		<td>群组</td><td><input class="input" type="text" name="url_groups" value="{$db_bbsurl}/apps.php?q=groups" size="50" id="url_groups" > <a href="javascript:;" onclick="copyUrl('groups')">复制</a></td>
+		<td><a href="$admin_file?adminjob=apps&admintype=app_groups">设置</a></td><td><a href="$admin_file?adminjob=apps&admintype=app_groups&action=argument">管理</a></td>
+	</tr>
+	<tr class="tr3">
+		<td>热榜</td><td><input class="input" type="text" name="url_hot" value="{$db_bbsurl}/apps.php?q=hot" size="50" id="url_hot" > <a href="javascript:;" onclick="copyUrl('hot')">复制</a></td>
+		<td><a href="$admin_file?adminjob=apps&admintype=app_hot">设置</a></td><td>&nbsp;</td>
+	</tr>
+	<tr class="tr3">
+		<td>分享</td><td><input class="input" type="text" name="url_share" value="{$db_bbsurl}/apps.php?q=share" size="50" id="url_share" > <a href="javascript:;" onclick="copyUrl('share')">复制</a></td>
+		<td><a href="$admin_file?adminjob=apps&admintype=app_share">设置</a></td><td><a href="$admin_file?adminjob=apps&admintype=app_share&action=share">管理</a></td>
+	</tr>
+	<tr class="tr3">
+		<td>记录</td><td><input class="input" type="text" name="url_write" value="{$db_bbsurl}/apps.php?q=write" size="50" id="url_write" > <a href="javascript:;" onclick="copyUrl('write')">复制</a></td>
+		<td><a href="$admin_file?adminjob=apps&admintype=app_write">设置</a></td><td><a href="$admin_file?adminjob=apps&admintype=app_write&action=writes">管理</a></td>
+	</tr>
+</table>
+<script language="JavaScript">
+function copyUrl(id) {
+	var url = getObj('url_'+id).value;
+	if (is_ie) {
+		window.clipboardData.setData("Text",url);
+		alert('URL已复制到剪贴板');
+	} else {
+		prompt('按下 Ctrl+C 复制到剪贴板',url)
+	}
+}
+</script>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+<ul class="nav5 cc2">
+	<li><a href="$basename&action=app&job=appslist" hidefocus="true">基础应用</a></li>
+	<li  class="current"><a href="$basename&action=app" hidefocus="true">第三方在线应用</a></li>
+</ul>
+<!--
+EOT;
+if (empty($db_appifopen)) {print <<<EOT
+-->
+<form action="{$basename}" method="post">
+<input type="hidden" name="action" value="open" />
+<div class="tr5">
+	<b>app应用简介</b><br />
+	app应用是由 PHPWind 提供的程序扩展服务。站长可自主选择是否开启，并且可针对每个应用设置是否启用。
+	<br /><br />
+	<input type="submit" value="开启应用" class="btn" />
+</div>
+</form>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+<div class="tr5">
+	<b>app应用简介</b><br />
+	1、当站点应用使用异常时，你可以使用数据更新操作将站点信息更新到app应用平台。<br />
+	2、关闭应用之后，所有用户应用都将无法使用。
+	<br />
+	<table width="100%" cellspacing="0" cellpadding="0">
+		<tr class="tr2">
+			<td width="15%">
+				<form action="{$basename}" method="post">
+				<input type="hidden" name="action" value="open" />
+				<input type="submit" value="数据更新" class="btn" />
+				</form>
+			</td>
+			<td width="15%">
+				<form id="close" action="{$basename}" method="post">
+				<input type="hidden" name="action" value="close" />
+				<input type="button" value="关闭应用" class="btn" onClick="appcheck();" />
+				</form>
+			</td>
+<script language="JavaScript">
+function appcheck(){
+	var obj = document.getElementById('close');
+	if(confirm('将关闭整站所有APP应用，确认此操作吗？')) {
+		obj.submit();
+	}
+}
+</script>
+<!--
+EOT;
+if ($db_appbbs) {print <<<EOT
+-->
+			<td width="19%">
+				<form id="close_bbs" action="{$basename}" method="post">
+				<input type="hidden" name="action" value="close_bbs" />
+				<input type="button" value="关闭论坛中应用" class="btn" onClick="bbscheck();" />
+				</form>
+			</td>
+
+<script language="JavaScript">
+function bbscheck(){
+	var obj = document.getElementById('close_bbs');
+	if(confirm('将关闭论坛中所有APP应用，确认此操作吗？')) {
+		obj.submit();
+	}
+}
+</script>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+			<td width="19%">
+				<form action="{$basename}" method="post">
+				<input type="hidden" name="action" value="open_bbs" />
+				<input type="submit" value="开启论坛中应用" class="btn"/>
+				</form>
+			</td>
+<!--
+EOT;
+} if ($db_appo) {print <<<EOT
+-->
+			<td>
+				<form id="close_o" action="{$basename}" method="post">
+				<input type="hidden" name="action" value="close_o" />
+				<input type="button" value="关闭圈子中应用" class="btn"  onClick="ocheck();" />
+				</form>
+			</td>
+
+<script language="JavaScript">
+function ocheck(){
+	var obj = document.getElementById('close_o');
+	if(confirm('将关闭圈子中所有APP应用，确认此操作吗？')) {
+		obj.submit();
+	}
+}
+</script>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+			<td>
+				<form action="{$basename}" method="post">
+				<input type="hidden" name="action" value="open_o" />
+				<input type="submit" value="开启圈子中应用" class="btn" />
+				</form>
+			</td>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</tr>
+	</table>
+</div>
+<h2>应用列表</h2>
+<script type="text/javascript" src=" http://apps.phpwind.net/js/global.js"></script>
+<script language="JavaScript">
+var server = new PwJs.Server("pwapp");
+server.start();
+</script>
+<iframe id="pwapp" name="pwapp" frameborder="0" width="100%" height="400" scrolling="no" src="{$url}"></iframe>
+<!--
+EOT;
+}}}elseif($action=='blooming'){
+print <<<EOT
+-->
+<h3>提示信息</h3>
+<div class="tr5">
+	1.选择常用分类：在前台推送帖子的时候，将优先展示选中的分类，请根据您的需求选择。<br />
+	2.点击获取最新分类：当PHPWind.com平台，有分类更新时，点击即可获取最新分类信息。<br />
+	3.使用用户组：控制用户组使用帖子推送的权限。
+</div>
+
+<form action="$basename" method="post">
+<input name="action" type="hidden" value="blooming" />
+<input name="step" type="hidden" value="2" />
+<h2>选择常用分类（<a style="color:#330000">最新分类</a><a href="$basename&action=$action&step=4">点击获取</a>）</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<!--
+EOT;
+foreach($info_class as $key=>$val){
+if(!$val[cup]){
+print<<<EOT
+-->
+	<tr class="tr3" style="margin-top:5px;">
+	<td style="border-bottom:1px #66CCFF" colspan="6"><strong>$val[name]</strong></td>
+	</tr>
+	<tr class="tr3">
+<!--
+EOT;
+$num=0;
+foreach($info_class as $key=>$value){
+if($value[cup]==$val[cid]){
+$checked = '';
+$value[ifshow] && $checked = 'checked';
+$num++;
+$htm_tr = $num % 6 == 0 ? '</tr><tr class="tr3">' : '';
+print<<<EOT
+-->
+		<td><input name="ciddb[]" type="checkbox" value="$key" $checked />$value[name]</td>$htm_tr
+<!--
+EOT;
+}}print <<<EOT
+-->
+	</tr>
+<!--
+EOT;
+}}print<<<EOT
+-->
+</table>
+<center>
+<br />
+<input type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" class="btn" />
+<input type="submit" name="Submit" value="提交" class="btn" />
+</center></form>
+<br />
+
+<form action="$basename" method="post">
+<input name="action" type="hidden" value="blooming" />
+<input name="step" type="hidden" value="3" />
+<h2>使用用户组</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+<!--
+EOT;
+$num=0;
+foreach ($ltitle as $key => $value) {
+if ($key=='1' || $key=='2' || $key=='6' || $key=='7') continue;
+$checked = in_array($key,$_Ginfo) ? 'checked' : '';
+$num++;
+$htm_tr = $num % 4 == 0 ? '</tr><tr class="tr3">' : '';
+print <<<EOT
+-->
+		<td class="b"><input type="checkbox" name="groupdb[]" value="$key" $checked />$value</td>$htm_tr
+<!--
+EOT;
+}print <<<EOT
+-->
+	</tr>
+</table>
+<center>
+<br />
+<input type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" class="btn" />
+<input type="submit" name="Submit" value="提交" class="btn" />
+</center></form>
+<br />
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

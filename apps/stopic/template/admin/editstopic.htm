@@ -1,0 +1,145 @@
+<!--
+<?php
+
+print <<<EOT
+-->
+<ul class="nav5 cc2">
+	<li><a href="javascript:;" hidefocus="true">布局分类</a></li>
+	<li><a href="$basename&job=draw&jobact=preedit&stopic_id=$stopic_id" hidefocus="true">编辑属性</a></li>
+	<li class="current"><a href="javascript:;" hidefocus="true">生成专题</a></li>
+</ul>
+
+<style type="text/css">
+html {height:100%;color: #000;background: #eef5fb;font-size:12px;}
+body, div, dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6, pre, code,
+form, fieldset, legend, input, button,
+textarea, p, blockquote, th, td {margin: 0;padding: 0;}
+
+table {border-collapse: collapse;border-spacing: 0;}
+th{text-align: left;}
+
+td,th,div{word-break:break-all;word-wrap:break-word}
+form{display:inline;}
+*{outline:none}
+/*通用样式*/
+.b{ font-weight:700;}
+.w{white-space:nowrap}
+.tal{text-align:left}
+.tac{text-align:center}
+.tar{text-align:right}
+.fr{float:right}
+.fl{float:left}
+.pr{position:relative}
+.vt,.vt td{vertical-align:top}
+/*字体大小*/
+.f9{font-size:10px;}
+.f10,small,.small{font-size:11px;}
+.f12{font-size:12px}
+.f14{font-size:14px}
+.f16{font-size:16px;}
+.f24{font-size:24px;}
+.fn,.fn a{font-weight:normal}
+body{font-family: Arial;}
+
+.main{margin:auto;width:940px;background:#fff;padding:10px;border:1px solid #adcaea;}
+
+.groupWrapper{padding-bottom:20px;margin-bottom:10px;border:1px dashed #cccccc;}
+
+.groupItem{margin-bottom:10px;border:1px solid #6392c5;background:#ffffff;overflow:hidden;}
+.groupItem .itemHeader{line-height: 28px;background-color: #b5d1f1;border-bottom:1px solid #6392c5;color:#333;padding:0 10px;cursor: move;font-weight: bold;font-size: 16px;height: 28px;position: relative;}
+
+.sortHelper{border:2px dashed #ffc495;width: auto !important;background:#ffecdc;}
+
+.groupItem .itemHeader .closeEl{position: absolute;right: 5px;top: 0px;font-weight: normal;font-size: 11px;text-decoration: none;}
+.groupItem .itemHeader .editEl{position: absolute;right: 20px;top: 0px;font-weight: normal;font-size: 11px;text-decoration: none;}
+.widget-top {cursor: move;border:1px solid #adcaea;padding:2px 10px;float:left;background:#ffffff;}
+.widget-top-bg{width:962px;margin:30px auto 5px;}
+
+.itemContent{padding:4px 10px;}
+.itemContent li{line-height:24px;border-bottom:0;}
+.pwSlide{margin:6px 0;}
+
+.itemContent h2{ font-size:14px; font-weight:700; text-align:center;margin:0;margin-top:4px;height:21px;overflow:hidden;line-height:21px;background:none;padding:0;}
+.itemContent p{margin:5px 0;text-indent:2em;}
+.itemContent tr td,.itemContent tr th{padding:4px 0 10px;}
+.itemContent th{vertical-align:top;}
+.itemContent th img{margin-top:2px;}
+.itemContent td h4{margin-left:10px; font-size:16px;}
+.itemContent td p{ text-align:left; text-indent:2em;margin-left:10px;}
+
+.list-img-a{padding-bottom:10px;}
+.list-img-a li{float:left;margin:6px 10px 5px 0;display:inline;}
+.list-img-a li p{line-height:20px;height:20px;overflow:hidden; text-align:center; text-indent:0;}
+
+.h{border-bottom:1px solid #abc8ea;background:#e8f5fb;text-align:left;color:#3366cc;padding:2px .5em 0; line-height:220%;}
+.h span{font-weight:normal;}
+.h h2{font-weight:bold}
+.h a{font-family:Arial;color:#3366cc}
+.h span a,.h span{color:#3366cc;}
+
+body {-moz-user-select:none;}
+</style>
+<table width="100%">
+	<tr class="tr3">
+		<td><b>专题标题：&nbsp;&nbsp;$stopic[title]</b></td>
+	</tr>
+	<tr>
+		<td style="padding:10px;">
+			<P style="padding:0 0 10px;">可视化模块操作只支持ie和firefox浏览器</P>
+			<P style="padding:0 0 10px;">选择模块&nbsp;&nbsp;&nbsp;&nbsp;(注：自定义html模块支持html代码，也可加入广告代码等内容)</P>
+			<div class="choose">
+				<div class="p10 cc2" style="padding-top:5px;">
+<!--
+EOT;
+foreach ($blocks as $key=>$block) {
+print <<<EOT
+-->
+	<div id="block_{$block[block_id]}" class="widget-top">$block[name]</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</div>
+			</div>
+			<div class="preview cc2">
+				<div id="container" style="padding:10px;">
+$tpl_content
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding:10px;">
+			<input type="hidden" name="job" value="generate" />
+			<input type="button" value="生成专题" class="btn" onclick="creatStopic();" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="预览" class="btn" onclick="previewStopic();return false;" />
+		</td>
+	</tr>
+</table>
+
+<script language="JavaScript" src="js/global.js"></script>
+<script language="JavaScript" src="js/core/core.js"></script>
+<script language="JavaScript" src="js/pw_ajax.js"></script>
+<script language="javascript" src="apps/stopic/js/getelementpos.js"></script>
+<script language="javascript" src="apps/stopic/js/drag.js"></script>
+<script language="javascript">
+
+var AJAXURL = '$ajaxurl';
+var STOPIC_ID = '$stopic_id';
+var special = New(externalDrag,['groupWrapper','groupItem','itemHeader','editEl','closeEl','itemContent','container']);
+special.externalDrag('widget-top');
+
+function creatStopic () {
+	var block_config = special.getStopicConfig();
+	ajax.send(AJAXURL,'job=creatstopic&stopic_id='+STOPIC_ID+block_config,ajax.get);
+}
+function previewStopic () {
+	var block_config = special.getStopicConfig();
+	url = '$basename&job=preview&stopic_id='+STOPIC_ID+block_config;
+	window.open(url,'_blank');
+}
+</script>
+<!--
+EOT;
+?>
+-->

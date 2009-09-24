@@ -1,0 +1,32 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">可以统计每月到访的ip量，每日到访的ip量，站长可以根据统计清楚的了解站点的流量情况。</div>
+
+<form action="$basename" method="post" name="creat">
+<h2>IP统计设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+<td width='25%'>是否开启IP统计</td>
+<td><input type="radio" value="1" $ipstates_Y name="ipstates">是 <input type="radio" value="0" $ipstates_N name="ipstates">否
+</td></tr></table>
+<input type="hidden" name="action" value="submit">
+<br><center>
+<input type="submit" value="提 交" class="btn"></center></form><br/>
+<h2>IP 索引</h2>
+<form action="$basename" method="post" name="ipIndex">
+<input type="hidden" name="action" value="ipIndex"/>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+	<td width='25%'>创建或更新IP库的索引文件，加快IP解析速度</td>
+	<td><input type="submit" class="btn" value="创建IP索引" /> </td>
+</tr>
+</table>
+</form>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>
+-->

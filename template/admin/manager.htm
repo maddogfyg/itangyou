@@ -1,0 +1,103 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+1、创始人拥有后台所有权限，若无特殊情况请勿更改。<br />
+2、您可以添加新创始人，删除和修改其他创始人信息。
+<!--
+EOT;
+if(!$action){print <<<EOT
+--></div>
+<h2>创始人管理</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 s3">
+		<td class="tal" width="25%">用户名</td>
+		<td width="15%">操 作</td>
+		<td></td>
+	</tr>
+<!--
+EOT;
+foreach($manager as $value){
+$rawuser = rawurlencode($value);print <<<EOT
+-->
+	<tr class="tr3">
+		<td class="tal">$value</td>
+		<td><a class="fourm-two" href="$basename&action=edit&oldname=$rawuser" title="编辑"><span class="edit" style="margin-right:1em;"></span></a> <a class="fourm-two" href="$basename&action=delete&oldname=$rawuser" title="删除"><span class="del"></span></a></td>
+		<td></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<br />
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="add">
+<h2>添加创始人</h2>
+<table width="100%" cellspacing="0" cellpadding="0" align="center">
+	<tr class="tr3">
+		<td width="25%">用户名</td>
+		<td><input type="text" size="20" class="input" name="username" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>密码</td>
+		<td><input type="text" size="20" class="input" name="password" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>确认密码</td>
+		<td><input type="text" size="20" class="input" name="check_pwd" /></td>
+	</tr>
+</table>
+<br /><center><input type="submit" class="btn" value="提 交"></center>
+</form>
+<br />
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="ifopen">
+<h2>管理员操作记录</h2>
+<table width="100%" cellspacing="0" cellpadding="0" align="center">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否开启管理员操作记录:</span> <br />当开启此设置后，管理员在后台操作时会被提醒记录操作理由 <br />管理操作记录可在“管理”->“后台管理记录”记录和查看</td>
+		<td><input type="radio" name="config[adminrecord]" value="1" $adminrecord_Y />开启
+			<input type="radio" name="config[adminrecord]" value="0" $adminrecord_N />关闭
+		</td>
+	</tr>
+</table>
+<br /><center><input type="submit" class="btn" value="提 交"></center>
+</form>
+<!--
+EOT;
+}elseif($action=='edit'){print <<<EOT
+-->
+<br />3、<font color="#FF0000">如不需要更改密码，“新密码”、“确认密码” 请留空。</font>
+</div>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="edit">
+<input type="hidden" name="oldname" value="$oldname" />
+<input type="hidden" name="step" value="2">
+<h2>编辑创始人</h2>
+<table width="100%" cellspacing="0" cellpadding="0" align="center">
+	<tr class="tr3">
+		<td width="25%">用户名</td>
+		<td><input type="text" size="20" class="input" name="username" value="$oldname" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>新密码</td>
+		<td><input type="text" size="20" class="input" name="password" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>确认密码</td>
+		<td><input type="text" size="20" class="input" name="check_pwd" /></td>
+	</tr>
+</table>
+<br /><center><input type="submit" class="btn" value="提 交"></center><br/>
+</form>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

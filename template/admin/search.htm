@@ -1,0 +1,155 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<style>
+
+/*字体颜色*/
+.s1{color:#006699;} /*蓝*/
+.s2{color:#1e5494;} /*深蓝*/
+.s3{color:#008800;}
+.gray{color:#888;}
+.f14{font-size:14px;}
+.b{font-weight:bold;}
+.wrap{height:auto; margin:auto;}	
+
+.s4{color:#fd0000;} /* 添加到"字体颜色"注释块*/
+.serach {padding:0 0 30px 0;}
+.serach h2{ font-size:12px; padding:0 ; font-weight:normal; height:33px; line-height:30px; /*background:url($imgpath/admin/h2_bg.png) center bottom repeat-x; */ background: url($imgpath/admin/h2_bg.png) left bottom repeat-x;}
+
+.serach p a,.serach dl dt a{ color:#294c89; text-decoration:underline;}
+.serach p a:active,.serach dl dt a:active{ color:#F60;}
+
+.dt1{padding:20px 0 0px 0;}
+.dd1{ line-height:20px; padding-top:5px; color:#666;}
+.dt2{text-indent:2em;padding-top: 8px; margin-top:0px;}
+
+.dd2{padding:5px 0 0 28px;line-height:20px; color:#666;}
+.serach_d{color:#000;}
+.dt3{padding-top:20px;}
+</style>
+<div class="wrap">
+	<div class="serach">
+<!--
+EOT;
+if(!$result){print <<<EOT
+-->
+<h2 class="gray">没有找到关于“<span class="s4">$keyword</span>”的操作</h2>
+<!--
+EOT;
+}else{
+print <<<EOT
+-->
+<h2 class="gray">有关“<span class="s4">$keyword</span>”的搜索结果</h2>
+<!--
+EOT;
+foreach ($result as $key=>$value) {
+$temp = strip_tags($value[name]);
+print <<<EOT
+-->
+<div>
+<p class="b dt1 f14"><a style="cursor:pointer;" onclick="openNewUrl('$key','$value[name]','$value[url]&admin_keyword=$keyword')">$value[name]</a></p>
+
+<!--
+EOT;
+foreach ($value[lang] as $k=>$val) {
+print <<<EOT
+-->
+<!--
+EOT;
+if(is_array($val)){
+print <<<EOT
+-->
+<div>
+<!--
+EOT;
+$i=0;
+foreach($val as $k2=>$v){
+print <<<EOT
+-->
+<!--
+EOT;
+if($i==0){print <<<EOT
+-->
+<p class="dt2 f14"><a style="cursor:pointer;" onclick="openNewUrl('$key','$value[name]','$value[url]&$k&admin_keyword=$keyword')">$v</a></p>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+<div class="dd2">$v</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+<!--
+EOT;
+$i++;
+}print <<<EOT
+-->
+</div>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+<div class="dd1">$val</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+<!--
+EOT;
+}print <<<EOT
+-->
+</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+
+<!--
+EOT;
+}print <<<EOT
+-->
+<div class="c"></div>
+<script language="JavaScript">
+function openNewUrl(id,name,url){
+<!--
+EOT;
+if($adskin!=2){print <<<EOT
+-->
+	parent.PW.Dialog({
+			            'id': id,
+			            'name': name,
+			            'url': url
+			        }).loadIframe(url);
+<!--
+EOT;
+}else{print <<<EOT
+-->
+	for(i in parent.guides){
+		if(i=='common') continue;
+		var guide = parent.guides[i];
+		for(j in guide){
+			var subs = guide[j];
+			for(k in subs){
+				if (k == id) {
+					parent.initguide(i,k,url);
+					//window.open("$admin_file?dfcate="+i+"&dftype="+k+"&dfurl="+escape(url));
+				}
+			}
+		}
+	}
+<!--
+EOT;
+}print <<<EOT
+-->
+}
+</script>
+	</div>
+</div>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>
+-->

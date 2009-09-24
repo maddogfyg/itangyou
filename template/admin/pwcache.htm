@@ -1,0 +1,76 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+		1、PW缓存库主要用于各种站点模式的不同应用<br />
+		2、请根据各个元素的使用情况而选择需要开启的缓存
+</div>
+<form action="$basename&" method="post">
+<input type="hidden" name="step" value="2">
+<h2>PW缓存库设置</h2>
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr class="b">
+	<td width="20%">开启PW缓存库<br />(未开启则直接进行数据库查询,<font color="red">需要开启时，请务必点击后面的更新缓存按钮</font>)</td>
+	<td>
+		<table width="100%" align="center" cellpadding="3" cellspacing="1" class="i_table">
+			<tr class="tr3">
+				<td><input type="checkbox" value="1" name="config[ifpwcache][]" $ifpwcache_1> 会员信息(总发帖,本月发帖,今日发帖,在线时间,会员积分)</td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=usersort');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3">
+				<td><input type="checkbox" value="2" name="config[ifpwcache][]" $ifpwcache_2> 热门帖(总回复数)<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=replysort');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3">
+				<td><input type="checkbox" value="4" name="config[ifpwcache][]" $ifpwcache_4> 热门帖(每天回复数)<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=replysortday');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3" style="display:none">
+				<td><input type="checkbox" value="8" name="config[ifpwcache][]" $ifpwcache_8> 热门帖(每周回复数)<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=replysortweek');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3">
+				<td><input type="checkbox" value="16" name="config[ifpwcache][]" $ifpwcache_16> 人气帖(总点击数)<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=hitsort');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3">
+				<td><input type="checkbox" value="32" name="config[ifpwcache][]" $ifpwcache_32> 人气帖(每天点击数)<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=hitsortday');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3" style="display:none">
+				<td><input type="checkbox" value="64" name="config[ifpwcache][]" $ifpwcache_64> 人气帖(每周点击数)<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=hitsortweek');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3" style="display:none">
+				<td><input type="checkbox" value="128" name="config[ifpwcache][]" $ifpwcache_128> 最新帖<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=newsubject');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3" style="display:none">
+				<td><input type="checkbox" value="256" name="config[ifpwcache][]" $ifpwcache_256> 最新回复<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=newreply');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3">
+				<td><input type="checkbox" value="512" name="config[ifpwcache][]" $ifpwcache_512> 最新图片<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=newpic');"><span class="update"></span></a></td>
+			</tr>
+			<tr class="tr3">
+				<td><input type="checkbox" value="1024" name="config[ifpwcache][]" $ifpwcache_1024> 热门收藏<br /></td>
+				<td><a class="fourm-two" title="更新缓存" onclick="window.location=('$basename&action=update&type=hotfavor');"><span class="update"></span></a></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr class="tr3" style="display:none">
+	<td>缓存库入库数目</td>
+	<td><input size="35" class="input" value="$db_cachenum" name="config[cachenum]"></td>
+</tr>
+</table>
+<br /><center><input type="submit" class="btn" value="提 交"></center>
+</form>
+<br />
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

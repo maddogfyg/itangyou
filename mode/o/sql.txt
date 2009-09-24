@@ -1,0 +1,24 @@
+CREATE TABLE pw_oboard (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `uid` mediumint(8) unsigned NOT NULL,
+  `username` varchar(15) NOT NULL,
+  `touid` mediumint(8) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `postdate` int(10) NOT NULL,
+  `c_num` mediumint(8) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `touid` (`touid`)
+) TYPE=MyISAM;
+
+CREATE TABLE pw_owritedata (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `uid` int(10) unsigned NOT NULL,
+  `touid` int(10) unsigned NOT NULL,
+  `postdate` int(10) unsigned NOT NULL,
+  `isshare` tinyint(1) unsigned NOT NULL default '0',
+  `source` varchar(10) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `c_num` mediumint(8) UNSIGNED NOT NULL,
+  PRIMARY KEY  (`id`),
+   KEY `uid` (`uid`)
+) TYPE=MyISAM;

@@ -1,0 +1,1142 @@
+<!--<?php
+if (!defined('AJAX')){
+include_once PrintEot('left');
+}print<<<EOT
+-->
+<style type="text/css">
+.red{color:#ff0000;}
+.mr15{margin-right:15px;}
+.black{color:#555555;}
+.fn,.fn a{font-weight:normal}
+.pd5{padding:0 0 5px;}
+.p10{padding:10px;}
+.unline{text-decoration:underline;margin-right:15px;}
+.tr3 td{ vertical-align:top;}
+.w{white-space:nowrap}
+
+/*分类*/
+.addcate{width:270px;border:1px solid;border-color: #b8b8b8 #dedede #dedede #b8b8b8;background:#ffffff;overflow:hidden;padding-bottom:10px;}
+.add-title{line-height:25px;margin-bottom:10px;width:290px;}
+.add-title li{ cursor:pointer;float:left;padding:0 15px;border-right:1px solid #dedede;background:#f7f7f7;border-bottom:1px solid #dedede;}
+.add-title .current{border-bottom:none;background:#ffffff;}
+.add-list{height:150px;overflow:auto;border:1px solid;border-color: #b8b8b8 #dedede #dedede #b8b8b8;background:#ffffff;margin:10px;}
+.add-list li{border-bottom:1px solid #e4e4e4;padding:4px 10px;}
+.add-list li:hover{background:#f7f7f7;}
+.add-list li input{ vertical-align:middle;margin-right:4px;}
+.tr6 td{padding:4px 0 4px 10px;border:none;border-bottom:1px dashed #ccc;}
+.h{border-bottom:1px solid #9ec0e1;background:#e6f0f9;text-align:left;color:#333333;padding:0 .5em; line-height:2.4em;}
+
+.admin-tips{padding:0 10px;}
+.admin-tips span{float:left;margin-right:20px;display:inline;white-space:nowrap;height:25px;margin-top:15px;}
+</style>
+<!--
+EOT;
+if (empty($action)) {print <<<EOT
+-->
+<ul class="nav3 cc2">
+<li><a href="$basename" class="two">行业分类主题管理</a></li>
+<li><a href="$basename&action=topic">分类内容管理</a></li>
+</ul>
+
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="topiclist" />
+<h2><span class="f14">主题管理</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a  href="$basename&action=addtopic" class="black">＋添加分类主题</a></h2>
+<table width="100%">
+	<tr class="tr3">
+		<td width="30">启用</td>
+		<td width="8%">顺序</td>
+		<td width="15%">主题名称</td>
+		<td>分类模板</td>
+		<td>所属版块</td>
+		<td width="140">操作</td>
+		<td>删除</td>
+	</tr>
+<!--
+EOT;
+foreach($topiccatedb as $key => $value){
+$ifable = '';
+if ($value[ifable]) $ifable = 'checked';
+print <<<EOT
+-->
+	<tr class="tr3">
+		<td><input type="checkbox" name="selid[$value[cateid]]" value="$value[ifable]" $ifable></td>
+		<td><input type="text" class="input" name="vieworder[$value[cateid]]" value="$value[vieworder]" size="8"></td>
+		<td>$value[name]</td>
+		<td><span class="unline">$value[model]</span></td>
+		<td>$value[forum]</td>
+		<td><a href="$basename&action=edittopic&cateid=$key" class="unline">编辑主题</a> <a href="$basename&action=editmodel&cateid=$key" class="unline">编辑模板</a>
+		</td>
+		<td>
+<!--
+EOT;
+if(!$value[ifdel]){print<<<EOT
+-->
+		<a class="fourm-two" href="$basename&action=deltopic&cateid=$value[cateid]" onclick="if(!confirm('删除主题将删除所有关联的模板、变量及其他信息')){return false;}"><span class="del">删除</span></a>
+<!--
+EOT;
+}print<<<EOT
+-->
+		</td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<center style="margin-top:10px"><input type="submit" class="btn" value="提 交"></center>
+</form><br />
+<!--
+EOT;
+} elseif ($action == 'topic') {print <<<EOT
+-->
+<ul class="nav3 cc2">
+<li><a href="$basename">行业分类主题管理</a></li>
+<li><a href="$basename&action=topic" class="two">分类内容管理</a></li>
+</ul>
+<h2>
+选择分类模板
+<select name="modelid" onchange="totopic(this.value)">
+<!--
+EOT;
+foreach($topiccatedb as $value){
+print<<<EOT
+-->
+	<optgroup label="$value[name]">
+<!--
+EOT;
+foreach($newmodeldb[$value[cateid]] as $val){
+$selected = '';
+$val[modelid] == $modelid && $selected = 'selected';
+print<<<EOT
+-->
+	<option value="$val[modelid]" $selected>|--$val[name]</option>
+<!--
+EOT;
+}print<<<EOT
+-->
+	</optgroup>
+<!--
+EOT;
+}print <<<EOT
+-->
+</select>
+</h2>
+<script language="JavaScript">
+function totopic(modelid) {
+	window.location.href = '$admin_file?adminjob=topiccate&action=topic&modelid='+modelid;
+}
+</script>
+<!--
+EOT;
+if($modelid){print<<<EOT
+-->
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="topic" />
+<input type="hidden" name="step" value="search" />
+<input type="hidden" name="modelid" value="$modelid" />
+<input type="hidden" name="tids" value="$tids" />
+<h2>搜索内容</h2>
+<div class="admin-tips cc2">$searchhtml<b id="asearch" style="display:none;font-weight:normal;">$asearchhtml</b></div>
+<div class="c"></div>
+<center style="margin-top:10px"><input type="submit" value="提 交" class="btn" /> &nbsp;<a id="show" href="javascript:;" onclick="showasearch()">高级搜索</a></center>
+</form>
+<div class="c"></div>
+<script language="JavaScript">
+function showasearch(id){
+	if (getObj('asearch').style.display == 'none') {
+		getObj('asearch').style.display = '';
+	} else {
+		getObj('asearch').style.display = 'none';
+	}
+}
+</script>
+<!--
+EOT;
+}print<<<EOT
+-->
+<h2>搜索结果</h2>
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="delthreads" />
+<input type="hidden" name="alltids" value="$alltids" />
+<input type="hidden" name="modelid" value="$modelid" />
+<table width="100%">
+	<tr class="tr3 tac">
+		<td width="8%">全选</td>
+		<td>名称</td>
+		<td width="12%">关联模板</td>
+		<td width="12%">所属版块</td>
+		<td width="12%">发布者</td>
+		<td width="15%">发布时间</td>
+		<td width="8%">操作</td>
+	</tr>
+<!--
+EOT;
+foreach($topicdb as $key => $value){
+print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td><input type="checkbox" name="selid[]" value="$value[tid]"></td>
+		<td><a href="read.php?tid=$value[tid]" target="_blank" class="unline">$value[subject]</a></td>
+		<td>{$topicmodeldb[$modelid][name]}</td>
+		<td>{$forum[$value[fid]][name]}</td>
+		<td><a href="u.php?uid=$value[authorid]" target="_blank" class="unline">$value[author]</a></td>
+		<td>$value[postdate]</td>
+		<td><a href="$basename&action=delthreads&selid=$value[tid]&modelid=$modelid" onclick="if(!confirm('是否确认删除该帖子？')){return false;}" class="unline">删除</a></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<br />$pages
+<center style="margin-top:10px"><input type="button" class="btn" name="chkall" value="全 选" onclick='CheckAll(this.form)'>
+<input type="submit" value="删 除" class="btn" onclick="if(!confirm('是否确认删除帖子？')){return false;}"> <input type="submit" name="sendmsg" value="群发消息" class="btn"></center>
+</form>
+<!--
+EOT;
+}elseif($_POST['sendmsg']){print<<<EOT
+-->
+<ul class="nav3 cc2">
+<li><a href="$basename">行业分类主题管理</a></li>
+<li><a href="$basename&action=topic">分类内容管理</a></li>
+<li><a href="javascript:;" class="two">群发消息</a></li>
+</ul>
+<form name='FORM' action="$basename" method="post">
+<input type="hidden" name="action" value="sendmsg" />
+<input type="hidden" name="step" value="2" />
+<input type="hidden" name="uids" value="$uids" />
+<h2>短消息群发</h2>
+<script language="JavaScript" src="js/wind_editor.js"></script>
+<table width="100%">
+	<tr class="tr3">
+		<td width="15%">主题</td>
+		<td width="85%"><input type="text" class="input" name="subject" size="60" /></td>
+	</tr>
+	<tr class="tr3" valign="top">
+		<td>内容</td>
+		<td>
+<!--
+EOT;
+require_once(R_P.'template/wind/editor.htm');
+print <<<EOT
+-->
+		</td>
+	</tr>
+</table>
+<br />
+<center>
+	<input type="submit" class="btn" value="提 交">
+	<input class="btn" type="reset" value="重 置">
+</center>
+</form>
+<!--
+EOT;
+}elseif(in_array($action,array('addtopic','edittopic'))){print<<<EOT
+-->
+<ul class="nav3 cc2">
+<li><a href="$basename" class="two">行业分类主题管理</a></li>
+<li><a href="$basename&action=topic">分类内容管理</a></li>
+</ul>
+<form name="FORM" method="post" action="$basename&">
+<input type="hidden" name="action" value="$action">
+<input type="hidden" name="cateid" value="$cateid">
+<input type="hidden" name="step" value="2">
+<!--
+EOT;
+if($action == 'addtopic'){print<<<EOT
+-->
+<h2>添加主题</h2>
+<!--
+EOT;
+}elseif($action == 'edittopic'){print<<<EOT
+-->
+<h2>编辑主题</h2>
+<!--
+EOT;
+}print<<<EOT
+-->
+<table width="100%">
+	<tr class="tr3">
+		<td width="100">分类主题名称</td>
+		<td><input name="name" id="cate_name" class="input" value="$name" size="35"><span id="cate_name_warn">最多14个字节</span></td>
+	</tr>
+	<tr class="tr3">
+		<td>模板启用</td>
+		<td>
+<!--
+EOT;
+if($action == 'addtopic'){print<<<EOT
+-->
+			<span class="mr15 w fl"><input type="checkbox" name="modelid" value="1" checked disabled style="vertical-align:middle;">&nbsp;默认模板</span>
+<!--
+EOT;
+}elseif($action == 'edittopic'){print<<<EOT
+-->
+			$selectmodel
+<!--
+EOT;
+}print<<<EOT
+-->
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>开启分类主题</td>
+		<td>
+			<input type="radio" name="ifable" value="1" $ifable_Y> 开启
+			<input type="radio" name="ifable" value="0" $ifable_N> 关闭
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>顺序</td>
+		<td><input name="vieworder" class="input" value="$vieworder" size="10"></td>
+	</tr>
+	<tr class="tr3">
+		<td>&nbsp;</td><td>
+<!--
+EOT;
+if($action == 'addtopic'){print<<<EOT
+-->
+		<input type="submit" class="btn" value="下一步">
+<!--
+EOT;
+}elseif($action == 'edittopic'){print<<<EOT
+-->
+		<input type="submit" class="btn" value="提交">
+<!--
+EOT;
+}print<<<EOT
+-->
+		</td>
+	</tr>
+</table>
+<script type="text/javascript" language="JavaScript" src="js/pw_ajax.js"></script>
+<script language="JavaScript">
+var charset = '$db_charset';
+initCheckTextNum('cate_name','cate_name_warn',14);
+</script>
+</form>
+<!--
+EOT;
+}elseif($action == 'editmodel'){print<<<EOT
+-->
+<script language="JavaScript" src="js/pcdate.js"></script>
+<script language="JavaScript" src="js/desktop/Compatibility.js"></script>
+<ul class="nav3 cc2">
+<li><a href="$basename" class="two">行业分类主题管理</a></li>
+<li><a href="$basename&action=topic">分类内容管理</a></li>
+</ul>
+
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+1.编辑字段时，可以在名称中加入{#}（两个花括号加上一个井号），表示发表和阅读帖子时，标记前后的文字可以分别显示在字段的前后。<br />
+2.当显示顺序数字相同且不为0时，发表和阅读帖子时也会在同一行显示。 <br />
+3.结合以上两点，可以灵活的编辑字段显示格式。比如“户型:*室*厅*卫*阳台”，可以编辑成相同顺序的4个字段，字段名称分别为“户型:{#}室”、“{#}厅”、“{#}卫”、“{#}阳台”。<br />
+4.如果字段通过前台发帖存在数据，将无法编辑变量。<br />
+5.上传（upload）类型必填限制无效。
+</div>
+<h3>修改字段</h3>
+<div style="padding:0 0 0 10px;">
+<ul class="nav5">
+<!--
+EOT;
+foreach($modeldb as $key => $value){
+$current = $key == $modelid ? 'current' : '';
+print<<<EOT
+-->
+	<li class="$current"><a href="$basename&action=editmodel&cateid=$cateid&modelid=$key">$value[name]</a></li>
+<!--
+EOT;
+}print<<<EOT
+-->
+</ul>
+<a href="javascript:;" id="editmodelname" onclick="sendmsg('$ajax_basename_editmodelname','cateid=$cateid&modelid=$modelid',this.id);"  class="unline">编辑模板名称</a><a href="javascript:;" id="addmodename" onclick="sendmsg('$ajax_basename_addmodel','cateid=$cateid',this.id);"  class="unline">添加模板</a><a href="javascript:;" onclick="sendmsg('$ajax_basename_add','modelid=$modelid&cateid=$cateid',this.id);" id="addfield" style="cursor:pointer;" class="unline red">+添加字段</a>
+</div>
+<div class="c"></div>
+<script type="text/javascript" language="JavaScript" src="js/global.js"></script>
+<script type="text/javascript" language="JavaScript" src="js/pw_ajax.js"></script>
+<form method="post" action="$basename&">
+<input name="action" type="hidden" value="editmodel">
+<input name="cateid" id="cateid" type="hidden" value="$cateid">
+<input name="modelid" id="modelid" type="hidden" value="$modelid">
+<input name="step" type="hidden" value="2">
+<table width="100%" style="margin:0 2px 12px 2px">
+	<tr class="tr3">
+		<td width="5%">启用</td>
+		<td width="5%">顺序</td>
+		<td width="10%">类型</td>
+		<td>发帖处显示内容</td>
+		<td width="10%" class="tac">默认查询</td>
+		<td width="10%" class="tac">高级查询</td>
+		<td width="10%" class="tac">帖子列表显示</td>
+		<td width="10%" class="tac">是否必须</td>
+		<td width="10%" class="tac">框体显示长度</td>
+		<td width="10%" class="tac">操作</td>
+	</tr>
+<!--
+EOT;
+foreach($fielddb as $k=>$v){print <<<EOT
+-->
+	<tr id="col_$k" class="tr3"><td><input type="checkbox" name="ifable[$k]" id="ifable[$k]" value="1" $v[ifable_checked] ></td><td><input name="vieworder[$k]" id="vieworder[$k]" value="$v[vieworder]" size="2" class="input"></td>
+
+<!--
+EOT;
+if ($v['type'] == 'number'){print<<<EOT
+-->
+	<td>数字</td><td>$v[name1]：<input type="text" size="10" class="input">
+<!--
+EOT;
+} elseif ($v['type'] == 'text'){print<<<EOT
+-->
+	<td>字串</td><td>$v[name1]：<input type="text" size="10" class="input">
+
+<!--
+EOT;
+} elseif ($v['type'] == 'radio'){print<<<EOT
+-->
+	<td>单选</td><td>$v[name1]：
+<!--
+EOT;
+foreach($v['rules'] as $rk => $rv){
+$true_rv = substr($rv,strpos($rv,'=')+1);
+print<<<EOT
+-->
+	<input type="radio" name="radio">&nbsp;$true_rv
+<!--
+EOT;
+}
+}elseif($v['type'] == 'checkbox'){print<<<EOT
+-->
+	<td>多选</td><td>$v[name1]：
+<!--
+EOT;
+foreach($v['rules'] as $ck => $cv){
+$true_cv = substr($cv,strpos($cv,'=')+1);
+print<<<EOT
+-->
+	<input type="checkbox" value="" class="input">&nbsp;$true_cv
+<!--
+EOT;
+}
+}elseif($v['type'] == 'textarea'){print<<<EOT
+-->
+	<td>文本框</td><td>$v[name1]：<textarea name="textarea" cols="20"></textarea>
+<!--
+EOT;
+}elseif($v['type'] == 'select'){print<<<EOT
+-->
+	<td>下拉框</td><td>
+	$v[name1]：
+	<select name="select">
+<!--
+EOT;
+foreach($v['rules'] as $sk => $sv){
+$true_sv = substr($sv,strpos($sv,'=')+1);
+print<<<EOT
+-->
+	<option value="">$true_sv</option>
+<!--
+EOT;
+}print<<<EOT
+-->
+	</select>
+<!--
+EOT;
+}elseif($v['type'] == 'calendar'){print<<<EOT
+-->
+	<td>日历</td><td>$v[name1]：<input type="text" name="calendar_$k" id="calendar_$k" value="" onclick="ShowCalendar(this.id,0)" size="10" class="input">
+<!--
+EOT;
+}elseif($v['type'] == 'email'){print<<<EOT
+-->
+	<td>电子邮件</td><td>$v[name1]：<input type="text" name="email" value="" size="10" class="input">
+<!--
+EOT;
+}elseif($v['type'] == 'url'){print<<<EOT
+-->
+	<td>超链接</td><td>$v[name1]：<input type="text" name="url" value="" size="10" class="input">
+<!--
+EOT;
+}elseif($v['type'] == 'img'){print<<<EOT
+-->
+	<td>图片</td><td>$v[name1]：<input type="text" name="image" value="" size="10" class="input">
+<!--
+EOT;
+}elseif($v['type'] == 'upload'){print<<<EOT
+-->
+	<td>上传</td><td>$v[name1]：<input type="file" name="upload" size="10" class="input">
+<!--
+EOT;
+}elseif($v['type'] == 'range'){print<<<EOT
+-->
+	<td>取值范围</td><td>$v[name1]：<input type="text" name="range" value="" size="10" class="input">
+<!--
+EOT;
+}print<<<EOT
+-->
+	$v[name2] <p class="gray">$v[descrip]</p></td>
+	<td class="tac"><input type="checkbox" name="ifsearch[$k]" value="1" $v[ifsearch_checked]></td>
+	<td class="tac"><input type="checkbox" name="ifasearch[$k]" value="1" $v[ifasearch_checked]></td>
+	<td class="tac"><input type="checkbox" name="threadshow[$k]" value="1" $v[threadshow_checked]></td>
+	<td class="tac"><input type="checkbox" name="ifmust[$k]" value="1" $v[ifmust_checked]></td>
+	<td class="tac">
+<!--
+EOT;
+if(in_array($v['type'],array('number','text','textarea','calendar','email','url','img','upload'))){print<<<EOT
+-->
+	<input type="text" name="textsize[$k]" value="$v[textsize]" size="5" class="input">
+<!--
+EOT;
+}print<<<EOT
+-->
+	</td>
+	<td class="tac"><a href="javascript:;" onclick="sendmsg('$ajax_basename_edit','fieldid=$k&modelid=$modelid&cateid=$cateid',this.id);" id="editfield_$k">编辑</a>
+	<a href="javascript:;" onclick="delfield($k);return false;" style="color:#C0C0C0">X</a><br />
+<!--
+EOT;
+if($v['indexstate'] == 1){print<<<EOT
+-->
+	<a href="javascript:;" onclick="editIndex($modelid,$k,'del');return false;">删除索引</a>
+<!--
+EOT;
+}elseif($v['indexstate'] == 0 && $v['ifindex']){print<<<EOT
+-->
+	<a href="javascript:;" onclick="editIndex($modelid,$k,'add');return false;">添加索引</a>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+	<span></span>
+<!--
+EOT;
+}print<<<EOT
+-->
+	</tr>
+<!--
+EOT;
+}print<<<EOT
+-->
+	<a name="cols"></a>
+</table>
+<center>
+	<input type="button" name="chkall" value="全 选" onclick="CheckIfable(this.form,'ifable[')" class="btn">
+	<input type="submit" name="delete" value="提 交" class="btn">
+</center>
+</form>
+<script language="JavaScript">
+var basename = '$basename';
+var ajax_basename_edit = '$ajax_basename_edit';
+var ajax_basename_add = '$ajax_basename_add';
+var ajax_basename_showfield = '$ajax_basename_showfield';
+var ajax_basename_delfield = '$ajax_basename_delfield';
+var ajax_basename_editindex = '$ajax_basename_editindex';
+var ajax_basename_delmodel = '$ajax_basename_delmodel';
+
+function CheckIfable(form,cname){
+	var ifcheck = null;
+	for (var i=0;i<form.elements.length-2;i++){
+		var e = form.elements[i];
+		if(e.type=='checkbox' && e.name.indexOf(cname) != -1){
+			if (ifcheck === null) ifcheck = !e.checked;
+			e.checked = ifcheck;
+			if (typeof e.onclick == 'function') e.onclick();
+		}
+	}
+	return ifcheck;
+}
+/*
+function editFieldResponse(){
+	var str = ajax.request.responseText.split("\t");
+
+	if (str[0] == 'success'){
+		var fielddb = JSONParse(str[5]);
+
+		var tr = elementBind('tr','col_' + str[1],'tr3');
+		var td_ifable = elementBind('td');
+		var input_ifable = elementBind('input');
+		input_ifable.type = 'checkbox';
+		input_ifable.name = 'ifable['+str[1]+']';
+		input_ifable.value = 1;
+		input_ifable.checked = str[6] ? true : false;
+		td_ifable.appendChild(input_ifable);
+		var td_vieworder = elementBind('td');
+		var input_vieworder = elementBind('input');
+		input_vieworder.name = 'vieworder['+str[1]+']';
+		input_vieworder.size = 2;
+		input_vieworder.value = str[7];
+		td_vieworder.appendChild(input_vieworder);
+
+		var td_type = elementBind('td');
+		td_type.innerHTML = str[3];
+
+		var td_field = elementBind('td');
+		var name_span = elementBind('span');
+		name_span.innerHTML = str[4]+'：';
+		if (str[2] == 'select') {
+			var selobj = elementBind('select');
+			for (var temp in fielddb){
+				selobj.options.add(new Option(fielddb[temp],''));
+			}
+			td_field.appendChild(name_span);
+			td_field.appendChild(selobj);
+		} else if (str[2] == 'radio'){
+
+			td_field.appendChild(name_span);
+			for (var temp in fielddb){
+				var radioobj = elementBind('input');
+				radioobj.type = 'radio';
+				td_field.appendChild(radioobj);
+				var radiotext = elementBind('span');
+				radiotext.innerHTML = fielddb[temp];
+				td_field.appendChild(radiotext);
+			}
+		} else if (str[2] == 'checkbox'){
+
+			td_field.appendChild(name_span);
+			for (var temp in fielddb){
+				var checkboxobj = elementBind('input');
+				checkboxobj.type = 'checkbox';
+				td_field.appendChild(checkboxobj);
+				var checkboxtext = elementBind('span');
+				checkboxtext.innerHTML = fielddb[temp];
+				td_field.appendChild(checkboxtext);
+			}
+		} else if (str[2] == 'upload'){
+			var upload = elementBind('input');
+			upload.type = 'file';
+			td_field.appendChild(name_span);
+			td_field.appendChild(upload);
+		} else {
+			var input = elementBind('input');
+			td_field.appendChild(name_span);
+			td_field.appendChild(input);
+		}
+		var td_ifsearch = elementBind('td');
+		var input_ifsearch = elementBind('input');
+		input_ifsearch.type = 'checkbox';
+		input_ifsearch.name = 'ifsearch['+str[1]+']';
+		input_ifsearch.value = 1;
+		str[8] = parseInt(str[8]);
+		input_ifsearch.checked = str[8] ? true : false;
+		td_ifsearch.appendChild(input_ifsearch);
+
+
+		var td_ifasearch = elementBind('td');
+		var input_ifasearch = elementBind('input');
+		input_ifasearch.type = 'checkbox';
+		input_ifasearch.name = 'ifasearch['+str[1]+']';
+		input_ifasearch.value = 1;
+		str[9] = parseInt(str[9]);
+		input_ifasearch.checked = str[9] ? true : false;
+		td_ifasearch.appendChild(input_ifasearch);
+
+		var td_threadshow = elementBind('td');
+		var input_threadshow = elementBind('input');
+		input_threadshow.type = 'checkbox';
+		input_threadshow.name = 'threadshow['+str[1]+']';
+		input_threadshow.value = 1;
+		str[10] = parseInt(str[10]);
+		input_threadshow.checked = str[10] ? true : false;
+		td_threadshow.appendChild(input_threadshow);
+
+		var td_ifmust = elementBind('td');
+		var input_ifmust = elementBind('input');
+		input_ifmust.type = 'checkbox';
+		input_ifmust.name = 'ifmust['+str[1]+']';
+		input_ifmust.value = 1;
+		input_ifmust.checked = str[11] ? true : false;
+		td_ifmust.appendChild(input_ifmust);
+
+		var td_del = elementBind('td');
+		var del_a = elementBind('a');
+		//var del_a.href = 'javascript:;';
+		del_a.onclick=function(){
+			delfield(str[1]);
+		}
+		del_a.innerHTML = '删除'
+
+		var modelid = getObj('modelid').value;
+		var addindex_a = elementBind('a');
+		//var addindex_a.href = 'javascript:;';
+		addindex_a.onclick=function(){
+			editIndex(modelid,str[1],'add');
+		}
+		addindex_a.innerHTML = '添加索引';
+
+		var br = elementBind('br');
+		td_del.appendChild(del_a);
+		td_del.appendChild(br);
+		td_del.appendChild(addindex_a);
+
+		tr.appendChild(td_ifable);
+		tr.appendChild(td_vieworder);
+		tr.appendChild(td_type);
+		tr.appendChild(td_field);
+		tr.appendChild(td_ifsearch);
+		tr.appendChild(td_ifasearch);
+		tr.appendChild(td_threadshow);
+		tr.appendChild(td_ifmust);
+		tr.appendChild(td_del);
+
+		if (IsElement('col_'+str[1])){
+			var replacenode = getObj('col_'+str[1]);
+			replacenode.parentNode.replaceChild(tr,replacenode);
+		} else {
+			getObj('s_table').appendChild(tr);
+			tr.focus();
+		}
+	} else {
+		ajax.guide();
+	}
+}
+
+*/
+
+function delfield(id) {
+	if(confirm('删除字段将同时删除帖子关联数据，是否确认删除？')) {
+		ajax.send(ajax_basename_delfield,'fieldid='+id,function(){
+				var str = ajax.request.responseText.split("\t");
+				if (str[0] == 'success'){
+					//delElement('col_'+id);
+					showDialog('success','删除字段成功!');
+					window.location.href = basename+'&action=editmodel&cateid=$cateid&modelid='+str[1];
+				} else {
+					showDialog('error','删除失败');
+				}
+			}
+		);
+	}
+}
+
+function editIndex(modelid,fieldid,type) {
+	if (confirm('添加索引后，可以提交分类信息帖子的查询速度，但如果添加索引的字段过多，效果会下降。建议将常用查询建立索引。是否确认？')){
+		ajax.send(ajax_basename_editindex,'modelid='+modelid+'&fieldid='+fieldid+'&type='+type,function(){
+				var str = ajax.request.responseText.split("\t");
+				if (str[0] == 'success'){
+					showDialog('success','索引操作成功！');
+					window.location.href = basename+'&action=editmodel&cateid='+str[1]+'&modelid='+str[2];
+				} else {
+					ajax.guide();
+				}
+			}
+		);
+	}
+}
+
+function delmodel(modelid){
+	if(confirm('删除该模板后将清空该模板下的所有信息，包括帖子信息！是否确认删除该模板？')){
+		ajax.send(ajax_basename_delmodel,'modelid='+modelid,function(){
+				var str = ajax.request.responseText.split("\t");
+				if (str[0] == 'success'){
+					showDialog('success','模板删除成功!');
+					window.location.href = basename+'&action=editmodel&cateid='+str[1];
+				} else {
+					ajax.guide();
+				}
+			}
+		);
+	}
+}
+
+function ShowType(id){
+	if(id == 'radio' || id == 'checkbox' || id == 'select') {
+		getObj('content_des').innerHTML = '在“选项内容”中设置选项，一个选项一行，格式为“1=***” ，“=”后为要显示的内容，确保“=”前的数字不是相同的';
+	} else if(id == 'number') {
+		getObj('content_des').innerHTML = '数值范围表示发表帖子时，输入框中填写的数字必须在此设置的范围内，留空则不限制';
+	} else if(id == 'calendar') {
+		getObj('content_des').innerHTML = '发帖和搜索时弹出日期选择框';
+	} else if(id == 'text') {
+		getObj('content_des').innerHTML = '输入框，最大字节长度为255';
+	} else if(id == 'url') {
+		getObj('content_des').innerHTML = '该字段内容浏览时会显示成超链接，最大字节长度为255';
+	} else if(id == 'email') {
+		getObj('content_des').innerHTML = '可以控制输入内容符合电子邮件格式，最大字节长度为255';
+	} else if(id == 'textarea') {
+		getObj('content_des').innerHTML = '文本输入框，最大字节长度为6500';
+	} else if (id == 'img') {
+		getObj('content_des').innerHTML = '可以输入图片链接，浏览时将在图片播放器中显示，最大字节长度为255';
+	} else if (id == 'upload') {
+		getObj('content_des').innerHTML = '可上传图片，浏览时将在图片播放器中显示';
+	} else if(id == 'range') {
+		getObj('content_des').innerHTML = '发帖时表现形式为文本框，但搜索时显示为两个文本框，输入最大值和最小值后，可以搜索出范围内的记录。比如发帖时输入100，搜索时输入“1-150”可以查询到结果';
+	}
+
+	getObj('content_box').style.display = '';
+
+	if (id == 'radio' || id == 'checkbox' || id == 'select'){
+		getObj('content_rules').style.display = '';
+		getObj('content_number').style.display = 'none';
+	} else if (id == 'number'){
+		getObj('content_rules').style.display = 'none';
+		getObj('content_number').style.display = '';
+	} else {
+		getObj('content_rules').style.display = 'none';
+		getObj('content_number').style.display = 'none';
+	}
+
+	for (var i=0;i<getObj('fieldtype').options.length ; i++ ){
+		if(id==getObj('fieldtype').options[i].value) {
+			getObj('fieldtype').options[i].selected = true;
+		}
+	}
+}
+
+</script>
+<!--
+EOT;
+}elseif($action == 'editmodelname'){print<<<EOT
+-->
+<form method="post" action="$ajax_basename"  onsubmit="return false;">
+<input type="hidden" name="step" value="2">
+<input type="hidden" name="cateid" value="$cateid">
+<input type="hidden" name="modelid" value="$modelid">
+<table cellpadding="0" cellpadding="0" width="100%">
+	<th class="h" colspan="3" style="cursor:move" onmousedown="read.move(event);">编辑模板名称</th>
+	<tr><td>顺序</td><td colspan="2">标签名称</td></tr>
+<!--
+EOT;
+foreach($modeldb as $key => $value) {print<<<EOT
+-->
+	<tr><td><input name="vieworder[$key]" value="$value[vieworder]" size="3" class="input"></td><td><input class="input" name="name[$key]" value="$value[name]"></td><td><a href="javascript:;" onclick="delmodel($key);return false;" style="cursor:pointer;" class="unline">删除模板</a></td></tr>
+<!--
+EOT;
+}print<<<EOT
+-->
+<tr><td style="padding:5px 0;" colspan="3">
+<center>
+	<input type="button" value="修改" class="btn" onclick="ajax.submit(this.form,modeNameEditResponse);">
+	<input type="button" value="取消" class="btn" onclick="closep();">
+</center>
+</td></tr>
+</table>
+</form>
+<script language="JavaScript">
+var basename = '$basename';
+function modeNameEditResponse(){
+	str = ajax.request.responseText.split("\t");
+	if (str[0] == 'success'){
+		window.location.href = basename+'&action=editmodel&cateid='+str[1]+'&modelid='+str[2];
+	}else{
+		showDialog('error','修改失败');
+	}
+}
+</script>
+<!--
+EOT;
+}elseif($action == 'addmodelname'){print<<<EOT
+-->
+<form method="post" action="$ajax_basename"  onsubmit="return false;">
+<input type="hidden" name="step" value="2">
+<input type="hidden" name="cateid" value="$cateid">
+<input type="hidden" name="modelid" value="$modelid">
+<table cellpadding="0" cellpadding="0" width="100%">
+	<th class="h" colspan="2" style="cursor:move" onmousedown="read.move(event);">
+		<span class="fr" style="margin-top:2px;cursor:pointer" onclick="closep();"><img src="$imgpath/close.gif" /></span>添加模板
+	</th>
+	<tr>
+		<td>模板名称：</td>
+		<td><input type="text" name="modename" value=""></td>
+	</tr>
+<tr><td style="padding:5px 0;" colspan="2">
+<center>
+	<input type="button" value="添加" class="btn" onclick="ajax.submit(this.form,modeNameAddResponse);">
+</center>
+</td></tr>
+</table>
+</table>
+</form>
+<script language="JavaScript">
+var basename = '$basename';
+function modeNameAddResponse(){
+	str = ajax.request.responseText.split("\t");
+	if (str[0] == 'success'){
+		window.location.href = basename+'&action=editmodel&cateid='+str[1]+'&modelid='+str[2];
+	}else if (str[0] == 'mode_name_too_long'){
+		showDialog('error','名称长度超过30个字节！',2);
+	}else if (str[0] == 'samename'){
+		showDialog('error','同个主题分类下不能存在相同的模板名称',2);
+	}else{
+		showDialog('error','添加失败',2);
+	}
+}
+</script>
+<!--
+EOT;
+}elseif($action == 'addfield'){print<<<EOT
+-->
+<div id="add_field_box">
+<form method="post" action="$ajax_basename_add"  onsubmit="return false;">
+<input type="hidden" name="step" value="2">
+<input type="hidden" name="modelid" value="$modelid">
+<input type="hidden" name="cateid" value="$cateid">
+<div class="addcate">
+	<ul class="cc2 add-title">
+		<li class="current" style="cursor:move" onmousedown="read.move(event);">添加字段</li>
+		<li href="javascript:;" onclick="changeAddCopyBox('copy_field_box');">其他模板导入</li>
+		<li style="width:72px;">&nbsp;</li>
+	</ul>
+	<table width="100%">
+		<tr class="tr6">
+			<td style="width:70px;">名称：</td>
+			<td>
+				<input class="input" type="text" name="name" size="22" id="name"/>
+			</td>
+		</tr>
+		<tr class="tr6">
+			<td>描述：</td>
+			<td>
+				<textarea name="descrip"  id="descrip" style="height:50px;width:150px;"></textarea>
+			</td>
+		</tr>
+		<tr class="tr6">
+			<td></td>
+			<td>
+				<select name="fieldtype" id="fieldtype" onchange="ShowType(this.value);">
+					<option value="0">选择字段类型</option>
+					<option value="number">数字（number）</option>
+					<option value="text">字串（text）</option>
+					<option value="radio">单选（radio）</option>
+					<option value="checkbox">多选（checkbox）</option>
+					<option value="textarea">文本（textarea）</option>
+					<option value="select">选择（select）</option>
+					<option value="calendar">日历（calendar）</option>
+					<option value="email">电子邮件（email）</option>
+					<option value="url">超链接（url）</option>
+					<option value="img">图片（img）</option>
+					<option value="upload">上传（upload）</option>
+					<option value="range">取值范围（range）</option>
+				</select>
+			</td>
+		</tr>
+		<tr id="content_number"  style="display:none;">
+			<td>数值范围：</td>
+			<td>
+				<input type="text" name="rule_min" id="rule_min" size="5" value=""> - <input type="text" name="rule_max" id="rule_max" size="5" value=""><br />
+			</td>
+		</tr>
+		<tr id="content_rules"  style="display:none;">
+			<td>选项内容：</td>
+			<td>
+				<textarea name="rules" style="height:50px;width:150px;"></textarea>
+			</td>
+		</tr>
+		<tr id="content_box" style="display:none;">
+			<td>提示信息：</td>
+			<td><div id="content_des"></div></td>
+		</tr>
+		<tr class="tr6 tac">
+			<td colspan="2"><input name="" type="button" class="btn" value="添加" onclick="ajax.submit(this.form,ajax.guide)" />&nbsp;&nbsp;
+			<input name="" type="button" class="btn" value="取消" onclick="closep();" /></td>
+		</tr>
+	</table>
+</div>
+</form>
+</div>
+<div id="copy_field_box" style="display:none;">
+<form method="post" action="$ajax_basename_copy"  onsubmit="return false;">
+<input type="hidden" name="modelid" value="$modelid">
+<input type="hidden" name="cateid" value="$cateid">
+<div class="addcate">
+	<ul class="cc2 add-title">
+		<li href="javascript:;" onclick="changeAddCopyBox('add_field_box');">添加字段</li>
+		<li class="current" style="cursor:move;">其他模板导入</li>
+		<li style="width:72px;">&nbsp;</li>
+	</ul>
+	<p style="padding:10px 0 0 10px;">选择模板&nbsp;
+		<select onchange="selectFieldsByMode(this.value)">
+			<option value="">--</option>
+<!--
+EOT;
+foreach($select_catedb as $key => $value){print<<<EOT
+-->
+			<optgroup label="$value[name]">
+<!--
+EOT;
+foreach ($select_modeldb as $k => $v){
+if($v['cateid'] != $key) continue;
+print<<<EOT
+-->
+				<option value="$v[modelid]">$v[name]</option>
+<!--
+EOT;
+}print<<<EOT
+-->
+			</optgroup>
+<!--
+EOT;
+}print<<<EOT
+-->
+		</select>
+	</p>
+	<div class="add-list">
+		<div id="fieldlist"></div>
+	</div>
+	<div class="tac">
+		<input type="button" class="btn" name="chkall" value="全 选" onclick="CheckIfable(this.form,'copyfield[')" />&nbsp;
+		<input name="" type="button" class="btn" value="导入" onclick="ajax.submit(this.form,ajax.guide)" />&nbsp;
+		<input name="" type="button" class="btn" value="取消" onclick="closep();" />
+	</div>
+</div>
+</form>
+</div>
+<script language="JavaScript">
+var ajax_basename_showfield = '$ajax_basename_showfield';
+function changeAddCopyBox(id){
+	if(id == 'add_field_box') {
+		getObj(id).style.display = '';
+		getObj('copy_field_box').style.display = 'none';
+	} else if (id == 'copy_field_box'){
+		getObj(id).style.display = '';
+		getObj('add_field_box').style.display = 'none';
+	}
+}
+
+function selectFieldsByMode(value){
+
+	var currentmodelid = getObj('modelid').value;
+	ajax.send(ajax_basename_showfield,'modelid='+value+'&currentmodelid='+currentmodelid,showFiledsList);
+}
+
+function showFiledsList(){
+
+	var str = ajax.request.responseText.split("\t");
+	var ul = elementBind('ul','ul_fieldlist');
+	var ofieldlist = getObj('fieldlist');
+	if (str[0] == 'success'){
+		if(IsElement('ul_fieldlist')){delElement('ul_fieldlist');}
+		if(IsElement('copyfieldbutton')){delElement('copyfieldbutton');}
+		var fielddb = JSONParse(str[1]);
+		for (var temp in fielddb){
+			var check_box = elementBind('input');
+			check_box.type = 'checkbox';
+			check_box.name = 'copyfield[]';
+			check_box.value = temp;
+			var check_name = elementBind('span');
+			check_name.innerHTML = fielddb[temp];
+			var check_li = elementBind('li');
+			check_li.appendChild(check_box);
+			check_li.appendChild(check_name);
+			ul.appendChild(check_li);
+		}
+	} else {
+		var check_li = elementBind('li');
+		ul.appendChild(check_li);
+		check_li.innerHTML = '该模板没有字段';
+	}
+	ofieldlist.appendChild(ul);
+}
+</script>
+<!--
+EOT;
+}elseif($action == 'editfield'){print<<<EOT
+-->
+<form method="post" action="$ajax_basename_edit"  onsubmit="return false;">
+<input type="hidden" name="step" value="2">
+<input type="hidden" name="fieldid" value="$fieldid">
+<input type="hidden" name="cateid" value="$cateid">
+<input type="hidden" name="modelid" value="$modelid">
+<div class="addcate">
+	<ul class="cc2 add-title">
+		<li class="current" style="cursor:move" onmousedown="read.move(event);">编辑字段</li><li style="width:162px;">&nbsp;</li>
+	</ul>
+	<table width="100%">
+		<tr class="tr6">
+			<td style="width:70px;">名称：</td>
+			<td>
+				<input class="input" type="text" name="name" size="22" id="name" value="$fielddb[name]"/>
+			</td>
+		</tr>
+		<tr class="tr6">
+			<td>描述：</td>
+			<td>
+				<textarea name="descrip" id="descrip" style="height:50px;width:150px;">$fielddb[descrip]</textarea>
+			</td>
+		</tr>
+<!--
+EOT;
+if($ifhidden==1){
+$selectdb = array(
+	'number'=>'数字（number）',
+	'text'=>'字串（text）',
+	'radio'=>'单选（radio）',
+	'checkbox'=>'多选（checkbox）',
+	'textarea'=>'文本（textarea）',
+	'select'=>'选择（select）',
+	'calendar'=>'日历（calendar）',
+	'email'=>'电子邮件（email）',
+	'url'=>'超链接（url）',
+	'img'=>'图片（img）',
+	'upload'=>'上传（upload）',
+	'range'=>'取值范围（range）'
+);
+print<<<EOT
+-->
+		<tr class="tr6">
+			<td></td>
+			<td>
+				<input type="hidden" name="fieldtype" value="$fielddb[type]">
+				<select id="fieldtype" onchange="ShowType(this.value);">
+					<option>{$selectdb[$fielddb[type]]}</option>
+				</select>
+			</td>
+		</tr>
+<!--
+EOT;
+}else{print<<<EOT
+-->
+		<tr class="tr6">
+			<td></td>
+			<td>
+				<select name="fieldtype" id="fieldtype" onchange="ShowType(this.value);">
+					<option value="0">选择字段类型</option>
+					<option value="number">数字（number）</option>
+					<option value="text">字串（text）</option>
+					<option value="radio">单选（radio）</option>
+					<option value="checkbox">多选（checkbox）</option>
+					<option value="textarea">文本（textarea）</option>
+					<option value="select">选择（select）</option>
+					<option value="calendar">日历（calendar）</option>
+					<option value="email">电子邮件（email）</option>
+					<option value="url">超链接（url）</option>
+					<option value="img">图片（img）</option>
+					<option value="upload">上传（upload）</option>
+					<option value="range">取值范围（range）</option>
+				</select>
+			</td>
+		</tr>
+<!--
+EOT;
+}print<<<EOT
+-->
+		<tr id="content_number"  style="display:none;">
+			<td>数值范围：</td>
+			<td>
+				<input type="text" name="rule_min" id="rule_min" size="5" value="$minnum"> - <input type="text" name="rule_max" id="rule_max" size="5" value="$maxnum">
+			</td>
+		</tr>
+		<tr id="content_rules"  style="display:none;">
+			<td>选项内容：</td>
+			<td>
+				<textarea name="rules" style="height:50px;width:150px;">$rule_content</textarea>
+			</td>
+		</tr>
+		<tr id="content_box" style="display:none;">
+			<td>提示信息：</td>
+			<td><div id="content_des"></div></td>
+		</tr>
+		<tr class="tr6 tac">
+			<td colspan="2"><input name="" type="button" class="btn" value="修改" onclick="ajax.submit(this.form,ajax.guide)" />&nbsp;&nbsp;
+			<input name="" type="button" class="btn" value="取消" onclick="closep();" /></td>
+		</tr>
+	</table>
+</div>
+</form>
+<script language="JavaScript">
+var type = '$type';
+setTimeout(function(){ShowType(type);},300);
+</script>
+<!--
+EOT;
+}if(!defined('AJAX')){
+include_once PrintEot('adminbottom');
+}
+?>-->

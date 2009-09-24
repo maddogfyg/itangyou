@@ -1,0 +1,45 @@
+<!--<?php
+include_once PrintEot('left');
+if (empty($action)) {
+if ($db_today == 0) {
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">请在 核心设置->常规设置->全局参数 开启今日到访统计才能使用此功能!</div>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+<h2>今日到访会员</h2>
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr class="tr3 tac s3">
+<td>用户名</td>
+<td>登录时间</td>
+<td>活动时间</td>
+<td>来自</td>
+<td>发帖</td>
+<td>{$db_rvrcname}</td>
+</tr>
+<!--
+EOT;
+foreach($inbbsdb as $inbbs){
+print <<<EOT
+-->
+<tr class="tr3 tac">
+	<td title="注册时间:$inbbs[rgtime]"><a href="u.php?action=show&username=$inbbs[rawuser]" target="_blank">$inbbs[user]</a></td>
+	<td>$inbbs[logintime]</td>
+	<td>$inbbs[intime]</td>
+	<td title="$inbbs[ip]">$inbbs[ipfrom]</td>
+	<td>$inbbs[post]</td>
+	<td>$inbbs[rvrc]</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table></div>$pages
+<!--
+EOT;
+}}include_once PrintEot('adminbottom');
+?>-->

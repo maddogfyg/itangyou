@@ -1,0 +1,58 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<form action="$basename&" method="post">
+<input type="hidden" name="step" value="2">
+<h2>圈子核心设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否开启好友邀请：</span></td>
+		<td>
+			<input type="radio" name="config[invite]" value="1" $invite_Y>是
+			<input type="radio" name="config[invite]" value="0" $invite_N>否
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td width="60%"><span class="xia2">是否开启随便看看模块：</span></td>
+		<td>
+			<input type="radio" name="config[browseopen]" value="1" $browseopen_Y>是
+			<input type="radio" name="config[browseopen]" value="0" $browseopen_N>否
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">随便看看模块开启：</span></td>
+		<td>
+			<input type="checkbox" value="1" name="browse[]" $browse_0 /> 幻灯片热门周回复
+			<input type="checkbox" value="2" name="browse[]" $browse_1 /> 今日达人
+			<input type="checkbox" value="4" name="browse[]" $browse_2 /> 记录
+			<input type="checkbox" value="8" name="browse[]" $browse_3 /> 分享
+			<br />
+			<input type="checkbox" value="16" name="browse[]" $browse_4 /> 相册
+			<input type="checkbox" value="32" name="browse[]" $browse_5 /> 群组
+			<input type="checkbox" value="64" name="browse[]" $browse_6 /> 日志
+			<input type="checkbox" value="128" name="browse[]" $browse_7 /> 最新帖子
+			<input type="checkbox" value="256" name="browse[]" $browse_8 /> 最新回复
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><span class="xia2">未登录状态圈子首页模块开启：</span></td>
+		<td>
+			<input type="checkbox" value="2" name="indexset[]" $indexset_1 /> 最新照片
+			<input type="checkbox" value="4" name="indexset[]" $indexset_2 /> 站点热门
+			<input type="checkbox" value="8" name="indexset[]" $indexset_3 /> 最新动态
+			<br />
+			<input type="checkbox" value="16" name="indexset[]" $indexset_4 /> 活跃会员
+			<input type="checkbox" value="32" name="indexset[]" $indexset_5 /> 记录
+			<input type="checkbox" value="64" name="indexset[]" $indexset_6 /> 分享
+			<input type="checkbox" value="128" name="indexset[]" $indexset_7 /> 相册
+			<input type="checkbox" value="256" name="indexset[]" $indexset_8 /> 群组
+			<input type="checkbox" value="512" name="indexset[]" $indexset_9 /> 日志
+		</td>
+	</tr>
+</table><br />
+<center><input type="submit" value="提 交" class="btn"></center><br/>
+</form>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

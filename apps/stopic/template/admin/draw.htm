@@ -1,0 +1,563 @@
+<!--<?php
+print <<<EOT
+-->
+<script type="text/javascript" language="JavaScript" src="js/global.js"></script>
+<script language="JavaScript" src="js/pw_ajax.js"></script>
+<script type="text/javascript" language="JavaScript" src="js/color_picker.js"></script>
+<script language="JavaScript">
+	var AJAXURL = '$ajaxurl';
+</script>
+<!--
+EOT;
+if ("preadd" == $jobact) {
+print <<<EOT
+-->
+<ul class="nav5 cc2">
+	<li><a href="javascript:;" hidefocus="true">选择分类</a></li>
+	<li class="current"><a href="javascript:;" hidefocus="true">编辑属性</a></li>
+	<li><a href="javascript:;" hidefocus="true">生成专题</a></li>
+</ul>
+
+<form action="{$basename}&job=$job" method="post" enctype="multipart/form-data" onsubmit="return checkSubmit();">
+<table width="100%">
+	<tr class="tr3">
+		<td width="20%">专题标题（限50字节）</td>
+		<td>
+			<input id="stopicTitle" name="stopic_title" maxlength="50" type="text" class="input" style="width:278px;" onchange="checkStopicTitle()" />
+			<font color="red">*</font>
+			<span id="stopicTitleError" style="display:none;"><font color="red">请填写专题的标题</font></span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>SEO关键字 </td>
+		<td><input name="seo_keyword" type="text" class="input" style="width:278px;" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>SEO网页描述</td>
+		<td><input name="seo_desc" type="text" class="input" style="width:278px;" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>横幅图片</td>
+		<td>
+			<input id="layoutbannerurl" name="banner_url" value="$defaultBanner" type="text" class="input" style="width:278px;"  />
+			<span id="bannerUrlError" style="display:none;"><font color="red">请填写正确的横幅图片url（以http://开头）</font></span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>导航设置</td>
+		<td>
+			<div id="navBody"></div>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td></td>
+		<td>
+			<a style="cursor:pointer;color:blue" onclick="addType();">[添加导航记录]</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			（请填写配对的导航文字和url，否则将不会被保存）
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td colspan="2">
+			<p class="pd5">
+			<input name="is_new_bg" id="notNewBg" type="radio" value="0" onclick="showBgDisplay();" checked /> 选择全局背景图片
+			<input name="is_new_bg" type="radio" value="1" onclick="showBgDisplay();" /> 上传自定义图片
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			（如果不需要背景，可留空不选或不上传，没有背景图片时将使用设置的背景色）
+			</p>
+		</td>
+	</tr>
+	<tr class="tr3" id="trShowBg">
+		<td colspan="2">
+			<div style="width:515px;">
+			<a href="javascript:void(0);"><img class="fl" style="margin:10px 10px 10px 0;" src="$db_bbsurl/apps/stopic/image/left.png" onclick="pageStopicBg('pre')"></a>
+			<a href="javascript:void(0);"><img class="fr" style="margin:10px 0;" src="$db_bbsurl/apps/stopic/image/right.png" onclick="pageStopicBg('nxt')"></a>
+			<div id="showBg">
+				<ul class="zt-list cc2" id="bgPager">
+<!--
+EOT;
+	if (!count($bg_list)) {
+print <<<EOT
+-->
+			该分类下暂无背景图片
+<!--
+EOT;
+	}
+	foreach ($bg_list as $bg_data) {
+print <<<EOT
+-->
+					<li style="display:none;">
+						<img src="{$bg_data['thumb_url']}" width="60" height="60" />
+						<p><input name="bg_id" type="radio" value="{$bg_data['id']}" />&nbsp;</p>
+					</li>
+<!--
+EOT;
+	}
+print <<<EOT
+-->
+				</ul>
+			</div>
+			</div>
+			<input type="hidden" name="bgPageOffset" id="bgPageOffset" value="1" />
+		</td>
+	</tr>
+	<tr class="tr3" id="trShowUpload" style="display:none;">
+		<td colspan="2">
+			<input id="bgFileUpload" type="file" name="background" onchange="checkFileType()">（允许类型：jpg，jpeg，gif，png）
+			<span id="fileTypeError" style="display:none;"><font color="red">请选择正确的文件类型</font></span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>背景图片展示方式</td>
+		<td>
+			<input name="layout_set[bgrepeat]" type="radio" class="input" value="" checked="checked" />平铺 &nbsp;&nbsp;
+			<input name="layout_set[bgrepeat]" type="radio" class="input" value="no-repeat" />单张居中 &nbsp;&nbsp;
+			<input name="layout_set[bgrepeat]" type="radio" class="input" value="repeat-x" />横向平铺
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><a href="#" class="b s3" onclick="changeDisplay(this,'hiddentable');return false;">显示高级设置▼</a></td>
+		<td> </td>
+	</tr>
+</table>
+<table width="100%" style="display:none" id="hiddentable">
+	<tr class="tr3">
+		<td colspan="2">
+		<p class="pd5">
+			选择风格样式：
+		</p>
+		<div class="choose" style="margin-bottom:10px;height:149px;overflow-y:scroll;">
+			<div class="p10" style="padding-bottom:0">
+			<ul class="zt-list3 cc2" id="style_ul">
+<!--
+EOT;
+foreach ($styles as $key => $style) {
+print <<<EOT
+-->
+				<li id="style_{$key}">
+					<a href="javascript:;" hidefocus="true"><img src="{$style[minipreview]}" title="$style[name]" /></a>
+				</li>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			</ul>
+			</div>
+		</div>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>全局背景颜色</td>
+		<td>
+			<input id="layoutbgcolor" name="layout_set[bgcolor]" value="$layoutDefaultSet[bgcolor]" type="text" class="input" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutbgcolor',function(){pickReback('layoutbgcolorspan',color_picker)})">
+			<span id="layoutbgcolorspan" style="color:$layoutDefaultSet[bgcolor];">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>内容区域背景颜色</td>
+		<td>
+			<input id="layoutareabgcolor" name="layout_set[areabgcolor]" value="$layoutDefaultSet[areabgcolor]" type="text" class="input" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutareabgcolor',function(){pickReback('layoutareabgcolorspan',color_picker)})">
+			<span id="layoutareabgcolorspan" style="color:$layoutDefaultSet[areabgcolor];">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>全局链接字体颜色</td>
+		<td>
+			<input id="layoutfontcolor" name="layout_set[fontcolor]" value="$layoutDefaultSet[fontcolor]" type="text" class="input" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutfontcolor',function(){pickReback('layoutfontcolorspan',color_picker)})">
+			<span id="layoutfontcolorspan" style="color:$layoutDefaultSet[fontcolor];">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>导航字体颜色</td>
+		<td>
+			<input id="layoutnavfontcolor" name="layout_set[navfontcolor]" value="$layoutDefaultSet[navfontcolor]" type="text" class="input" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutnavfontcolor',function(){pickReback('layoutnavfontcolorspan',color_picker)})">
+			<span id="layoutnavfontcolorspan" style="color:$layoutDefaultSet[navfontcolor];">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>导航背景颜色</td>
+		<td>
+			<input id="layoutnavbgcolor" name="layout_set[navbgcolor]" value="$layoutDefaultSet[navbgcolor]" type="text" class="input" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutnavbgcolor',function(){pickReback('layoutnavbgcolorspan',color_picker)})">
+			<span id="layoutnavbgcolorspan" style="color:$layoutDefaultSet[navbgcolor];">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>专题其他样式设置</td>
+		<td>
+			<textarea id="layoutothercss" name="layout_set[othercss]" style="border: 1px solid rgb(204, 204, 204); width: 620px; height: 80px;">
+$layoutDefaultSet[othercss]</textarea>
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr class="tr3">
+		<td colspan="2">
+			<input type="hidden" name="jobact" value="add" />
+			<input type="hidden" name="category_id" value="$category_id" />
+			<!-- <input type="hidden" name="bg_id" value="$bg_id" /> -->
+			<input type="hidden" name="layout_select" value="$layout_select" />
+			<!-- <input type="hidden" name="copy_stopic_id" value="$copy_stopic_id" /> -->
+			<input type="button" value="上一步" onclick="history.go(-1);" class="btn" />&nbsp;<input type="submit" value=" 提 交 " class="btn" />
+			
+			<input type="hidden" id="categoryId" value="$category_id" />
+			<input type="hidden" id="bgId" value="0" />
+		</td>
+	</tr>
+</table>
+</form>
+
+<!--
+EOT;
+} elseif ("preedit" == $jobact) {
+	$tmp = $stopic_data['layout_config']['bgrepeat'];
+	$checked_bgrepeat_norepeat = $tmp == "no-repeat" ? "checked" : "";
+	$checked_bgrepeat_repeatx = $tmp == "repeat-x" ? "checked" : "";
+	$checked_bgrepeat_null = (!$checked_bgrepeat_norepeat && !$checked_bgrepeat_repeatx) ? "checked" : "";
+print <<<EOT
+-->
+<ul class="nav5 cc2">
+	<li><a href="javascript:;" hidefocus="true">选择分类</a></li>
+	<li class="current"><a href="javascript:;" hidefocus="true">编辑属性</a></li>
+	<li><a href="$basename&job=editstopic&stopic_id=$stopic_id" hidefocus="true">生成专题</a></li>
+</ul>
+<form action="{$basename}&job=$job" method="post" enctype="multipart/form-data" onsubmit="return checkSubmit();">
+<table width="100%">
+	<tr class="tr3">
+		<td width="20%">专题标题 （限50字节）</td>
+		<td>
+			<input type="hidden" name="tmp_nothing" value="" />
+			<input id="stopicTitle" name="stopic_title" maxlength="50" type="text" class="input" style="width:278px;" value="{$stopic_data['title']}" onchange="checkStopicTitle()" />
+			<font color="red">*</font>
+			<span id="stopicTitleError" style="display:none;"><font color="red">请填写专题的标题</font></span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>SEO关键字 </td>
+		<td><input name="seo_keyword" type="text" class="input" style="width:278px;" value="{$stopic_data['seo_keyword']}" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>SEO网页描述</td>
+		<td><input name="seo_desc" type="text" class="input" style="width:278px;" value="{$stopic_data['seo_desc']}" /></td>
+	</tr>
+	<tr class="tr3">
+		<td>横幅图片</td>
+		<td>
+			<input id="layoutbannerurl" name="banner_url" type="text" class="input" style="width:278px;" value="{$stopic_data['banner_url']}"  />
+			<span id="bannerUrlError" style="display:none;"><font color="red">请填写正确的横幅图片url（以http://开头）</font></span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>导航设置</td>
+		<td>
+			<div id="navBody">
+<!--
+EOT;
+	if (is_array($stopic_data['nav_config'])) {
+		foreach ($stopic_data['nav_config'] as $nav_data) {
+print <<<EOT
+-->
+				<div>导航文字：<input name="nav_set[text][]" type="text" class="input" value="{$nav_data['text']}" />导航URL：<input name="nav_set[url][]" type="text" class="input" style="width:278px;" value="{$nav_data['url']}" />&nbsp;<a href="javascript:void(0);" onclick="delElement(this.parentNode)">删除</a></div>
+<!--
+EOT;
+		}
+	}
+print <<<EOT
+-->
+			</div>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td></td>
+		<td>
+			<a style="cursor:pointer;color:blue" onclick="addType();">[添加导航记录]</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			（请填写配对的导航文字和url，否则将不会被保存）
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td colspan="2">
+			<p class="pd5">
+			<input name="is_new_bg" id="notNewBg" type="radio" value="0" onclick="showBgDisplay();" checked /> 选择全局背景图片
+			<input name="is_new_bg" type="radio" value="1" onclick="showBgDisplay();" /> 上传自定义图片
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			（如果不需要背景，可留空不选或不上传，没有背景图片时将使用设置的背景色）
+			</p>
+		</td>
+	</tr>
+	<tr class="tr3" id="trShowBg">
+		<td colspan="2">
+			<div style="width:515px;">
+			<a href="javascript:void(0);"><img class="fl" style="margin:10px 10px 10px 0;" src="$db_bbsurl/apps/stopic/image/left.png" onclick="pageStopicBg('pre')"></a>
+			<a href="javascript:void(0);"><img class="fr" style="margin:10px 0;" src="$db_bbsurl/apps/stopic/image/right.png" onclick="pageStopicBg('nxt')"></a>
+			<div id="showBg">
+				<ul class="zt-list cc2" id="bgPager">
+<!--
+EOT;
+	if (!count($bg_list)) {
+print <<<EOT
+-->
+			该分类下暂无背景图片
+<!--
+EOT;
+	}
+	foreach ($bg_list as $bg_data) {
+		$checked = ($stopic_data['bg_id'] == $bg_data['id']) ? 'checked' : '';
+print <<<EOT
+-->
+					<li style="display:none;">
+						<img src="{$bg_data['thumb_url']}" width="60" height="60" />
+						<p><input name="bg_id" type="radio" value="{$bg_data['id']}" $checked />&nbsp;</p>
+					</li>
+<!--
+EOT;
+	}
+print <<<EOT
+-->
+				</ul>
+			</div>
+			</div>
+			<input type="hidden" name="bgPage" id="bgPageOffset" value="1" />
+		</td>
+	</tr>
+	<tr class="tr3" id="trShowUpload" style="display:none;">
+		<td colspan="2">
+			<input id="bgFileUpload" type="file" name="background" onchange="checkFileType()">（允许类型：jpg，jpeg，gif，png）
+			<span id="fileTypeError" style="display:none;"><font color="red">请选择正确的文件类型</font></span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>背景图片展示方式</td>
+		<td>
+			<input name="layout_set[bgrepeat]" type="radio" class="input" value="" $checked_bgrepeat_null />平铺 &nbsp;&nbsp;
+			<input name="layout_set[bgrepeat]" type="radio" class="input" value="no-repeat" $checked_bgrepeat_norepeat />单张居中 &nbsp;&nbsp;
+			<input name="layout_set[bgrepeat]" type="radio" class="input" value="repeat-x" $checked_bgrepeat_repeatx />横向平铺
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><a href="#" class="b s3" onclick="changeDisplay(this,'hiddentable');return false;">显示高级设置▼</a></td>
+		<td> </td>
+	</tr>
+</table>
+<table width="100%" style="display:none" id="hiddentable">
+	<tr class="tr3">
+		<td colspan="2">
+		<p class="pd5">
+			选择风格样式：
+		</p>
+		<div class="choose" style="margin-bottom:10px;height:149px;overflow-y:scroll;">
+			<div class="p10" style="padding-bottom:0">
+			<ul class="zt-list3 cc2" id="style_ul">
+<!--
+EOT;
+foreach ($styles as $key => $style) {
+print <<<EOT
+-->
+				<li id="style_{$key}">
+					<a href="javascript:;" hidefocus="true"><img src="{$style[minipreview]}" title="$style[name]" /></a>
+				</li>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			</ul>
+			</div>
+		</div>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>全局背景颜色</td>
+		<td>
+			<input id="layoutbgcolor" name="layout_set[bgcolor]" type="text" class="input" value="{$stopic_data['layout_config']['bgcolor']}" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutbgcolor',function(){pickReback('layoutbgcolorspan',color_picker)})">
+			<span id="layoutbgcolorspan" style="color:{$stopic_data['layout_config']['bgcolor']};">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>内容区域背景颜色</td>
+		<td>
+			<input id="layoutareabgcolor" name="layout_set[areabgcolor]" type="text" class="input" value="{$stopic_data['layout_config']['areabgcolor']}" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutareabgcolor',function(){pickReback('layoutareabgcolorspan',color_picker)})">
+			<span id="layoutareabgcolorspan" style="color:{$stopic_data['layout_config']['areabgcolor']};">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>全局链接字体颜色</td>
+		<td>
+			<input id="layoutfontcolor" name="layout_set[fontcolor]" type="text" class="input" value="{$stopic_data['layout_config']['fontcolor']}" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutfontcolor',function(){pickReback('layoutfontcolorspan',color_picker)})">
+			<span id="layoutfontcolorspan" style="color:{$stopic_data['layout_config']['fontcolor']};">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>导航字体颜色</td>
+		<td>
+			<input id="layoutnavfontcolor" name="layout_set[navfontcolor]" type="text" class="input" value="{$stopic_data['layout_config']['navfontcolor']}" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutnavfontcolor',function(){pickReback('layoutnavfontcolorspan',color_picker)})">
+			<span id="layoutnavfontcolorspan" style="color:{$stopic_data['layout_config']['navfontcolor']};">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>导航背景颜色</td>
+		<td>
+			<input id="layoutnavbgcolor" name="layout_set[navbgcolor]" type="text" class="input" value="{$stopic_data['layout_config']['navbgcolor']}" />
+			<img  class="color_image" src="$imgpath/select_arrow.gif" onmouseover="this.src=imgpath+'/select_arrow_over.gif'" onmouseout="this.src=imgpath+'/select_arrow.gif'" onclick="showColorPicker(this,'layoutnavbgcolor',function(){pickReback('layoutnavbgcolorspan',color_picker)})">
+			<span id="layoutnavbgcolorspan" style="color:{$stopic_data['layout_config']['navbgcolor']};">■■■■</span>
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>专题其他样式设置</td>
+		<td><textarea id="layoutothercss" name="layout_set[othercss]" style="border: 1px solid rgb(204, 204, 204); width: 620px; height: 80px;" rows="8">{$stopic_data['layout_config']['othercss']}</textarea></td>
+	</tr>
+</table>
+<table width="100%">
+	<tr class="tr3">
+		<td colspan="2">
+			<input type="hidden" name="stopic_id" value="$stopic_id" />
+			<input type="hidden" name="jobact" value="edit" />
+			<input type="submit" value=" 下一步 " class="btn" />
+			
+			<input type="hidden" id="categoryId" value="{$stopic_data['category_id']}" />
+			<input type="hidden" id="bgId" value="{$stopic_data['bg_id']}" />
+		</td>
+	</tr>
+</table>
+</form>
+<!--
+EOT;
+}
+
+print <<<EOT
+-->
+<div id="navCopy" style="display:none"><div>导航文字：<input name="nav_set[text][]" type="text" class="input" />导航URL：<input name="nav_set[url][]" type="text" class="input" style="width:278px;" />&nbsp;<a href="javascript:void(0);" onclick="delElement(this.parentNode)">删除</a></div></div>
+<script language="javascript" src="apps/stopic/js/changestyle.js"></script>
+<script language="javascript">
+function addType() {
+	getObj('navBody').appendChild(getObj('navCopy').firstChild.cloneNode(true));
+}
+
+function pageStopicBg(op) {
+	var nowPage = getObj('bgPageOffset').value * 1;
+	var nextPage = (op == 'pre') ? (nowPage - 1) : (nowPage + 1);
+	var totalPage = {$bg_total};
+
+	if (nextPage < 1) { alert("已经翻到第一页"); return ;}
+	if (nextPage > totalPage) { alert("已经翻到最后一页"); return ;}
+	getObj('bgPageOffset').value = nextPage;
+
+	showStopicBg(nextPage);
+}
+function showStopicBg(pageNumber) {
+	var bgPerpage = 6;
+	var bgPagerObj = getObj('bgPager');
+	var tagObjs = bgPagerObj.getElementsByTagName("li");
+	if (tagObjs.length == 0) return ;
+	
+	var startOffset = (pageNumber - 1) * bgPerpage;
+	var endOffset = pageNumber * bgPerpage - 1;
+	
+	for(i=0; i<tagObjs.length; i++){
+		if (i >= startOffset && i <= endOffset) {
+			tagObjs[i].style.display = "inline";
+		} else{
+			tagObjs[i].style.display = "none";
+		}
+	}
+	return;
+}
+
+function showBgDisplay() {
+	if (getObj('notNewBg').checked) {
+		getObj('trShowBg').style.display = '';
+		getObj('trShowUpload').style.display = 'none';
+	} else {
+		getObj('trShowBg').style.display = 'none';
+		getObj('trShowUpload').style.display = '';
+	}
+}
+function checkFileType() {
+	var fileName = getObj("bgFileUpload").value;
+	if (fileName != '' && !getObj('notNewBg').checked) {
+		var regTest = /\.(jpe?g|gif|png)$/gi;
+		var arrMactches = fileName.match(regTest);
+		if (arrMactches == null) {
+			getObj('fileTypeError').style.display = '';
+			return false;
+		} else {
+			getObj('fileTypeError').style.display = 'none';
+		}
+	}
+	return true;
+}
+function checkStopicTitle() {
+	var stopicTitle = getObj("stopicTitle").value;
+	if ("" == stopicTitle) {
+		getObj('stopicTitleError').style.display = '';
+		getObj('stopicTitle').focus();
+	} else {
+		getObj('stopicTitleError').style.display = 'none';
+		return true;
+	}
+	return false;
+}
+function checkBannerUrl() {
+	urlText = getObj('layoutbannerurl').value;
+	if ("" != urlText && urlText != "http://") {
+		var regTest = /^https?:\/\/([\da-z\.-]+)\.([a-z\.]{2,6})(\/.*)?$/gi;
+		var arrMactches = urlText.match(regTest);
+		if (arrMactches == null) {
+			getObj('bannerUrlError').style.display = '';
+			return false;
+		} else {
+			getObj('bannerUrlError').style.display = 'none';
+		}
+	}
+	return true;
+}
+
+function changeDisplay(e,id) {
+	var id = objCheck(id);
+	if (id.style.display=='none') {
+		id.style.display = '';
+		e.innerHTML = '隐藏高级设置▼';
+	} else {
+		id.style.display = 'none';
+		e.innerHTML = '显示高级设置▼';
+	}
+}
+
+function pickReback(obj,color){
+	if (typeof obj == 'string') {
+		obj = getObj(obj);
+	}
+	obj.style.color = color;
+}
+
+function checkSubmit() {
+	var b1 = checkStopicTitle();
+	var b2 = checkFileType();
+	//var b3 = checkBannerUrl();
+	return b1 && b2;
+}
+
+window.onload = function() {
+	if (getObj('layoutbannerurl').value == "") getObj('layoutbannerurl').value = "http://";
+	addType();
+	showBgDisplay();
+	showStopicBg(1);
+};
+
+var stylechange = New(changeStyle,['style_ul']);
+
+</script>
+
+<!--
+EOT;
+?>
+-->

@@ -1,0 +1,219 @@
+<!--
+<?php
+print <<<EOT
+-->
+<form action="$ajaxurl" method="post" onsubmit="return false;">
+<table cellspacing="0" cellpadding="0" width="600">
+	<tbody id="fildbody">
+		<tr><th class="h" colspan="100" style="cursor:move" onmousedown="read.move(event);"><span class="fr" style="margin-top:2px;cursor:pointer" onclick="closep();"><img src="$imgpath/close.gif" /></span>修改内容</th></tr>
+		<tr>
+			<td colspan="$cospan">
+			<div class="fr">
+<!--
+EOT;
+if ($block[block_id]!=6) {
+print <<<EOT
+-->
+			帖子tid:<input type="text" id="tid" size="10" class="input">(选填) 
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			<input type="button" class="btn" onclick="javascript:New(addFildData,['fildbody','filddata','tid']);" value="添加"></div>
+
+			模块名称：<input type="text" name="unit_title" value="$unit[title]" class="input"></td>
+		</tr>
+		<tr>
+<!--
+EOT;
+foreach ($block[config] as $value) {
+$value = getParamName($value);
+print <<<EOT
+-->
+			<td>{$value}</td>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			<td>&nbsp;</td>
+		</tr>
+<!--
+EOT;
+foreach ($unit['data'] as $key=>$value) {
+print <<<EOT
+-->
+		<tr>
+<!--
+EOT;
+foreach ($value as $k=>$val) {
+print <<<EOT
+-->
+
+<!--
+EOT;
+if ($k=='html') {
+$val = str_replace(array('<','>'),array('&lt;','&gt;'),$val);
+print <<<EOT
+-->
+			<td><textarea style="width:550px;" rows="8" name="{$k}[]" >$val</textarea></td>
+<!--
+EOT;
+} else {
+print <<<EOT
+-->
+			<td><input type="text" name="{$k}[]" size="26" value="$val" class="input"></td>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			<td width="30"><a href="#" onclick="delTr(this);">删除</a></td>
+		</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+	</tbody>
+</table>
+<div class="tac" style="padding:5px 0;">
+	<input type="hidden" name="job" value="editcontent">
+	<input type="hidden" name="step" value="2">
+	<input type="hidden" name="html_id" value="$html_id">
+	<input type="hidden" name="stopic_id" value="$stopic_id">
+	<input type="button" value=" 提 交 " class="btn" onclick="ajax.submit(this.form,updateHTML)">
+</div>
+</form>
+<table style="display:none">
+	<tbody id="filddata">
+		<tr>
+<!--
+EOT;
+foreach ($block[config] as $value) {
+print <<<EOT
+-->
+<!--
+EOT;
+if ($value=='html') {
+print <<<EOT
+-->
+			<td><textarea style="width:550px;" rows="8" name="{$value}[]" ></textarea></td>
+<!--
+EOT;
+} else {
+print <<<EOT
+-->
+			<td><input type="text" size="26" name="{$value}[]" value="" class="input"></td>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<!--
+EOT;
+}
+print <<<EOT
+-->
+			<td><a href="#" onclick="delTr(this);">删除</a></td>
+		</tr>
+	</tbody>
+</table>
+<script language="javascript">
+function delTr (e) {
+	while (e && e.tagName.toLowerCase() != 'tr') {
+		e = e.parentNode;
+	}
+	if (e.tagName.toLowerCase() == 'tr') {
+		delElement(e);
+	}
+}
+
+function updateHTML () {
+	var rText = ajax.request.responseText.split('\t');
+	if (rText[0] == 'success') {
+		var itemid = '$html_id';
+		if (rText[1] != '') {
+			var data =  JSONParse(rText[1]);
+			if (typeof(data)=='object') {
+				special.setItemContent(itemid,data['content']);
+				special.setItemTitle(itemid,data['title']);
+			}
+		}
+	}
+}
+
+var addFildData = Class({},{
+	Create	: function (fildbody,filddata,tid) {
+		this._setTid(tid);
+		this._setFildBody(fildbody);
+		this._setCloneNode(filddata);
+		this.appendToFildBody();
+	},
+	
+	appendToFildBody	: function () {
+		this._getTidContent();
+		this.fildBody.appendChild(this.clonenode);
+	},
+
+	_setFildBody	: function (fildbody) {
+		this.fildBody	= getObj(fildbody);
+	},
+
+	_setTid	: function (tid) {
+		if (getObj(tid)) {
+			var tid = getObj(tid).value;
+			tid = tid - 0;
+			this.tid	= tid;
+		}
+	},
+
+	_setCloneNode	: function (filddata) {
+		var nodes = getObj(filddata).getElementsByTagName('tr');
+		this.clonenode	= nodes[0].cloneNode(true);
+	},
+
+	_getTidContent	: function () {
+		if (!this.tid) return false;
+		var ajaxurl = '$ajaxurl';
+		var block_id= '$block_id';
+		var self	= this;
+		ajax.send(ajaxurl,'job=gettidcontent&tid='+this.tid+'&block_id='+block_id,function () {
+			var rText = ajax.request.responseText.split('\t');
+			if (rText[0] == 'success') {
+				if (rText[1] != '') {
+					var data =  JSONParse(rText[1]);
+					if (typeof(data)=='object') {
+						for (var i in data) {
+							var fild = self._getFildName(i);
+							if (fild) {
+								fild.value = data[i];
+							}
+						}
+					}
+				}
+			}
+		});
+	},
+	_getFildName	: function (fild) {
+		var filds = this.clonenode.getElementsByTagName('input');
+		for (var i=0;i<filds.length;i++) {
+			if (filds[i].name.indexOf(fild)!=-1) {
+				return filds[i];
+			}
+		}
+		return false;
+	}
+});
+</script>
+<!--
+EOT;
+?>
+-->

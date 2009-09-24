@@ -1,0 +1,25 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<h2>合并会员</h2>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="unit">
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tr class="tr3"><td colspan="2">将<span class="xia2"> 原用户 </span>的积分 , 帖子数据合并到<span class="xia2"> 目标用户 </span>中，同时删除 <span class="xia2">原用户</span> 的记录</td></tr>
+	<tr class="tr3">
+		<td width="30%">原用户数字ID（多个用户用‘,’分隔）</td>
+		<td><input class="input" type="text" name="uids" size="80"></td>
+	</tr>
+	<tr class="tr3">
+		<td>目标用户数字ID</td>
+		<td><input class="input" type="text" name="newuid"></td>
+	</tr>
+</table>
+<br>
+<center><input type="submit" class="btn" value="提 交"></center><br/>
+</form>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

@@ -1,0 +1,31 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+<span class="s3">说明:</span><br>1.<font color="blue">777属性通过</font>:文件属性正常。<br>2.<font color=green>需要设置777属性</font>:没有设置777属性，需要管理员使用FTP工具手动设置777属性，否则程序可能无法正常运行。<br>3.<font color="silver">文件不存在</font>:文件不存在，请检查文件是否上传完整。<br></div>
+<h2><b>文件属性检查</b></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<!--
+EOT;
+foreach($filepath as $key => $value){
+if($filemode[$key]==1){
+$chmod="<font color=silver>文件不存在</font>";
+}elseif($filemode[$key]==2){
+$chmod="<font color=green>需要设置777属性</font>";
+}else{
+$chmod="<font color=blue>777属性通过</font>";
+}$value=str_replace(array(R_P,D_P),'',$value);
+print <<<EOT
+-->
+<tr class="tr3"><td width="30%">$value</td><td>$chmod</td></tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</td></tr></table>
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>-->

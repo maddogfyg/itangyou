@@ -1,0 +1,115 @@
+<!--<?php
+include_once PrintEot('left');print <<<EOT
+-->
+<div style="padding:15px 0 0;"><a href="$admin_file?adminjob=hackcenter">插件中心</a> &raquo; <a href="#">{$db_hackdb[bank][0]}</a></div>
+<!--
+EOT;
+if(empty($action)){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename" class="two">银行设置</a></li>
+<li><a href="$basename&action=log">日志管理</a></li>
+</ul><div class="c"></div>
+<h3>提示信息</h3>
+<div class="tr5">银行设置：可开启关闭银行功能，以及设置银行基本参数</div>
+
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="unsubmit" />
+<h2>银行参数设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="40%">是否开放银行<br />(需要到插件中心 管理中同时启用该插件方为有效)</td>
+<td><input type="radio" value=1 $bk_open_1 name="config[open]" /> 是 <input type="radio" value="0" $bk_open_0 name="config[open]" /> 否</td></tr>
+<tr class="tr3"><td>是否开放转帐功能</td>
+<td><input type="radio" value="1" $bk_virement_1 name="config[virement]" /> 是 <input type="radio" value="0" $bk_virement_0 name="config[virement]" /> 否</td></tr>
+<tr class="tr3"><td>银行排行榜更新时间设置</td>
+<td><input size="35" class="input" value="$bk_per" name="config[per]" /></td></tr>
+<tr class="tr3"><td>银行排行榜显示个数</td>
+<td><input size="35" class="input" value="$bk_num" name="config[num]" /></td></tr>
+<tr class="tr3"><td>银行转帐手续费(%)</td>
+<td><input size="35" class="input" value="$bk_virerate" name="config[virerate]" /></td></tr>
+<tr class="tr3"><td>银行转帐最低限制</td>
+<td><input size="35" class="input" value="$bk_virelimit" name="config[virelimit]" /></td></tr>
+<tr class="tr3">
+<td>银行交易时间间隔限制(秒)</td>
+<td><input size="35" class="input" value="$bk_timelimit" name="config[timelimit]" /></td>
+</tr>
+<tr class="tr3">
+<td>银行活期存款利率 (%)</td>
+<td><input size="35" class="input" value="$bk_rate" name="config[rate]" /></td>
+</tr>
+<tr class="tr3">
+<td>银行定期存款利率 (%)</td>
+<td><input size="35" class="input" value="$bk_drate" name="config[drate]" /></td>
+</tr>
+<tr class="tr3">
+<td>银行定期存款期限 (月)</td>
+<td><input size="35" class="input" value="$bk_ddate" name="config[ddate]" /></td></tr></table>
+<br /><center><input type="submit" class="btn" value="提 交" /></center></form><br />
+<!--
+EOT;
+}elseif($action=='log'){print <<<EOT
+-->
+
+<ul class="nav3">
+<li><a href="$basename">银行设置</a></li>
+<li><a href="$basename&action=log" class="two">日志管理</a></li>
+</ul><div class="c"></div>
+<h3>提示信息</h3>
+<div class="tr5">银行日志：清晰地记录用户每一笔交易信息，方便查询</div>
+
+<form action="$basename&action=log&" method="post">
+<h2>搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac">
+<td>用户名: <input type="text" size="25" class="input" name="username1" value="$username1" /></td>
+<td>关键字: <input type="text" size="25" class="input" name="keyword" value="$keyword" /></td>
+<td>
+<select name="type">
+<option value="all">全部</option>
+<option value="bk_save" $select[bk_save]>{$lang[logtype][bk_save]}</option>
+<option value="bk_draw" $select[bk_draw]>{$lang[logtype][bk_draw]}</option>
+<option value="bk_vire" $select[bk_vire]>{$lang[logtype][bk_vire]}</option>
+<option value="bk_credit" $select[bk_credit]>{$lang[logtype][bk_credit]}</option>
+</select>
+</td>
+<td><input type="submit" value="提 交" class="btn"/></td>
+</tr></table></form>
+ &nbsp; $pages
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="dellog" />
+<h2>银行操作日志</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 tac s3">
+<td width="5%">ID</td>
+<td width="5%">类型</td>
+<td width="*">描述</td>
+<td width="15%">操作日期</td>
+<td width="15%">IP</td>
+<td width="3%">删</td>
+</tr>
+<!--
+EOT;
+$num=($page-1)*$db_perpage;
+foreach($logdb as $key => $value){
+$num++;
+print <<<EOT
+-->
+<tr class="tr3 tac">
+<td>$num</td>
+<td>{$lang[logtype][$value[type]]}</td>
+<td><div style="TABLE-LAYOUT: fixed;WORD-WRAP: break-word" align="left">$value[descrip]</div></td>
+<td>$value[date]</td>
+<td>$value[ip]</td>
+<td><input type="checkbox" name="selid[]" value="$value[id]" /></td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</td></tr></table>
+<br /><center><input type="button" name="chkall" value="全 选" onclick="CheckAll(this.form)" class="btn" />
+<input type="submit" name="hello" value="提 交" class="btn" /></center></form><br/>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

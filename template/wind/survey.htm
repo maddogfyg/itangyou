@@ -1,0 +1,38 @@
+<!--<?php
+print<<<EOT
+-->
+<div class="t">
+<table width="100%" align="center" cellspacing="0" cellpadding="0">
+<tr><td class="h" colspan="4"><b>问卷列表</b></td></tr>
+
+<tr class="tr3 tac">
+<!--
+EOT;
+foreach($survey_cache as $item){
+$j+=1;
+if($j%4!='0'){
+print<<<EOT
+-->
+<td width="25%"><a href="survey.php?itemid=$item[itemid]">$item[subject]</a></td>
+<!--
+EOT;
+}else{
+print<<<EOT
+-->
+</tr>
+<tr>
+<!--
+EOT;
+}}print<<<EOT
+-->
+</tr>
+</table>
+</div>
+<div>
+<center>
+<iframe frameborder="0" scrolling="auto" style="width:100%;height:{$rt[frameheight]}px;border:none" src="{$rt[url]}"></iframe>
+</center>
+</div>
+<!--
+EOT;
+?>

@@ -1,0 +1,156 @@
+<!--<?php
+include_once PrintEot('left');
+if(!$action){print <<<EOT
+-->
+<h2>搜索</h2>
+<form action="{$basename}&action=pay" method="post">
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="40%">订单号 <input type="text" name="order" class="input" size="40" /></td>
+		<td><input type="submit" value="提 交" class="btn" /></td>
+	</tr>
+</table>
+</form>
+
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="del">
+<h2>订单管理 <span class="w"><a href="$basename">所有订单</a> | 
+<a href="$basename&state=2">已完成订单</a> | 
+<a href="$basename&state=1">未完成订单</a></span></h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3 s3" align="center">
+<td>ID</td>
+<td>用户名</td>
+<td>订单类型</td>
+<td>付款帐号</td>
+<td>支付金额</td>
+<td>交易状态</td>
+<td>交易时间</td>
+<td>详情</td>
+<td>删除</td>
+</tr>
+<!--
+EOT;
+$order_lang = array('积分充值','道具购买','版块权限购买','特殊组购买','注册码购买');
+$id=($page-1)*$db_perpage;
+foreach($orderdb as $key => $value){
+if($value[state]==0){
+$state='<font color="blue">未完成</font>';
+}elseif($value[state]==1){
+$state='已支付，等待用户确认';
+}elseif($value[state]==2){
+$state='已完成';
+}
+$id++;
+print <<<EOT
+-->
+<tr class="tr3" align="center">
+<td>$id</td>
+<td>$value[username]</td>
+<td>{$order_lang[$value[type]]}</td>
+<td>$value[payemail]</td>
+<td>$value[fee]</td>
+<td>$state</td>
+<td>$value[date]</td>
+<td><a href="$basename&action=pay&id=$value[id]">详情</a></td>
+<td><input type="checkbox" name="selid[]" value="$value[id]"></td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br />$pages
+<center><input type="button" class="btn" name="chkall" value="全 选" onclick="CheckAll(this.form)">
+<input type="submit" class="btn" name="hello" value="删除"></center></form>
+<br/>
+<!--
+EOT;
+}elseif($action=='pay'){print <<<EOT
+-->
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr><td class="tr4">完成支付说明</td></tr>
+<tr><td style="line-height:150%">
+由于支付宝系统在传输支付状态的过程可能会出现一些不可预料的问题，导致用户实际已经支付成功，但交易币没有充值成功~</td></tr>
+<tr><td style="line-height:150%">请核对订单信息后将付款帐号填入下方对应的文本框内，再使用“完成充值”功能完成本次订单的充值</td></tr></table>
+<br/>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="pay">
+<input type="hidden" name="step" value="2">
+<input type="hidden" name="id" value="$rt[id]">
+<h2>订单信息</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3">
+	<td>订单号</td>
+	<td>$rt[order_no]</td>
+</tr>
+<tr class="tr3">
+	<td>用户名</td>
+	<td>$rt[username] (uid:$rt[uid])</td>
+</tr>
+<tr class="tr3">
+	<td>支付金额</td>
+	<td><font color="orange">￥$rt[fee]</font></td>
+</tr>
+<tr class="tr3">
+	<td>付款帐号</td>
+	<td>
+<!--
+EOT;
+if ($rt['state'] == '2') {print <<<EOT
+-->
+		$rt[payemail]
+<!--
+EOT;
+} else {print <<<EOT
+-->
+		<input type="text" size="30" name="payemail" />
+<!--
+EOT;
+}print <<<EOT
+-->
+	</td>
+</tr>
+<tr class="tr3">
+	<td>交易状态</td>
+	<td>
+<!--
+EOT;
+$order_lang = array('积分充值','道具购买','版块权限购买','特殊组购买','注册码购买');
+if ($rt['state'] == '2') {print <<<EOT
+-->
+	已完成订单
+<!--
+EOT;
+} else {print <<<EOT
+-->
+	未支付订单
+<!--
+EOT;
+}print <<<EOT
+-->
+	</td>
+</tr>
+<tr class="tr3">
+	<td>订单类型</td>
+	<td>{$order_lang[$rt[type]]}<div style="color:gray">$detail</div></td>
+</tr>
+<tr class="tr3">
+	<td>交易时间</td>
+	<td>$rt[date]</td>
+</tr>
+</table><br />
+<!--
+EOT;
+if ($rt['state'] < 2) {print <<<EOT
+-->
+<center><input type="submit" class="btn" value="完成充值"></center>
+<!--
+EOT;
+}print <<<EOT
+-->
+</form>
+<br/>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

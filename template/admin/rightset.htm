@@ -1,0 +1,102 @@
+<!--<?php
+include_once PrintEot('left');
+if(!$action){print <<<EOT
+-->
+<h3><b>提示信息</b></h3>
+<div class="tr5">
+1、可添加或删除后台管理权限。<br />
+2、根据需求设置每个用户组的后台管理权限。
+</div>
+<h2>用户组后台权限管理</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3 s3" style="height:30px;">
+		<td width="30%">用户组</td>
+		<td width="15%">操 作</td>
+		<td></td>
+	</tr>
+<!--
+EOT;
+foreach($setdb as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" style="height:30px;">
+		<td>$value</td>
+		<td><a class="fourm-two" href="$basename&action=edit&gid=$key" title="编辑"><span class="edit" style="margin-right:1em;"></span></a> <a class="fourm-two" href="$basename&action=delete&gid=$key" title="删除"><span class="del"></span></a></td>
+		<td></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<br />
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="edit">
+<h2>添加后台权限</h2>
+<table width="100%" cellspacing="0" cellpadding="0" align="center">
+	<tr class="tr3">
+		<td width="30%">用户组</td>
+		<td><select name="gid">$unsetdb</select></td>
+	</tr>
+</table>
+<br /><center><input type="submit" class="btn" value="提 交"></center>
+</form>
+<!--
+EOT;
+}elseif($action=='edit'){print <<<EOT
+-->
+<h2>{$ltitle[$gid]}的后台权限分配</h2>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="edit">
+<input type="hidden" name="step" value="2">
+<input type="hidden" name="gid" value="$gid">
+<table width="100%" cellspacing="0" cellpadding="0" align="center">
+$editset
+</table><br />
+<center><input type="button" value="全 选" class="btn" onclick="CheckForm(this.form)"> <input type="submit" class="btn" value="提 交"></center>
+</form>
+<script language="JavaScript">
+var allcheck = true;
+var checkvar = {{$checkvar}}
+function CheckForm(obj){
+	if (obj.id) {
+		if (checkvar['chk_'+obj.id]=='undefined') {
+			return false;
+		}
+		var newobj = obj.getElementsByTagName('input');
+		var len = newobj.length;
+		var checkall = checkvar['chk_'+obj.id];
+	} else {
+		var newobj = obj.elements;
+		var len = newobj.length-2;
+		var checkall = allcheck;
+	}
+	for (var i=0;i<len;i++) {
+		if (newobj[i].type=='checkbox') newobj[i].checked = checkall;
+	}
+	if (obj.id) {
+		if (checkall==true) {
+			checkvar['chk_'+obj.id] = false;
+			allcheck = true;
+		} else {
+			checkvar['chk_'+obj.id] = true;
+			allcheck = false;
+		}
+	} else {
+		if (checkall==true) {
+			for (i in checkvar) {
+				checkvar[i] = false;
+			}
+			allcheck = false;
+		} else {
+			for (i in checkvar) {
+				checkvar[i] = true;
+			}
+			allcheck = true;
+		}
+	}
+}
+</script>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

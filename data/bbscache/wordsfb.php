@@ -1,0 +1,10 @@
+<?php
+$replace=array(
+);
+$wordsfb=array(
+);
+$alarm=array(
+);
+$pwcode=array(
+);
+?>

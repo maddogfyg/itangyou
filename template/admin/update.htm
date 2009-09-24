@@ -1,0 +1,74 @@
+<!--<?php
+include_once PrintEot('left');
+print <<<EOT
+-->
+<h2>缓存管理</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='cache'>
+
+<tr class="tr3"><td style="width:60%;">数据转换后或前台不能正常访问时，可以使用此功能更新所有缓存</td><td><input type="submit" class="btn" value="更新站点缓存"></td></tr>
+
+</form>
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='bbsinfo'>
+
+<tr class="tr3"><td>可修复会员总数统计错误问题</td><td><input type="submit" class="btn" value="更新会员总数"></td></tr>
+
+</form>
+<form action="$basename&" method="post">
+<input type="hidden" name="action" value="online">
+
+<tr class="tr3"><td>前台在线用户列表发生错乱时，可使用此功能修复</td><td><input type="submit" class="btn" value="初始化在线列表"></td></tr>
+
+</form>
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='topped'>
+
+<tr class="tr3"><td>置顶帖显示不正常，可使用此功能修复</td><td><input type="submit" class="btn" value="更新置顶帖统计"></td></tr>
+
+</form>
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='usergroup'>
+
+<tr class="tr3"><td>使用此功能可修复版主头衔错误和系统组头衔错误的问题</td><td><input type="submit" class="btn" value="更新系统组成员头衔"></td></tr>
+
+</form>
+
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='digest'>
+<tr class="tr3"><td>修复所有会员的精华帖个数统计</td><td><input type="text" size="20" class="input" name="percount" value=1000> <input type="submit" class="btn" value="每批更新个数"></td></tr></form>
+
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='forum'>
+
+<tr class="tr3"><td>更新所有版块的主题数和文章数统计<br/><span class="gray">数据转换后或前台文章数统计不正常时，可使用此功能修复</span></td><td><input type="text" size="20" class="input" name="percount" value="100"> <input type="submit" class="btn" value="每批更新个数"></td></tr>
+</form>
+
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='group'>
+
+<tr class="tr3"><td>根据积分方案更新会员组头衔<br><span class="gray">每次更改升级点数需求或会员组提升方式后需要使用此功能更新会员组头衔</span></td><td><input type="text" size="20" class="input" name="percount" value=2000> <input type="submit" class="btn" value="每批更新个数"></td></tr>
+</form>
+
+
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='thread'>
+
+<tr class="tr3"><td>更新主题的回复数统计<br><span class="gray">当浏览帖子页面回复显示不正常时，可以使用此功能修复 (不建议使用)</span></td><td><input type="text" size="20" class="input" name="percount" value="2000"> <input type="submit" class="btn" value="每批更新个数"></td>
+</tr>
+</form>
+
+<form action="$basename&" method=post>
+<input type="hidden" name=action value='appcount'>
+
+<tr class="tr3"><td>更新用户的应用（app）统计<br><span class="gray">但用户的app统计不正确的时候（例如相片数量准确），可以使用此功能修复</span></td><td><input type="text" size="20" class="input" name="percount" value="2000"> <input type="submit" class="btn" value="每批更新个数"></td>
+</tr></table>
+</form>
+
+<!--
+EOT;
+include_once PrintEot('adminbottom');
+?>
+-->

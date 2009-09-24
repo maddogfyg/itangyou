@@ -1,0 +1,94 @@
+@charset "gb18030";
+/* CSS Document */
+body{font-family:Verdana;color:#333;background:url(bg.png) 0 top repeat-x; font-size:12px;}
+
+/*特殊文字颜色*/
+.gray{color:#888;}
+/*布局*/
+#header,#main,#footer,.topbor{overflow:hidden;}
+#header,#main,#footer{width:960px;margin:0 auto;}
+#header{margin-bottom:8px;}
+
+/*按钮*/
+.btn{border-color:#3366cc;margin-right:1em;color:#fff;background:#3366cc;}
+.btn,.bt{border-width:1px;cursor:pointer;padding:.1em 1em;*padding:0 1em;font-size:9pt; line-height:130%; overflow:visible;}
+.bt{cursor:pointer;background:#f7f7f7;vertical-align:middle;border-color: #e4e4e4 #cccccc #cccccc #e4e4e4;}
+
+.input{border: 1px solid; border-color: #c0c0c0 #ededed #ededed #c0c0c0;padding:2px 0px 2px 1px;font-size:1.0em;vertical-align:middle;color:#000;}
+textarea{border: 1px solid; border-color: #c0c0c0 #ededed #ededed #c0c0c0;}
+
+.search{display:inline; margin:5px 10px 0 0;width:170px; height:20px; border:1px solid #999; background:url(textareabg.png)}
+.s-btn{height:20px;width:48px;border:0; padding:0; display:block;cursor:pointer; float:right; background:url(searchbt.png) ; border-left:1px solid #999 }
+.s-btn:hover { background-position:0 1px}
+.s-input{height:15px;border:0;width:106px;background:none;float:left;}
+
+.nav{background:url(navbg.png) 0 0 no-repeat;height:30px; overflow:hidden}
+.nav ul{padding:0 0 0 20px}
+.nav li,.nav li a{float:left; height:31px; line-height:34px; }
+.nav li{ background-position:left 0; padding-left:2px;margin:0 5px}
+.nav li a{ padding:0 10px 0 8px;color:#ffffff;}
+.nav li a:hover{text-decoration:underline;}
+
+.nav .current,.nav .current a{ background:url(nav-current.png);color:#666 }
+.nav .current{ background-color:#fff }
+.nav .current a{ background-position:right top }
+
+.nav2{background:url(nav2-bg.png) 0 bottom repeat-y;}
+.nav2 ul{padding:6px 20px 9px;}
+.nav2 li{float:left;height:18px;padding:0 .5em;overflow:hidden;}
+.nav2 li a{float:left;color:#333;display:block;padding:0 .5em;white-space:nowrap;}
+.nav2 li a:hover{background:#F1F1F1;}
+
+/*footer*/
+#footer{background:url(footer-bg.png) 0 top repeat-x;padding:10px 0 40px;line-height:1.8;}
+.bottom{margin:0 auto;}
+.bottom ul{list-style:none;}
+.bottom ul li{ padding:0 1em 0 0;display:inline;line-height:2;}
+.bottom ul li a{white-space:nowrap; font-size:14px;}
+/*弹出框 popout*/
+.popoutContent{background:#fff;border:1px solid #006699;}
+.bgcorner1,.bgcorner2,.bgcorner3,.bgcorner4,.pobg1,.pobg2,.pobg3,.pobg4{filter:Alpha(opacity=40);_filter:Alpha(opacity=40);opacity:.4;overflow:hidden; z-index:1005; line-height:0 }
+.bgcorner1,.bgcorner2,.bgcorner3,.bgcorner4{width:8px;height:8px;background:#006699;}
+.bgcorner1{background-position: 0 0 }
+.bgcorner2{background-position: -8px 0 }
+.bgcorner3{background-position: -8px -8px}
+.bgcorner4{background-position:0 -8px}
+.pobg1,.pobg2,.pobg3,.pobg4{ background:#006699;}
+.pobg1{height:8px; }
+.pobg2{width:8px;}
+.pobg3{height:8px;}
+.pobg4{width:8px;}
+.popoutContent td{padding:.5em .6em;border-bottom:1px solid #dbe4e9;}
+/*table head*/
+.h{border-bottom:1px solid #a9d5e9;background:#e1f2fa;text-align:left;color:#006699;padding:2px .5em 0; line-height:220%;}
+	.h span{font-weight:normal;}
+	.h h2{font-weight:bold}
+	.h a{font-family:Arial;color:#006699}
+	.h span a,.h span{color:#006699;}
+
+.listA_li li{background:url(listA_li.png) 0 10px no-repeat;padding-left:10px;}
+/*menu*/
+.menu{position:absolute;background:#fff;border:1px solid #d7e6f2;}
+.menu a{display:block;padding:4px 8px;}
+/*下拉框*/
+.menu-post{border:2px solid #d5e6ed;padding:1px;background:#9fb7e7;}
+.menu-post .menu-b{border:1px solid #fff;background:#ffffff;}
+.menu-b .h{border-bottom:1px solid #abc8ea;}
+.menu-half li{width:46%;float:left;}
+.menu-half li a{float:left;}
+
+.user-table td{padding:1em 1em .5em 2em;}
+
+
+.view-current{background:#ffffdb;position:relative;}
+.view-hover .open-none{display:none;position:absolute;}
+.view-current .open-none{display:inline;right:0px;background:#f7e084;cursor:pointer;position:absolute;z-index:9999;padding:3px 10px 5px;margin:0;top:0;}
+
+.mode-one{padding:10px;width:600px;border:1px solid #eeeeee;background:#fff;margin-top:10px;}
+.mode-one dd{float:left;;line-heigh:24px;width:600px;}
+.mode-one dd .fr a{margin-left:2em;}
+.mode-one dd li{padding:4px 0;}
+.mode-one a{color:#006699;border-bottom:1px solid #006699;}
+
+.area-list-tree{border-bottom:1px dashed #cccccc;margin-bottom:10px;}
+.area-list-tree li{float:left;margin-right:20px;height:18px;line-height:18px;overflow:hidden;padding-bottom:10px;}

@@ -1,0 +1,180 @@
+<!--<?php
+include_once PrintEot('left');
+if (empty($action)) {print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename" class="two">同步积分列表</a></li>
+	<li><a href="$basename&action=create">新建同步积分</a></li>
+</ul>
+<div class="c"></div>
+
+<style type="text/css">
+.fourm-one{float:left;background:url($imgpath/admin/setfourm/fourm-one.gif) 0 0 no-repeat;width:40px;height:21px;}
+</style>
+<h3>同步积分列表</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td>同步积分名称</td>
+		<td width="8%"></td>
+		<td width="8%"></td>
+	</tr>
+<!--
+EOT;
+foreach ($uc_syncredit as $key => $value) {print <<<EOT
+-->
+	<tr class="tr3">
+		<td>$credittype[$key]</td>
+		<td><a href="$basename&action=edit&cid=$key">编辑</a></td>
+		<td><a href="$basename&action=del&cid=$key">删除</a></td>
+	</tr>
+	<tbody>
+<!--
+EOT;
+foreach ($value as $k => $v) {print <<<EOT
+-->
+	<tr class="tr3">
+		<td><span class="fourm-one"></span>{$uc_credits[$k][$v]} (应用：{$applist[$k][name]})</td>
+		<td><!-- <a href="$basename&action=import&cid=$value[cid]&id=$v[id]">导入</a> --> -- </td>
+		<td> -- </td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+	</tbody>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<!--
+EOT;
+} elseif ($action == 'create' || $action == 'edit') {print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">同步积分列表</a></li>
+<!--
+EOT;
+if ($action == 'create') {print <<<EOT
+-->
+	<li><a href="$basename&action=create" class="two">新建同步积分</a></li>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+	<li><a href="$basename&action=create">新建同步积分</a></li>
+	<li><a href="$basename&action=edit&cid=$cid" class="two">编辑同步积分</a></li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul>
+<h3>积分信息</h3>
+<form action="$basename" method="post" name="appForm">
+<input type="hidden" name="action" id="s_action" value="$action" />
+<input type="hidden" name="step" value="2" />
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="12%">同步积分名称</td>
+		<td>
+			<select name="cid" id="credit_cid">
+<!--
+EOT;
+foreach ($credittype as $key => $value) {print <<<EOT
+-->
+				<option value="$key">$value</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+			</select> (本站)
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td>选择同步积分</td>
+		<td>
+<!--
+EOT;
+foreach ($applist as $key => $value) {
+if ($key != $uc_appid) {print <<<EOT
+-->
+			<div style="margin:3px 0">
+				<select name="ctype[$key]" id="credit_cid$key">
+					<option></option>
+<!--
+EOT;
+foreach ($uc_credits[$key] as $k => $v) {print <<<EOT
+-->
+					<option value="$k">$v</option>
+<!--
+EOT;
+}print <<<EOT
+-->
+				</select> (应用站点：$value[name])</div>
+<!--
+EOT;
+}}print <<<EOT
+-->
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td></td>
+		<td><input type="submit" value="提 交" class="btn" /> <input type="button" value="更新应用积分设置" class="btn" onclick="setcredit();" /></td>
+	</tr>
+</table>
+</form>
+<script language="JavaScript">
+function setcredit() {
+	document.getElementById('s_action').value = 'setcredit';
+	document.appForm.submit();
+}
+(function() {
+	var setv = {{$setv}};
+	for (var i in setv) {
+		getObj('credit_' + i).value = setv[i];
+	}
+})();
+</script>
+<!--
+EOT;
+} elseif ($action == 'del') {print <<<EOT
+-->
+<ul class="nav3">
+	<li><a href="$basename">同步积分列表</a></li>
+	<li><a href="$basename&action=create">新建同步积分</a></li>
+	<li><a href="$basename&action=del&cid=$cid">删除积分</a></li>
+</ul>
+<h3>删除积分</h3>
+<form action="$basename" method="post">
+<input type="hidden" name="action" value="del" />
+<input type="hidden" name="step" value="3" />
+<input type="hidden" name="cid" value="$cid" />
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="15%">删除积分</td>
+		<td>$credittype[$cid]</td>
+	</tr>
+	<tr class="tr3">
+		<td>关联积分</td>
+		<td>
+<!--
+EOT;
+foreach ($uc_syncredit[$cid] as $key => $value) {print <<<EOT
+-->
+			<div>{$uc_credits[$key][$value]} (应用:{$applist[$key][name]})</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+		</td>
+	</tr>
+	<tr class="tr3">
+		<td><br /></td>
+		<td><input type="submit" value="确认删除" class="btn" /></td>
+	</tr>
+</table>
+</form>
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->

@@ -1,0 +1,362 @@
+<!--<?php
+include_once PrintEot('left');
+print<<<EOT
+-->
+<h2><a href="$admin_file?adminjob=app&admintype=article&action=app&job=appslist">返回基础应用列表</a></h2>
+<!--
+EOT;
+if(!$action){print <<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename" class="two">相册设置</a></li>
+</ul>
+<div class="c"></div>
+
+<form action="$basename&" method="post">
+<input type="hidden" name="step" value="3">
+<h2>相册基本设置</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr class="tr3"><td width="30%"><span class="xia2">是否开启相册功能:</span></td>
+<td><input type="radio" name="phopen" value="1" $phopen_Y /> 开启
+<input type="radio" name="phopen" value="0" $phopen_N /> 关闭</td></tr>
+<tr class="tr3"><td width="30%"><span class="xia2">是否开启验证码:</span></td>
+<td><input type="radio" name="config[photos_gdcheck]" value="1" $photos_gdcheck_Y /> 开启
+<input type="radio" name="config[photos_gdcheck]" value="0" $photos_gdcheck_N /> 关闭</td></tr>
+<tr class="tr3"><td width="30%"><span class="xia2">是否开启验证问题:</span></td>
+<td><input type="radio" name="config[photos_qcheck]" value="1" $photos_qcheck_Y /> 开启
+<input type="radio" name="config[photos_qcheck]" value="0" $photos_qcheck_N /> 关闭</td></tr>
+<tr class="tr3"><td width="30%"><span class="xia2">允许创建相册的用户组:</span><br />全不选为任何用户组可创建相册</td>
+<td>$creategroup</td></tr>
+<tr class="tr3"><td><span class="xia2">每个群组最多可以拥有的相册数:</span></td>
+<td><input name="config[albumnum]" value="$o_albumnum" size="8" class="input" maxlength="8" /></td></tr>
+<tr class="tr3"><td><span class="xia2">每个会员可以创建的相册数:</span></td>
+<td><input name="config[albumnum2]" value="$o_albumnum2" size="8" class="input" maxlength="8" /></td></tr>
+<tr class="tr3"><td><span class="xia2">每个相册最多可容纳的相片数:</span></td>
+<td><input name="config[maxphotonum]" value="$o_maxphotonum" size="8" class="input" maxlength="8" />（不适合太大，建议值:20-30）</td></tr>
+<tr class="tr3"><td><span class="xia2">相册分目录建立标准:</span></td>
+<td><input type="radio" name="config[mkdir]" value="1" $mkdir1 />按月存入不同目录 <br />
+<input type="radio" name="config[mkdir]" value="2" $mkdir2 />按日存入不同目录 <br />
+<input type="radio" name="config[mkdir]" value="3" $mkdir3 />按群组ID存入不同目录 </td></tr>
+<tr class="tr3"><td><span class="xia2">上传单张图片的最大尺寸:（单位k）</span></td>
+<td><input name="config[maxfilesize]" value="$o_maxfilesize" size="8" class="input" maxlength="8" /></td></tr>
+</table>
+<br />
+<h3>相册积分奖惩设置</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3" align="center">
+		<td width="15%">积分名称</td>
+		<td>创建相册(-)</td>
+		<td>上传相片(+)</td>
+		<td>删除相片(-)</td>
+	</tr>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$value</td>
+		<td><input name="creditset[Createalbum][$key]" value="{$creditset[Createalbum][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Uploadphoto][$key]" value="{$creditset[Uploadphoto][$key]}" size="8" class="input" /></td>
+		<td><input name="creditset[Deletephoto][$key]" value="{$creditset[Deletephoto][$key]}" size="8" class="input" /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+<tr class="tr3"><td colspan="5" style="padding-left:1em">注:<b>威望积分</b>支持小数点后一位，其他积分只允许整数！</td></tr>
+</table><br />
+<h3>相册积分流通记录</h3>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td colspan="4" style="line-height:18px;padding-left:1em">此功能可以详细记录某种积分的流通情况，帮助站长更加清晰地掌握论坛的积分状况！</td>
+	</tr>
+	<tr class="tr3" align="center">
+		<td width="15%">积分名称</td>
+		<td>创建相册</td>
+		<td>上传相片</td>
+		<td>删除相片</td>
+	</tr>
+<!--
+EOT;
+foreach($credit->cType as $key => $value){print <<<EOT
+-->
+	<tr class="tr3" align="center">
+		<td>$value</td>
+		<td><input type="checkbox" name="creditlog[Createalbum][$key]" value="1" {$creditlog[Createalbum][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[Uploadphoto][$key]" value="1" {$creditlog[Uploadphoto][$key]} /></td>
+		<td><input type="checkbox" name="creditlog[Deletephoto][$key]" value="1" {$creditlog[Deletephoto][$key]} /></td>
+	</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table>
+<br><center><input type="submit" value="提 交" class="btn"></center></form>
+<!--
+EOT;
+}elseif($action == 'albums'){print<<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename&action=albums" class="two">相册管理</a></li>
+<li><a href="$basename&action=photos">相片管理</a></li>
+</ul>
+<div class="c"></div>
+<!--
+EOT;
+if ($job == 'list') {print<<<EOT
+-->
+<form action="$basename&action=albums&" method="post">
+<input type="hidden" name="job" value="delete">
+<input type="hidden" name="aname" value="$aname">
+<input type="hidden" name="owner" value="$owner">
+<input type="hidden" name="crtime_s" value="$crtime_s">
+<input type="hidden" name="crtime_e" value="$crtime_e">
+<input type="hidden" name="lasttime_s" value="$lasttime_s">
+<input type="hidden" name="lasttime_e" value="$lasttime_e">
+<input type="hidden" name="private" value="$private">
+<input type="hidden" name="lines" value="$lines">
+<input type="hidden" name="orderway" value="$orderway">
+<input type="hidden" name="ordertype" value="$ordertype">
+<input type="hidden" name="page" value="$page">
+<table width="100%" cellspacing="0" cellpadding="0" style="TABLE-LAYOUT: fixed;WORD-WRAP: break-word">
+<tr><td class="tr4" colspan="19">相册列表</td></tr>
+<tr class="tr3 s3">
+	<td>ID</td>
+	<td colspan="6" class="tac">标题</td>
+	<td colspan=2>作者</td>
+	<td colspan=2>发表时间</td>
+	<td colspan=2>最后更新时间</td>
+	<td colspan=2>可见度</td>
+	<td class="tac">相片数</td>
+	<td class="tac">编辑</td>
+	<td class="tac">管理</td>
+	<td class="tac">删除</td>
+</tr>
+<!--
+EOT;
+foreach ($albumdb as $key => $album) {
+if(!$album['aname'])continue;
+$key+=($page-1)*$lines+1;
+print <<<EOT
+-->
+<tr class="tr3">
+	<td class="tac">$key</td>
+	<td colspan="6" class="tac"><a href="mode.php?m=o&u=$album[ownerid]&q=photos&a=album&aid=$album[aid]" target="_blank" title="$album[aname]">$album[s_aname]</a></td>
+	<td colspan=2><a href="u.php?action=show&uid=$album[ownerid]" target="_blank">$album[owner]</a></td>
+	<td colspan=2>$album[crtime]</td>
+	<td colspan=2>$album[lasttime]</td>
+	<td colspan=2>
+<!--
+EOT;
+if ($album['private'] == 0) {print <<<EOT
+-->
+		全站可见
+<!--
+EOT;
+}elseif($album['private'] == 1) {print <<<EOT
+-->
+		仅自己可见
+<!--
+EOT;
+}print <<<EOT
+-->
+	</td>
+	<td class="tac">$album[photonum]</td>
+	<td class="tac"><a href="$basename&action=albums&job=edit&aid=$album[aid]&aname=$encode_aname&owner=$encode_owner&crtime_s=$crtime_s&crtime_e=$crtime_e&lasttime_s=$lasttime_s&lasttime_e=$lasttime_e&private=$private&lines=$lines&orderway=$orderway&ordertype=$ordertype&page=$page&" class="fourm-two"><span class="edit"></span></a></td>
+	<td class="tac"><a href="$basename&action=photos&job=list&aid=$album[aid]" class="fourm-two"><span class="edit"></span></a></td>
+	<td class="tac"><input type="checkbox" name="selid[]" value="$album[aid]"></td>
+</tr>
+<!--
+EOT;
+}print <<<EOT
+-->
+</table><br>$pages
+<center><input class="btn" type='button' name='chkall' value='全 选' onclick='CheckAll(this.form)'>
+<input type="submit" value='提 交' class="btn" onclick="return checkdel();"></center>
+</form>
+<script language="JavaScript">
+function checkdel(){
+	if(confirm("确定要删除所选相册吗？" )){
+		return true;
+	}else{
+		return false;
+	}
+}
+</script>
+<!--
+EOT;
+} elseif ($job == 'edit'){print <<<EOT
+-->
+<form action="$basename&action=albums&job=edit" method="post">
+<input type="hidden" name="step" value="2">
+<input type="hidden" name="aid" value="$aid">
+<input type="hidden" name="url_aname" value="$aname">
+<input type="hidden" name="url_owner" value="$owner">
+<input type="hidden" name="url_crtime_s" value="$crtime_s">
+<input type="hidden" name="url_crtime_e" value="$crtime_e">
+<input type="hidden" name="url_lasttime_s" value="$lasttime_s">
+<input type="hidden" name="url_lasttime_e" value="$lasttime_e">
+<input type="hidden" name="url_private" value="$private">
+<input type="hidden" name="url_lines" value="$lines">
+<input type="hidden" name="url_orderway" value="$orderway">
+<input type="hidden" name="url_ordertype" value="$ordertype">
+<input type="hidden" name="url_page" value="$page">
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr><td class="tr4" colspan="2">相册编辑</td></tr>
+<tr class="tr3"><td width="15%">相册名称</td><td><input class="input" name="aname" value="$album[aname]" size="30"></td></tr>
+<tr class="tr3"><td>相册描述</td><td><textarea name="aintro" cols="30" class="input" style="width:300px;height:80px;">$album[aintro]</textarea></td></tr>
+<tr class="tr3"><td>可见度</td><td><select name="private"><option value="0" $private_0>全站可见</option><option value="1" $private_1>仅自己可见</option></td></tr>
+</table><br>
+<center><input type="submit" value='提 交' class="btn"> <input class="btn" type="button" value="返 回" onclick="javascript:history.go(-1);" /></center>
+</form>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+<script language="JavaScript" src="js/date.js"></script>
+<form action="$basename&action=albums&" method="post">
+<input type="hidden" name="job" value="list">
+<h2>相册搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="30%">相册名称（可使用通配符“*”）</td>
+		<td><input type="text" name="aname" value="" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">作者名称（可使用通配符“*”）</td>
+		<td><input type="text" name="owner" value="" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">发表日期</td>
+		<td><input type="text" name="crtime_s" value="" id="crtime_s" onclick="javascript:ShowCalendar(this.id)" class="input"> - <input type="text" name="crtime_e" id="crtime_e" value="" onclick="javascript:ShowCalendar(this.id)" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">最后更新日期</td>
+		<td><input type="text" name="lasttime_s" id="lasttime_s" value="" onclick="javascript:ShowCalendar(this.id)" class="input"> - <input type="text" name="lasttime_e" id="lasttime_e" value="" onclick="javascript:ShowCalendar(this.id)" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">可见度</td>
+		<td><select name="private"><option value="-1">不限制</option><option value="0">全站可见</option><option value="1">仅自己可见</option></select></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">排序</td>
+		<td><select name="orderway"><option value="crtime">发表时间</option><option value="lasttime">最后更新时间</option></select><input type="radio" name="ordertype" value="asc">升序 <input type="radio" name="oredertype" value="desc" checked="checked">降序</td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">每页显示条数</td>
+		<td><input type="text" name="lines" value="30" class="input" size="5"></td>
+	</tr>
+</table><br />
+<center><input class="btn" value="提 交" type="submit"></center>
+</form>
+<!--
+EOT;
+}}elseif($action == 'photos'){print<<<EOT
+-->
+<ul class="nav3">
+<li><a href="$basename&action=albums">相册管理</a></li>
+<li><a href="$basename&action=photos" class="two">相片管理</a></li>
+</ul>
+<div class="c"></div>
+<!--
+EOT;
+if ($job == 'list') {print <<<EOT
+-->
+<style>
+.admin-img li{float:left;width:150px;height:200px;line-height:18px;}
+.admin-img li img{width:100px;height:100px;padding:5px;border:1px solid #ccc;background:#fff;}
+</style>
+<form action="$basename&action=photos&" method="post">
+<input type="hidden" name="job" value="delete">
+<input type="hidden" name="aid" value="$aid">
+<input type="hidden" name="aname" value="$aname">
+<input type="hidden" name="pintro" value="$pintro">
+<input type="hidden" name="uptime_s" value="$uptime_s">
+<input type="hidden" name="uptime_e" value="$uptime_e">
+<input type="hidden" name="orderway" value="$orderway">
+<input type="hidden" name="ordertype" value="$ordertype">
+<input type="hidden" name="lines" value="$lines">
+<input type="hidden" name="page" value="$page">
+<h2>相片列表</h2>
+<div>
+<ul class="admin-img tac">
+<!--
+EOT;
+foreach ($cnpho as $key => $photo) {print <<<EOT
+-->
+		<li>
+			<a href="mode.php?m=o&q=photos&a=view&pid=$photo[pid]" target="_blank">
+				<img src="$photo[path]" border="0" class="vphoto" title="$photo[aname]"/>
+			</a>
+			<p>所属相册:<a href="$basename&action=photos&job=list&aid=$photo[aid]" title="$photo[aname]">$photo[s_aname]</a></p>
+			<p>
+			<a href="$admin_file?adminjob=mode&admintype=o_comments&job=list&type=photo&typeid=$photo[pid]">相片评论（$photo[c_num]）</a></p>
+			<p>选中 <input type="checkbox" name="selid[]" value="$photo[pid]"></p>
+		</li>
+<!--
+EOT;
+}print <<<EOT
+-->
+</ul></div>
+<div class="c"></div>
+$pages
+<center><input class="btn" type='button' name='chkall' value='全 选' onclick='CheckAll(this.form)'>
+<input type="submit" value='删 除' class="btn" onclick="return checkdel();"></center>
+</form>
+<script language="JavaScript">
+function checkdel(){
+	if(confirm("确定要删除所选相片吗？" )){
+		return true;
+	}else{
+		return false;
+	}
+}
+</script>
+<!--
+EOT;
+} else {print <<<EOT
+-->
+<script language="JavaScript" src="js/date.js"></script>
+<form action="$basename&action=photos&" method="post">
+<input type="hidden" name="job" value="list">
+<h2>相片搜索</h2>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr class="tr3">
+		<td width="30%">所属相册名称（可使用通配符“*”）</td>
+		<td><input type="text" name="aname" value="" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">所属相册ID</td>
+		<td><input type="text" name="aid" value="" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">作者名称（可使用通配符“*”）</td>
+		<td><input type="text" name="uploader" value="" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">描述（可使用通配符“*”）</td>
+		<td><input type="text" name="pintro" value="" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">上传日期</td>
+		<td><input type="text" name="uptime_s" value="" id="uptime_s" onclick="javascript:ShowCalendar(this.id)" class="input"> - <input type="text" name="uptime_e" id="uptime_e" value="" onclick="javascript:ShowCalendar(this.id)" class="input"></td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">排序</td>
+		<td><select name="orderway"><option value="default">默认排序</option><option value="uptime">上传日期</option><option value="hits">浏览数</option><option value="c_num">评论数</option></select><input type="radio" name="ordertype" value="asc">升序 <input type="radio" name="oredertype" value="desc" checked="checked">降序</td>
+	</tr>
+	<tr class="tr3">
+		<td width="30%">每页显示条数</td>
+		<td><input type="text" name="lines" value="30" class="input" size="5"></td>
+	</tr>
+</table><br />
+<center><input class="btn" value="提 交" type="submit"></center>
+</form>
+<!--
+EOT;
+}print<<<EOT
+-->
+<!--
+EOT;
+}include_once PrintEot('adminbottom');
+?>-->
